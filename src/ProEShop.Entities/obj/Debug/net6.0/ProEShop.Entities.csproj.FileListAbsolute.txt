@@ -1,0 +1,12 @@
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\bin\Debug\net6.0\ProEShop.Entities.deps.json
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\bin\Debug\net6.0\ProEShop.Entities.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\bin\Debug\net6.0\ProEShop.Entities.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ProEShop.Entities.csproj.AssemblyReference.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ProEShop.Entities.GeneratedMSBuildEditorConfig.editorconfig
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ProEShop.Entities.AssemblyInfoInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ProEShop.Entities.AssemblyInfo.cs
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ProEShop.Entities.csproj.CoreCompileInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ProEShop.Entities.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\refint\ProEShop.Entities.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ProEShop.Entities.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Entities\obj\Debug\net6.0\ref\ProEShop.Entities.dll

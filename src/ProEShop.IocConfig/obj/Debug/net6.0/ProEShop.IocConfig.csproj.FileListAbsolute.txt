@@ -1,0 +1,17 @@
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\bin\Debug\net6.0\ProEShop.IocConfig.deps.json
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\bin\Debug\net6.0\ProEShop.IocConfig.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\bin\Debug\net6.0\ProEShop.IocConfig.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.csproj.AssemblyReference.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.GeneratedMSBuildEditorConfig.editorconfig
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.AssemblyInfoInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.AssemblyInfo.cs
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.csproj.CoreCompileInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\refint\ProEShop.IocConfig.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ref\ProEShop.IocConfig.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\bin\Debug\net6.0\ProEShop.DataLayer.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\bin\Debug\net6.0\ProEShop.Entities.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\bin\Debug\net6.0\ProEShop.DataLayer.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\bin\Debug\net6.0\ProEShop.Entities.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.IocConfig\obj\Debug\net6.0\ProEShop.IocConfig.csproj.CopyComplete

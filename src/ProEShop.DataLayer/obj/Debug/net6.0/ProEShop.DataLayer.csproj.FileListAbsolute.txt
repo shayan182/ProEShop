@@ -1,0 +1,15 @@
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\bin\Debug\net6.0\ProEShop.DataLayer.deps.json
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\bin\Debug\net6.0\ProEShop.DataLayer.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\bin\Debug\net6.0\ProEShop.DataLayer.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\bin\Debug\net6.0\ProEShop.Entities.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\bin\Debug\net6.0\ProEShop.Entities.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.csproj.AssemblyReference.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.GeneratedMSBuildEditorConfig.editorconfig
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.AssemblyInfoInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.AssemblyInfo.cs
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.csproj.CoreCompileInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.csproj.CopyComplete
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\refint\ProEShop.DataLayer.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ProEShop.DataLayer.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.DataLayer\obj\Debug\net6.0\ref\ProEShop.DataLayer.dll

@@ -1,0 +1,12 @@
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\bin\Debug\net6.0\ProEShop.ViewModels.deps.json
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\bin\Debug\net6.0\ProEShop.ViewModels.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\bin\Debug\net6.0\ProEShop.ViewModels.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ProEShop.ViewModels.csproj.AssemblyReference.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ProEShop.ViewModels.GeneratedMSBuildEditorConfig.editorconfig
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ProEShop.ViewModels.AssemblyInfoInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ProEShop.ViewModels.AssemblyInfo.cs
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ProEShop.ViewModels.csproj.CoreCompileInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ProEShop.ViewModels.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\refint\ProEShop.ViewModels.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ProEShop.ViewModels.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.ViewModels\obj\Debug\net6.0\ref\ProEShop.ViewModels.dll

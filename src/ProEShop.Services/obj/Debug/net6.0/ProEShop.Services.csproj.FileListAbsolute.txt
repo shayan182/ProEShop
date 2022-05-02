@@ -1,0 +1,12 @@
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\bin\Debug\net6.0\ProEShop.Services.deps.json
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\bin\Debug\net6.0\ProEShop.Services.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\bin\Debug\net6.0\ProEShop.Services.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ProEShop.Services.csproj.AssemblyReference.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ProEShop.Services.GeneratedMSBuildEditorConfig.editorconfig
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ProEShop.Services.AssemblyInfoInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ProEShop.Services.AssemblyInfo.cs
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ProEShop.Services.csproj.CoreCompileInputs.cache
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ProEShop.Services.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\refint\ProEShop.Services.dll
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ProEShop.Services.pdb
+H:\Shayan\MarketPlace Project\ProEShop\src\ProEShop.Services\obj\Debug\net6.0\ref\ProEShop.Services.dll
