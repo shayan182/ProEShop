@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ProEShop.DataLayer.Context
+namespace ProEShop.DataLayer.Context;
+
+public interface IUnitOfWork : IDisposable
 {
-    public interface IUnitOfWork : IDisposable
-    {
-        DbSet<TEntity> Set<TEntity>() where TEntity : class;
-        int SaveChanges();
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
+    int SaveChanges();
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
 
-    }
 }

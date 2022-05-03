@@ -2,17 +2,16 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProEShop.Entities.Identitiy;
 
-namespace ProEShop.DataLayer.Configurations
-{
-    public class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
-    {
-        public void Configure(EntityTypeBuilder<UserToken> builder)
-        {
-            builder.ToTable("UserTokens");
+namespace ProEShop.DataLayer.Configurations;
 
-            builder.HasOne(x => x.User)
-                .WithMany(x => x.UserTokens)
-                .HasForeignKey(x => x.UserId);
-        }
+public class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
+{
+    public void Configure(EntityTypeBuilder<UserToken> builder)
+    {
+        builder.ToTable("UserTokens");
+
+        builder.HasOne(x => x.User)
+            .WithMany(x => x.UserTokens)
+            .HasForeignKey(x => x.UserId);
     }
 }

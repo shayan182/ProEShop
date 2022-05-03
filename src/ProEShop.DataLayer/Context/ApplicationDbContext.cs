@@ -4,12 +4,12 @@ using ProEShop.Entities;
 using ProEShop.Entities.Identitiy;
 
 namespace ProEShop.DataLayer.Context;
-public class ApplicationDbContext : 
-    IdentityDbContext<User,Role,long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
+public class ApplicationDbContext :
+    IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
     IUnitOfWork
 
 {
-    public ApplicationDbContext(DbContextOptions options ):base(options)
+    public ApplicationDbContext(DbContextOptions options) : base(options)
     {
 
     }

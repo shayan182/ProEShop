@@ -1,31 +1,33 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{90773550-A696-40E7-9F35-726D3D90196E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEShop.Web", "src\ProEShop.Web\ProEShop.Web.csproj", "{B5928820-DAD6-48AF-A99B-2E052EDC669E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEShop.Web", "src\ProEShop.Web\ProEShop.Web.csproj", "{B5928820-DAD6-48AF-A99B-2E052EDC669E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEShop.Entities", "src\ProEShop.Entities\ProEShop.Entities.csproj", "{7659D6C8-0E2D-41F2-AAC3-76019DB2C270}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEShop.Entities", "src\ProEShop.Entities\ProEShop.Entities.csproj", "{7659D6C8-0E2D-41F2-AAC3-76019DB2C270}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEShop.DataLayer", "src\ProEShop.DataLayer\ProEShop.DataLayer.csproj", "{DAE11D01-442A-468F-A0E2-FB673D3C7A47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEShop.DataLayer", "src\ProEShop.DataLayer\ProEShop.DataLayer.csproj", "{DAE11D01-442A-468F-A0E2-FB673D3C7A47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEShop.ViewModels", "src\ProEShop.ViewModels\ProEShop.ViewModels.csproj", "{6A8936CB-7EB8-43E1-9ADE-4BBBDA559E47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEShop.ViewModels", "src\ProEShop.ViewModels\ProEShop.ViewModels.csproj", "{6A8936CB-7EB8-43E1-9ADE-4BBBDA559E47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEShop.Common", "src\ProEShop.Common\ProEShop.Common.csproj", "{D50C07B3-D308-4E90-9FCB-01497F5613BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEShop.Common", "src\ProEShop.Common\ProEShop.Common.csproj", "{D50C07B3-D308-4E90-9FCB-01497F5613BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEShop.Services", "src\ProEShop.Services\ProEShop.Services.csproj", "{AD2CFF74-AF62-4152-9DBE-EE48FD294A58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEShop.Services", "src\ProEShop.Services\ProEShop.Services.csproj", "{AD2CFF74-AF62-4152-9DBE-EE48FD294A58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEShop.IocConfig", "src\ProEShop.IocConfig\ProEShop.IocConfig.csproj", "{E4D273B1-B111-4E23-BE78-7CB6C78C42ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEShop.IocConfig", "src\ProEShop.IocConfig\ProEShop.IocConfig.csproj", "{E4D273B1-B111-4E23-BE78-7CB6C78C42ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6B21085-E62C-4F20-A88C-BE1E9FE2F7C3}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B5928820-DAD6-48AF-A99B-2E052EDC669E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -57,6 +59,9 @@ Global
 		{E4D273B1-B111-4E23-BE78-7CB6C78C42ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4D273B1-B111-4E23-BE78-7CB6C78C42ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B5928820-DAD6-48AF-A99B-2E052EDC669E} = {90773550-A696-40E7-9F35-726D3D90196E}
 		{7659D6C8-0E2D-41F2-AAC3-76019DB2C270} = {90773550-A696-40E7-9F35-726D3D90196E}
@@ -65,5 +70,8 @@ Global
 		{D50C07B3-D308-4E90-9FCB-01497F5613BA} = {90773550-A696-40E7-9F35-726D3D90196E}
 		{AD2CFF74-AF62-4152-9DBE-EE48FD294A58} = {90773550-A696-40E7-9F35-726D3D90196E}
 		{E4D273B1-B111-4E23-BE78-7CB6C78C42ED} = {90773550-A696-40E7-9F35-726D3D90196E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4693A74D-AB86-416B-8B4E-A5D0FF5D9837}
 	EndGlobalSection
 EndGlobal
