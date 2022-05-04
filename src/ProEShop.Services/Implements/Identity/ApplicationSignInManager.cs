@@ -14,11 +14,7 @@ public class ApplicationSignInManager :
     SignInManager<User>, IApplicationSignInManager
 {
     
-    #region Custom Class
-
-
-
-    #endregion
+    
 
     public ApplicationSignInManager(
         IApplicationUserManager userManager,
@@ -32,4 +28,9 @@ public class ApplicationSignInManager :
             optionsAccessor, logger, schemes, confirmation)
     {
     }
+    #region Custom Class
+
+
+
+    #endregion
 }

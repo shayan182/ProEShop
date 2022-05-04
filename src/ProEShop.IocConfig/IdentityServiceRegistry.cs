@@ -13,6 +13,8 @@ public static class IdentityServicesRegistry
     {
         var siteSettings = GetSiteSettings(services);
         services.AddIdentityOptions(siteSettings);
+        services.AddConfiguredDbContext(siteSettings);
+        services.AddCustomServices();
     }
 
     public static SiteSettings GetSiteSettings(this IServiceCollection services)

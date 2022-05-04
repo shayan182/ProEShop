@@ -3,6 +3,8 @@
 namespace ProEShop.ViewModels.Identity.Settings;
 public class SiteSettings
 {
+    public ConnectionStrings ConnectionStrings { get; set; }
+
     // User need to confirm email to login?
     public bool EnableEmailConfirmation { get; set; }
 
@@ -11,6 +13,4 @@ public class SiteSettings
     public PasswordOptions PasswordOptions { get; set; }
     public LockoutOptions LockoutOptions { get; set; }
     public CookieOption CookieOptions { get; set; }
-
-
 }

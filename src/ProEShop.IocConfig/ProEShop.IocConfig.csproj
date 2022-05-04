@@ -5,12 +5,12 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-	<ItemGroup>
+	<!--<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
-	</ItemGroup>
+	</ItemGroup>-->
 	<ItemGroup>
 	  <ProjectReference Include="..\ProEShop.Common\ProEShop.Common.csproj" />
-	  <ProjectReference Include="..\ProEShop.DataLayer\ProEShop.DataLayer.csproj" />
+	  <!--<ProjectReference Include="..\ProEShop.DataLayer\ProEShop.DataLayer.csproj" />-->
 	  <ProjectReference Include="..\ProEShop.Services\ProEShop.Services.csproj" />
 	  <ProjectReference Include="..\ProEShop.ViewModels\ProEShop.ViewModels.csproj" />
 	</ItemGroup>

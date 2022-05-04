@@ -9,13 +9,14 @@ namespace ProEShop.Services.Contracts.Identity;
 
 public interface IApplicationSignInManager
 {
-    #region Base Class
     Task<ClaimsPrincipal> CreateUserPrincipalAsync(User user);
     bool IsSignedIn(ClaimsPrincipal principal);
     Task<bool> CanSignInAsync(User user);
     Task RefreshSignInAsync(User user);
     Task SignInAsync(User user, bool isPersistent, string authenticationMethod);
     Task SignInAsync(User user, AuthenticationProperties authenticationProperties, string authenticationMethod);
+    Task SignInWithClaimsAsync(User user, bool isPersistent, IEnumerable<Claim> additionalClaims);
+    Task SignInWithClaimsAsync(User user, AuthenticationProperties authenticationProperties, IEnumerable<Claim> additionalClaims);
     Task SignOutAsync();
     Task<User> ValidateSecurityStampAsync(ClaimsPrincipal principal);
     Task<bool> ValidateSecurityStampAsync(User user, string securityStamp);
@@ -41,10 +42,4 @@ public interface IApplicationSignInManager
     IUserClaimsPrincipalFactory<User> ClaimsFactory { get; set; }
     IdentityOptions Options { get; set; }
     HttpContext Context { get; set; }
-    #endregion
-    #region Custom Class
-
-
-
-    #endregion
 }
