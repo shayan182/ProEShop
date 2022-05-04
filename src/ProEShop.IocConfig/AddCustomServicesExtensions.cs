@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ProEShop.DataLayer.Context;
-using ProEShop.Entities.Identitiy;
+using ProEShop.Entities.Identity;
+using ProEShop.Services.Contracts;
 using ProEShop.Services.Contracts.Identity;
+using ProEShop.Services.Implements;
 using ProEShop.Services.Implements.Identity;
 
 namespace ProEShop.IocConfig;
@@ -33,6 +35,7 @@ public static class AddCustomServicesExtensions
         services.AddScoped<IApplicationSignInManager, ApplicationSignInManager>();
         services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
 
+        services.AddScoped<ICategoryService, CategoryService>();
         return services;
     }
 }

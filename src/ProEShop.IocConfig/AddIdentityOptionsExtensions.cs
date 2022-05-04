@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using ProEShop.Common.GuardToolKit;
-using ProEShop.Entities.Identitiy;
+using ProEShop.Entities.Identity;
 using ProEShop.Services.Implements.Identity;
 using ProEShop.ViewModels.Identity.Settings;
 

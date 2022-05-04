@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ProEShop.Common.GuardToolKit;
+using ProEShop.Common.PersianToolKit;
 using ProEShop.DataLayer.Context;
 using ProEShop.ViewModels.Identity.Settings;
 
@@ -18,6 +19,7 @@ public static class DbContextOptionsExtensions
         services.AddDbContextPool<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
+            options.AddInterceptors(new PersianYeKeCommandInterceptor());
         });
         return services;
     }

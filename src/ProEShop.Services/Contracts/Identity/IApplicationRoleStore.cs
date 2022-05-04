@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using ProEShop.Entities.Identitiy;
+using ProEShop.Entities.Identity;
 
 namespace ProEShop.Services.Contracts.Identity;
 

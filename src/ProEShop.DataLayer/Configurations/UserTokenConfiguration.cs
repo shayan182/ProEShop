@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProEShop.Entities.Identitiy;
+using ProEShop.Entities.Identity;
 
 namespace ProEShop.DataLayer.Configurations;
 

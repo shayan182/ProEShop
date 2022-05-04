@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using ProEShop.Entities.Identity;
 
-namespace ProEShop.Entities.Identitiy;
+namespace ProEShop.Entities.Identity;
 
 public class RoleClaim : IdentityRoleClaim<long>
 {

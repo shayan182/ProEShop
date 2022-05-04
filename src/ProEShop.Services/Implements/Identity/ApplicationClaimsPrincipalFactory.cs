@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using ProEShop.Common.Constants;
-using ProEShop.Entities.Identitiy;
+using ProEShop.Entities.Identity;
 
 namespace ProEShop.Services.Implements.Identity;
 

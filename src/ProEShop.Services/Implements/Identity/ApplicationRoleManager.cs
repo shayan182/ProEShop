@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProEShop.DataLayer.Context;
-using ProEShop.Entities.Identitiy;
+using ProEShop.Entities.Identity;
 using ProEShop.Services.Contracts.Identity;
 
 namespace ProEShop.Services.Implements.Identity;

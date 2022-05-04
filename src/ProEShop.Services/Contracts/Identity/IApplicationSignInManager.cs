@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using ProEShop.Entities.Identitiy;
+using ProEShop.Entities.Identity;
 
 namespace ProEShop.Services.Contracts.Identity;
 
