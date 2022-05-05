@@ -111,13 +111,12 @@ namespace ProEShop.Services.Services.Identity;
 
         adminUser = new User
         {
-            FirstName = name,
-            LastName = name,
+            FirstName = name, // به صورت دستی اضافه کردم
+            LastName = name,  // به صورت دستی اضافه کردم
             UserName = name,
             Email = email,
             EmailConfirmed = true,
             Avatar = _options.Value.UserDefaultAvatar,
-            IsActive = true
         };
         var adminUserResult = await _applicationUserManager.CreateAsync(adminUser, password);
         if (adminUserResult == IdentityResult.Failed())

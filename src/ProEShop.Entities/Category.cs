@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ProEShop.Entities.AuditableEntity;
 
 namespace ProEShop.Entities;
-public class Category
+public class Category : IAuditableEntity
 {
     public int Id { get; set; }
     [Required]
