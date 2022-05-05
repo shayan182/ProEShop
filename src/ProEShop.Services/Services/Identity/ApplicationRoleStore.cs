@@ -4,7 +4,7 @@ using ProEShop.DataLayer.Context;
 using ProEShop.Entities.Identity;
 using ProEShop.Services.Contracts.Identity;
 
-namespace ProEShop.Services.Implements.Identity;
+namespace ProEShop.Services.Services.Identity;
 
 public class ApplicationRoleStore :
     RoleStore<Role,ApplicationDbContext,long,UserRole,RoleClaim>, IApplicationRoleStore

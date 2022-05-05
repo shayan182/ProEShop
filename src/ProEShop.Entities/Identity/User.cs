@@ -9,7 +9,7 @@ public class User : IdentityUser<long>
     [MaxLength(200)] public string FirstName { get; set; }
 
     [MaxLength(200)] public string LastName { get; set; }
-
+    
     [NotMapped] public string FullName => $"{FirstName} {LastName}";
 
     public bool IsActive { get; set; }

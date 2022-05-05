@@ -12,7 +12,7 @@ builder.Services.AddCustomIdentityServices();
 
 
 var app = builder.Build();
-
+app.Services.InitializeDb();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

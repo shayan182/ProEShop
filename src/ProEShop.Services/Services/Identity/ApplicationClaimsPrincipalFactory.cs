@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using ProEShop.Common.Constants;
 using ProEShop.Entities.Identity;
 
-namespace ProEShop.Services.Implements.Identity;
+namespace ProEShop.Services.Services.Identity;
 
 public class ApplicationClaimsPrincipalFactory : UserClaimsPrincipalFactory<User,Role>
 {

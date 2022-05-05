@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using ProEShop.Common.GuardToolKit;
 using ProEShop.Entities.Identity;
-using ProEShop.Services.Implements.Identity;
+using ProEShop.Services.Services.Identity;
 using ProEShop.ViewModels.Identity.Settings;
 
 namespace ProEShop.IocConfig;
