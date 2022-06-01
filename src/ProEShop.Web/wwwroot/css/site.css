@@ -1,18 +1,96 @@
-html {
-  font-size: 14px;
+@font-face {
+    font-family: Vazird;
+    src: url('fonts/vazir/Vazir-Regular.eot');
+    src: url('fonts/vazir/Vazir-Regular.eot?#iefix') format('embedded-opentype'),
+         url('fonts/vazir/Vazir-Regular.woff2') format('woff2'),
+         url('fonts/vazir/Vazir-Regular.woff') format('woff'),
+         url('fonts/vazir/Vazir-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+* {
+    font-family: Vazir, tahoma;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #f5f5f5;
+}
+
+.custom-box-shadow{
+    box-shadow: 0px 2px 12px 1px rgb(0 0 0 / .47);
+}
+
+a{
+    text-decoration: none;
+}
+
+#main-header{
+    align-items: center;
+}
+
+.logo{
+    height: 45px;
+}
+
+#main-search-box{
+    background: #e9ecef;
+    border-radius: 4px;
+    padding: .3rem;
+}
+
+#main-search-box span{
+    border:none;
+}
+
+#main-search-box span:last-child{
+    cursor: pointer; 
+}
+
+#main-search-box input{
+    background: transparent;
+    border: none;
+    color: #7e7d7d;
+    font-size: .85rem;    
+}
+
+#main-search-box input:focus{
+    box-shadow: none;
+}
+
+.rem1and3{
+    font-size: 1.3rem;
+}
+
+.rem0and75{
+    font-size: 0.75rem;
+}
+
+.rem0and9{
+    font-size: 0.85rem;
+}
+
+#ul-profile-menus{
+    font-size: .9rem;
+}
+
+#wallet-and-pro-kala-box{
+    margin-top: 12px;
+}
+#wallet-and-pro-kala-box div:last-child{
+    margin-top: 8px;
+}
+
+#user-avatar-in-header{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid #b7b7b7;
+}
+#profile-menus{
+    display: flex;
+    align-items: center;
+}
+.proflie-dropdown-menu-lines{
+    padding: 0 12px;
 }

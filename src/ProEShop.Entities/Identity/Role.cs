@@ -9,6 +9,12 @@ public class Role : IdentityRole<long>, IAuditableEntity
     {
     }
 
+    public Role(string name , string description)
+         :this(name) // with this code we send name to fist ctor and that is send to base 
+    {
+        Description = description;
+    }
+    public string Description { get; set; }
     public virtual ICollection<RoleClaim> RoleClaims { get; set; }
     public virtual ICollection<UserRole> UserRoles { get; set; }
 }
