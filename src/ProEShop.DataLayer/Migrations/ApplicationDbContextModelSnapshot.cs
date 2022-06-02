@@ -24,11 +24,11 @@ namespace ProEShop.DataLayer.Migrations
 
             modelBuilder.Entity("ProEShop.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedByBrowserName")
                         .HasMaxLength(1000)
@@ -57,6 +57,10 @@ namespace ProEShop.DataLayer.Migrations
 
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Test")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
