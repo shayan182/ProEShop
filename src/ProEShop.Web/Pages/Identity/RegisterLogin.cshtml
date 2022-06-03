@@ -1,24 +1,9 @@
-﻿@{
-    Layout = null;
+﻿@page
+@model ProEShop.Web.Pages.Identity.RegisterLoginModel
+@{
+    ViewData["Title"] = "صفه ورود و ثبت نام";
+    Layout = "_IdentityLayout";
 }
-<!doctype html>
-<html lang="fa" dir="rtl">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.rtl.min.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="~/css/site.css">
-    <link rel="stylesheet" href="~/css/login.style.css">
-    <title>سلام به دنیا</title>
-</head>
-
-<body>
-
 <div class="d-flex justify-content-center" id="login-box">
     <div class="rounded-3 border border-1 col-11 col-md-9 col-lg-6 col-xl-5 col-xxl-4 py-4 px-5 mt-5">
         <div class="text-center">
@@ -44,10 +29,3 @@
         </form>
     </div>
 </div>
-
-<script src="lib/jquery/jquery.min.js"></script>
-<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-</body>
-
-</html>

@@ -1,4 +1,7 @@
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using DNTCommon.Web.Core;
+using Microsoft.Extensions.WebEncoders;
 using ProEShop.IocConfig;
 using ProEShop.ViewModels.Identity.Settings;
 
@@ -8,9 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 //bind your value from appsetting to SiteSettings
 builder.Services.Configure<SiteSettings>(options => builder.Configuration.Bind(options));
 builder.Services.Configure<ContentSecurityPolicyConfig>(options => builder.Configuration.GetSection("ContentSecurityPolicyConfig").Bind(options));
-builder.Services.AddControllersWithViews();
 builder.Services.AddCustomIdentityServices();
-
+builder.Services.AddRazorPages();
+builder.Services.Configure<WebEncoderOptions>(options =>
+{
+    options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
+});
 
 
 var app = builder.Build();
@@ -31,13 +37,5 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
-    endpoints.MapDefaultControllerRoute();
-});
-
+app.MapRazorPages();
 app.Run();
