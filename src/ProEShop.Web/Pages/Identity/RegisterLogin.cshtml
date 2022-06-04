@@ -1,25 +1,23 @@
 ﻿@page
-@model ProEShop.Web.Pages.Identity.RegisterLoginModel
+@model RegisterLoginModel
 @{
-    ViewData["Title"] = "صفه ورود و ثبت نام";
+    ViewData["Title"] = "صفحه ورود و ثبت نام";
     Layout = "_IdentityLayout";
 }
 <div class="d-flex justify-content-center" id="login-box">
     <div class="rounded-3 border border-1 col-11 col-md-9 col-lg-6 col-xl-5 col-xxl-4 py-4 px-5 mt-5">
         <div class="text-center">
-            <img src="~/images/eshop.png" width="140">
+            <img src="~/images/application/eshop.png" id="register-login-picture" width="140">
         </div>
         <div id="login-register-text" class="mt-3 rem1and3">
             ورود / ثبت نام
         </div>
-        <form action="" class="mt-3">
+        <form method="post" class="mt-3">
+            <div class="text-danger" asp-validation-summary="All"></div>
             <div>
-                <label class="form-label" for="" style="font-size: .9rem;">
-                    شماره موبایل یا پست الکترونیک خود را وارد
-                    کنید
-                </label>
-                <input type="text" class="form-control mt-3">
-                <span class="text-danger px-2 rem0and9">شماره تلفن اشتباه است</span>
+                <label class="form-label rem0and9" asp-for="RegisterLogin.PhoneNumberOrEmail"></label>
+                <input asp-for="RegisterLogin.PhoneNumberOrEmail" class="form-control mt-3">
+                <span class="span-error-message" asp-validation-for="RegisterLogin.PhoneNumberOrEmail"></span>
             </div>
             <div class="d-grid gap-2 mt-4">
                 <button class="btn btn-danger">
@@ -29,3 +27,6 @@
         </form>
     </div>
 </div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
