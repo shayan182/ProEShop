@@ -35,6 +35,7 @@ app.UseContentSecurityPolicy();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

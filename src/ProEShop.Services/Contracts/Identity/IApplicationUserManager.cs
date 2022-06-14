@@ -117,7 +117,7 @@ public interface IApplicationUserManager : IDisposable
     #endregion
     #region Custom Class
 
-
+    Task<DateTime?> GetSendSmsLastTimeAsync(string phoneNumber);
 
     #endregion
 }

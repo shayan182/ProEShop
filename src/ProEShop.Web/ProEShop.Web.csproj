@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\Identity\LoginWithPhoneNumber.cshtml.css" />
     <None Remove="Pages\Identity\RegisterLogin.cshtml.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Pages\Identity\LoginWithPhoneNumber.cshtml.css" />
     <Content Include="Pages\Identity\RegisterLogin.cshtml.css" />
   </ItemGroup>
 

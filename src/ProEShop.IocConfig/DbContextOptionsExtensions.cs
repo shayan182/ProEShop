@@ -1,4 +1,6 @@
 ﻿using DNTCommon.Web.Core;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ProEShop.Common.GuardToolKit;
@@ -11,6 +13,13 @@ namespace ProEShop.IocConfig;
 
 public static class DbContextOptionsExtensions
 {
+    public static void AddErrorFromResult(this ModelStateDictionary modelState,IdentityResult result)
+    {
+        foreach (var error in result.Errors)
+        {
+            modelState.AddModelError(String.Empty, error.Description);
+        }
+    }
     public static IServiceCollection AddConfiguredDbContext
         (this IServiceCollection services, SiteSettings siteSettings)
     {
