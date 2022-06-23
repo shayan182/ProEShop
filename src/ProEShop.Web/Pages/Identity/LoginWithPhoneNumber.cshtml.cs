@@ -7,7 +7,7 @@ using ProEShop.ViewModels.Identity;
 
 namespace ProEShop.Web.Pages.Identity;
 
-public class LoginWithPhoneNumberModel : PageModel
+public class LoginWithPhoneNumberModel : PageBase
 {
     private readonly IApplicationUserManager _userManager;
     private readonly IApplicationSignInManager _signInManager;
@@ -20,7 +20,7 @@ public class LoginWithPhoneNumberModel : PageModel
     }
 
     public LoginWithPhoneNumberViewModel LoginWithPhoneNumber { get; set; }
-        = new LoginWithPhoneNumberViewModel();
+        = new ();
     [ViewData]
     public string ActivationCode { get; set; }
     public async Task<IActionResult> OnGetAsync(string phoneNumber)
@@ -45,18 +45,18 @@ public class LoginWithPhoneNumberModel : PageModel
     public async Task<IActionResult> OnPostAsync(LoginWithPhoneNumberViewModel loginWithPhoneNumber)
     {
         if (!ModelState.IsValid)
-            return Page();
+            return Json(new JsonResultOperation(false));
 
         var user = await _userManager.FindByNameAsync(loginWithPhoneNumber.PhoneNumber);
         if (user is null)
-            return Page();
+            return Json(new JsonResultOperation(false));
 
         var result = await _userManager.VerifyChangePhoneNumberTokenAsync(user, loginWithPhoneNumber.ActivationCode, loginWithPhoneNumber.PhoneNumber);
         if (!result)
-            return Page();
+            return Json(new JsonResultOperation(false));
 
         await _signInManager.SignInAsync(user, true);
-        return RedirectToPage("/Test");
+        return Json(new JsonResultOperation(true, "شما با موفقیت وارد شدید."));
     }
 
     public async Task<IActionResult> OnPostReSendUserSmsActivationAsync(string phoneNumber)
@@ -64,15 +64,15 @@ public class LoginWithPhoneNumberModel : PageModel
         //System.Threading.Thread.Sleep(2000);
         var user =await _userManager.FindByNameAsync(phoneNumber);
         if (user is null)
-            return new JsonResult(new JsonResultOperation(false));
+            return Json(new JsonResultOperation(false));
         if (user.SendSmsLastTime.AddMinutes(3)> DateTime.Now)
-            return new JsonResult(new JsonResultOperation(false));
+            return Json(new JsonResultOperation(false));
         var phoneNumberToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, phoneNumber);
         //ToDo send sms
 
         user.SendSmsLastTime = DateTime.Now;
         await _uow.SaveChangesAsync();
-        return new JsonResult(new JsonResultOperation(true, "کد فعال سازی مجددا ارسال شد")
+        return Json(new JsonResultOperation(true, "کد فعال سازی مجددا ارسال شد")
         {
             Data = new
             {

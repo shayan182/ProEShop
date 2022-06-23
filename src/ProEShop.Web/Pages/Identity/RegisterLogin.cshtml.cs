@@ -12,7 +12,7 @@ using ProEShop.ViewModels.Identity.Settings;
 
 namespace ProEShop.Web.Pages.Identity;
 
-public class RegisterLoginModel : PageModel
+public class RegisterLoginModel : PageBase
 {
     private readonly IApplicationUserManager _userManager;
     private readonly ILogger<RegisterLoginModel> _logger;
@@ -70,7 +70,7 @@ public class RegisterLoginModel : PageModel
             {
                 var code = _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
                 //Todo send SMS
-                user.SendSmsLastTime = DateTime.Now.AddMinutes(-3);
+                user.SendSmsLastTime = DateTime.Now;
                 await _userManager.UpdateAsync(user);
             }
         }

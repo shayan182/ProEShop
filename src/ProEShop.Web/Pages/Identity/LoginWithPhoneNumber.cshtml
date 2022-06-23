@@ -3,6 +3,7 @@
 @{
     Layout = "_IdentityLayout";
     ViewData["Title"] = "ورود به سایت";
+    var reSendSmsUrl = @Url.Page("/Identity/LoginWithPhoneNumber", "ReSendUserSmsActivation");
 }
 
 <div class="d-flex justify-content-center" id="login-box"
@@ -27,7 +28,13 @@
         <div id="login-register-text" class="mt-3 rem1and3 d-flex">
             <span>کد تایید را وارد نمایید</span>
         </div>
-        <form method="post" class="mt-3">
+        <form data-ajax="true"
+              data-ajax-begin="onBeginLoginWithPhoneNumber"
+              data-ajax-complete="onCompleteLoginWithPhoneNumber"
+              data-ajax-failure="onFailureLoginWithPhoneNumber"
+              data-ajax-success="onSuccessLoginWithPhoneNumber"
+            method="post"
+              class="mt-3">
             <input asp-for="LoginWithPhoneNumber.PhoneNumber" />
             <div>
                 <label class="form-label rem0and9">
@@ -50,7 +57,7 @@
                         دیگر
                     </span>
                     <button id="send-user-activation-sms-box"
-                            onclick="reSendActivationCode('@Model.LoginWithPhoneNumber.PhoneNumber', this)"
+                            onclick="reSendActivationCode('@Model.LoginWithPhoneNumber.PhoneNumber', this, '@reSendSmsUrl')"
                             type="button"
                             class="d-none btn btn-default text-info">
                         دریافت مجدد کد تایید
@@ -66,8 +73,13 @@
     </div>
 </div>
 @section CustomScripts{
-<script src="~/Pages/Identity/LoginWithPhoneNumber.cshtml.js"></script>
+    <script src="~/Pages/Identity/LoginWithPhoneNumber.cshtml.js"></script>
 }
-@section ValidationScripts{
+@section Scripts{
 <partial name="_ValidationScriptsPartial" />
+<script src="~/lib/toastr.js/toastr.min.js"></script>
+<script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section Styles{
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
 }
