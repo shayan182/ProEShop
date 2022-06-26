@@ -18,6 +18,7 @@ public class ApplicationDbContext :
 
     }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Product> Products { get; set; }
 
     public T GetShadowPropertyValue<T>(object entity, string propertyName) where T : IConvertible
     {
