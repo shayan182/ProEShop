@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using ProEShop.Common.EntityFramwork;
 using ProEShop.Entities;
 using ProEShop.Entities.AuditableEntity;
 using ProEShop.Entities.Identity;
@@ -17,8 +18,6 @@ public class ApplicationDbContext :
     {
 
     }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<Product> Products { get; set; }
 
     public T GetShadowPropertyValue<T>(object entity, string propertyName) where T : IConvertible
     {
@@ -45,8 +44,10 @@ public class ApplicationDbContext :
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        builder.RegisterAllEntities(typeof(EntityBase));
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
+        // should be at end 
         builder.AddAuditableShadowProperties();
     }
 

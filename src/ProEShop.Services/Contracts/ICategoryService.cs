@@ -1,7 +1,8 @@
 ﻿using ProEShop.Entities;
+using ProEShop.ViewModels.Categories;
 
 namespace ProEShop.Services.Contracts;
 public interface ICategoryService : IGenericService<Category>
 {
-    Task<List<Category>> GetAll();
+    Task<ShowCategoriesViewModel> GetCategories(SearchCategoryViewModel model);
 }

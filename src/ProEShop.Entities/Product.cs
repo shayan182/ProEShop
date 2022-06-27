@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using ProEShop.Entities.AuditableEntity;
 
 namespace ProEShop.Entities;
 
+[Table("Products")]
 public class Product : EntityBase, IAuditableEntity
 {
 
