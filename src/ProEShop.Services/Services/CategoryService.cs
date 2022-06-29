@@ -38,7 +38,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
                 break;
         }
 
-        switch (model.ShowInMenusStatus)
+         switch (model.ShowInMenusStatus)
         {
             case ShowInMenusStatus.True:
                 categories = categories.Where(x => x.ShowInMenus);

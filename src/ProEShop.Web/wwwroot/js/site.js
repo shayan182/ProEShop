@@ -23,7 +23,7 @@ function hideLoading() {
     $('#loading-modal').modal('hide');
 }
 
-//toastr
+// Toastr
 
 function showToastr(status, message) {
     toastr.options = {
@@ -46,10 +46,14 @@ function showToastr(status, message) {
     toastr[status](message);
 }
 
-//end toastr
+// End toastr
 
-// Tooltip setup
+// Enable tooltips
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 });
+
+function showErrorMessage(message) {
+    showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
+}

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
-using ProEShop.Common.IdentityToolKit;
+using ProEShop.Common.IdentityToolkit;
 using ProEShop.Entities.Identity;
 using ProEShop.IocConfig;
 using ProEShop.Services.Contracts.Identity;

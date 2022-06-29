@@ -1,13 +1,28 @@
-﻿using System.Globalization;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Globalization;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
 
-namespace ProEShop.Common.IdentityToolKit;
+namespace ProEShop.Common.IdentityToolkit;
 
 public static class IdentityExtensions
 {
+    public static void AddErrorsFromResult(this ModelStateDictionary modelState, IdentityResult result)
+    {
+        foreach (var error in result.Errors)
+        {
+            modelState.AddModelError(string.Empty, error.Description);
+        }
+    }
+
+    public static List<string> GetModelStateErrors(this ModelStateDictionary modelState)
+    {
+        return modelState.Keys.SelectMany(k => modelState[k].Errors)
+            .Select(m => m.ErrorMessage).ToList();
+    }
+
     /// <summary>
     /// IdentityResult errors list to string
     /// </summary>
@@ -26,16 +41,17 @@ public static class IdentityExtensions
 
                 if (!useHtmlNewLine)
                 {
-                    results.AppendLine(errorDescription);
+                    results.AppendLine(errorDescription);//"\n"
                 }
                 else
                 {
-                    results.Append(errorDescription).AppendLine("<br/>");
+                    results.Append(errorDescription).AppendLine("<br/>");//"\n"
                 }
             }
         }
         return results.ToString();
     }
+
     /// <summary>
     /// Finds the first claimType's value of the given ClaimsIdentity.
     /// </summary>

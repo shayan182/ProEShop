@@ -1,4 +1,4 @@
-$('#sidebar').on('hide.bs.collapse', function (e) {
+﻿$('#sidebar').on('hide.bs.collapse', function (e) {
     if (e.target == this) {
         $('#main-content').removeClass('col-lg-10');
     }
