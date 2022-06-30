@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
@@ -21,9 +20,7 @@ public class IndexModel : PageBase
 
     #endregion
 
-    public ShowCategoriesViewModel Categories { get; set; }
-    = new();
-
+    
     public SearchCategoryViewModel SearchCategories { get; set; }
     = new();
 
@@ -40,5 +37,13 @@ public class IndexModel : PageBase
             });
         }
         return Partial("List", await _categoryService.GetCategories(searchCategories));
+    }
+    public IActionResult OnGetAdd()
+    {
+        return Partial("Add");
+    }
+    public IActionResult OnPostAdd(AddCategoryViewModel model)
+    {
+        return Partial("Add");
     }
 }
