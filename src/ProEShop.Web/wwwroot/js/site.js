@@ -57,3 +57,39 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 function showErrorMessage(message) {
     showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
 }
+
+//function initializeTinyMCE() {
+//    tinymce.init({
+//        selector: 'textarea.custom-tinymce',
+//        height: 300,
+//        max_height: 500,
+//        language: 'fa_IR',
+//        language_url: '/js/fa_IR.js',
+//        content_style: 'body {font-family: Vazir}',
+//        plugins: 'link table preview wordcount',
+//        toolbar: 'link bold italic table preview'
+//    });
+//}
+
+
+
+function initializeTinyMCE() {
+    tinymce.init({
+        selector: 'textarea.custom-tinymce',
+        height: 500,
+        max_height: 900,
+        language: 'fa_IR',
+        language_url: '/js/fa_IR.js',
+        content_style: 'body {font-family: Vazir}',
+        plugins: 'link table preview wordcount codesample directionality  emoticons fullpage insertdatetime a_tinymce_plugin legacyoutput advlist  image textpattern template wordcount lists media anchor  print autolink  noneditable pagebreak autosave bbcode charmap code nonbreaking',
+        toolbar: 'link bold italic table preview ltr rtl fullpage a11ycheck addcommentContext showcommentContexts casechange  wordcount checklist  image export bullist formatpainter pagebreak charmap pageembed nonbreaking permanentpen table restoredraft numlist  table'
+    });
+
+    // for tool bar :  tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol
+}
+
+document.addEventListener('focusin', function (e) {
+    if (e.target.closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root') !== null) {
+        e.stopImmediatePropagation();
+    }
+});

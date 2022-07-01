@@ -9,7 +9,7 @@
         <h5 class="card-title">
             @ViewData["Title"]
         </h5>
-         <div class="d-grid d-lg-block mb-2">
+        <div class="d-grid d-lg-block mb-2">
             <a asp-page-handler="Add" type="button" class="btn btn-outline-primary show-modal-form">
                 افزودن دسته بندی
             </a>
@@ -59,22 +59,26 @@
 
 
 <div class="modal fade" id="show-form-modal" data-bs-backdrop="static">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">افزودن دسته بندی</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body"></div>
-      <div class="modal-footer d-flex justify-content-start">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
-      </div>
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">افزودن دسته بندی</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer d-flex justify-content-start">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
+
+<textarea class="form-control custom-tinymce" ></textarea>
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/tinymce/tinymce.min.js"></script>
 }
     @section CustomScripts{
     <script src="~/Pages/Admin/Category/Index.cshtml.js"></script>
