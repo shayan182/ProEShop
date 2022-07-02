@@ -19,8 +19,12 @@
             <span class="span-error-message" asp-validation-for="Picture"></span>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 my-2">
-            <label class="form-label" asp-for="ParentId"></label>
-            <select class="form-select" asp-for="ParentId"></select>
+            <label class="form-label " asp-for="ParentId"></label>
+            <select class="form-select custom-select2" asp-for="ParentId">
+                <option>Test</option>
+                <option>Test2</option>
+                <option>Shayan</option>
+            </select>
         </div>
         <div class="col-12 my-2 form-check form-switch px-3">
             <label class="form-check-label" asp-for="ShowInMenus"></label>
