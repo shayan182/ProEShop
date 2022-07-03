@@ -1,6 +1,6 @@
 ﻿@model ProEShop.ViewModels.Categories.AddCategoryViewModel
 
-<form class="alert alert-secondary" asp-page-handler="Add" method="post">
+<form class="alert alert-secondary custom-ajax-form" asp-page-handler="Add" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="row">
         <div class="col-12 col-sm-6 col-lg-3 my-2">
@@ -20,10 +20,7 @@
         </div>
         <div class="col-12 col-sm-6 col-lg-3 my-2">
             <label class="form-label " asp-for="ParentId"></label>
-            <select class="form-select custom-select2" asp-for="ParentId">
-                <option>Test</option>
-                <option>Test2</option>
-                <option>Shayan</option>
+            <select class="form-select custom-select2" asp-for="ParentId" asp-items="Model.MainCategories">
             </select>
         </div>
         <div class="col-12 my-2 form-check form-switch px-3">
@@ -37,13 +34,13 @@
             <textarea class="form-control custom-tinymce" asp-for="Description"></textarea>
             <span class="span-error-message" asp-validation-for="Description"></span>
         </div>
+       
+
         <div class="col-12 my-2">
             <div class="d-grid d-lg-block">
-                <button type="submit" class="btn btn-primary d-inline-flex align-items-center">
+               <button type="submit" class="btn btn-primary d-inline-flex align-items-center submit-custom-ajax-button">
                     افزودن
-                    <span class="spinner-border spinner-border-sm d-none">
-                        &nbsp;
-                    </span>
+                    <span class="spinner-border spinner-border-sm d-none ms-2"></span>
                 </button>
             </div>
         </div>

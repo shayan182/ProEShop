@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
@@ -60,6 +61,26 @@ public class CategoryService : GenericService<Category>, ICategoryService
                 Slug = x.Slug
             })
         .ToListAsync()
+        };
+    }
+
+    public Dictionary<long, string> GetCategoriesToShowInSelelctBox()
+    {
+        return _categories.ToDictionary(x=>x.Id ,x => x.Title);
+    }
+
+    public override async Task<DuplicateColumns> AddAsync(Category entity)
+    {
+        var result = new List<string>();
+        if (await _categories.AnyAsync(x => x.Title == entity.Title))
+            result.Add(nameof(entity.Title));
+        if (await _categories.AnyAsync(x => x.Slug == entity.Slug))
+            result.Add(nameof(entity.Slug));
+        if(!result.Any())
+            await base.AddAsync(entity);
+        return new DuplicateColumns(!result.Any())
+        {
+            Columns = result
         };
     }
 }

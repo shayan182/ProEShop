@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using System.Text;
 
 namespace ProEShop.Common.Helpers;
 
@@ -13,6 +15,8 @@ public static class StringHelpers
 
     public static string GenerateGuid() => Guid.NewGuid().ToString("N");
 
+
+    //custome
     public static string RemoveMultipleSpaces(string str)
     {
         if (string.IsNullOrWhiteSpace(str))
@@ -34,5 +38,17 @@ public static class StringHelpers
         }
 
         return new string(ch).Trim();
+    }
+
+    public static List<string> SetDuplicateColumnsErrors<T>(this List<string> duplicateColumns)
+    {
+        var result = new List<string>();
+        foreach (var item in duplicateColumns)
+        {
+            var columnDisplayName = typeof(T).GetProperty(item)!
+                .GetCustomAttribute<DisplayAttribute>()!.Name;
+            result.Add($"این {columnDisplayName} قبلا در سیستم ثبت شده است");
+        }
+        return result;
     }
 }

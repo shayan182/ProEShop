@@ -17,14 +17,14 @@ public class Category : EntityBase, IAuditableEntity
     public string Title { get; set; }
 
     [Column(TypeName ="ntext")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [Required]
     [MaxLength(130)]
     public string Slug { get; set; }
 
     [MaxLength(50)]
-    public string Picture { get; set; }
+    public string? Picture { get; set; }
 
     public long? ParentId { get; set; }
 

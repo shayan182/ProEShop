@@ -1,15 +1,22 @@
 ﻿$(function () {
 
+    $('#modalOne').on('hide.bs.modal', function () {
+        tinyMCE.editors = [];
+    });
+
     $('.show-modal-form').click(function (e) {
+
         e.preventDefault();
         var urlToLoadTheForm = $(this).attr('href');
+        showLoading();
         $.get(urlToLoadTheForm, function (data, status) {
+            hideLoading();
             if (status == 'success') {
-                $('#show-form-modal .modal-body').html(data);
+                $('#form-modal-place .modal-body').html(data);
                 initializeTinyMCE();
                 initializeSelect2();
-                $.validator.unobtrusive.parse($('#show-form-modal form'))
-                $('#show-form-modal').modal('show');
+                $.validator.unobtrusive.parse($('#form-modal-place form'));
+                $('#form-modal-place').modal('show');
             }
             else {
                 showErrorMessage();
@@ -17,16 +24,57 @@
         });
     });
 
-    
-    $.get(`${location.pathname}?handler=GetDataTable`, function (data, status) {
-        $('.search-form-loading').removeAttr('disabled');
-        $('.data-table-loading').addClass('d-none');
-        if (status == 'success') {
-            $('.data-table-place').append(data);
-        }
-        else {
-            showErrorMessage();
-        }
+    function fillDataTable() {
+        $.get(`${location.pathname}?handler=GetDataTable`, function (data, status) {
+            $('.search-form-loading').removeAttr('disabled');
+            $('.data-table-loading').addClass('d-none');
+            if (status == 'success') {
+                $('.data-table-place .data-table-body').remove();
+                $('.data-table-place').append(data);
+            }
+            else {
+                showErrorMessage();
+            }
+        });
+    }
+    fillDataTable();
+
+    $(document).on('submit', 'form.custom-ajax-form', function (e) {
+        e.preventDefault();
+        var currentForm = $(this);
+        var formAction = currentForm.attr('action');
+        var formData = new FormData(this);
+        $.ajax({
+            url: formAction,
+            data: formData,
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                currentForm.find('.submit-custom-ajax-button span').removeClass('d-none');
+                currentForm.find('.submit-custom-ajax-button').attr('disabled', 'disabled');
+            },
+            success: function (data, status) {
+                if (data.isSuccessful == false) {
+                    fillValidationForm(data.data, currentForm);
+                    showToastr('warning', data.message);
+                }
+                else {
+                    fillDataTable();
+                    $('#form-modal-place').modal('hide');
+                    showToastr('success', data.message);
+                }
+            },
+            complete: function () {
+                currentForm.find('.submit-custom-ajax-button span').addClass('d-none');
+                currentForm.find('.submit-custom-ajax-button').removeAttr('disabled');
+            },
+            error: function () {
+                showErrorMessage();
+            }
+        });
     });
 
     $(document).on('submit', 'form.search-form-via-ajax', function (e) {
@@ -35,7 +83,7 @@
         const formData = currentForm.serializeArray();
 
         //show loading disabled button
-        currentForm.find('.search-form-loading').attr('disabled','disabled')
+        currentForm.find('.search-form-loading').attr('disabled', 'disabled')
         currentForm.find('.search-form-loading span').removeClass('d-none');
 
         $('.data-table-loading').removeClass('d-none');
@@ -50,13 +98,7 @@
 
             if (status == 'success') {
                 if (data.isSuccessful == false) {
-                    var errors = '<ul>';
-                    data.data.forEach(function (e) {
-                        er
-                        rors += `<li>${e}</li>`;
-                    });
-                    errors += '</ul>';
-                    currentForm.find('div[class*="validation-summary"]').html(errors);
+                    fillValidationForm();
                     showToastr('warning', data.message);
                 }
                 else {
@@ -70,4 +112,13 @@
             }
         });
     });
+
+    function fillValidationForm(errors, currentForm) {
+        var result = '<ul>';
+        errors.forEach(function (e) {
+            result += `<li>${e}</li>`;
+        });
+        result += '</ul>';
+        currentForm.find('div[class*="validation-summary"]').html(result);
+    }
 });

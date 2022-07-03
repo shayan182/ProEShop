@@ -76,30 +76,52 @@ function showErrorMessage(message) {
 function initializeTinyMCE() {
     tinymce.init({
         selector: 'textarea.custom-tinymce',
-        height: 500,
-        max_height: 900,
+        height: 300,
+        max_height: 500,
         language: 'fa_IR',
         language_url: '/js/fa_IR.js',
         content_style: 'body {font-family: Vazir}',
-        //plugins: 'link table preview wordcount codesample directionality  emoticons insertdatetime a_tinymce_plugin advlist  image textpattern template lists anchor  print autolink  noneditable pagebreak autosave charmap code nonbreaking',
         //plugins: ["link", "table", "preview", "wordcount", "media", "codesample", "emoticons", "insertdatetime", "a_tinymce_plugin", "advlist", "image", "textpattern", "template", "lists", "anchor", "print", "autolink", "noneditable", "pagebreak", "autosave", "code", "nonbreaking", "charmap"],
         plugins: ["image", "code", "table", "link", "media", "codesample"],
-        toolbar: 'link bold italic table preview ltr rtl a11ycheck addcommentContext showcommentContexts casechange  wordcount checklist  image export bullist formatpainter pagebreak charmap pageembed nonbreaking permanentpen table restoredraft numlist  table'
+        //toolbar: 'link bold italic table preview ltr rtl a11ycheck addcommentContext showcommentContexts casechange  wordcount checklist  image export bullist formatpainter pagebreak charmap pageembed nonbreaking permanentpen table restoredraft numlist  table'
+        toolbar: [
+            {
+                name: 'history', items: ['undo', 'redo', 'preview']
+            },
+            {
+                name: 'styles', items: ['styleselect']
+            },
+            {
+                name: 'formatting', items: ['bold', 'italic', 'underline', 'link']
+            },
+            {
+                name: 'alignment', items: ['alignleft', 'aligncenter', 'alignright', 'alignjustify', 'forecolor', 'backcolor']
+            },
+            {
+                name: 'table', items: ['table', 'wordcount']
+            },
+            {
+                name: 'indentation', items: ['outdent', 'indent']
+            }
+        ],
+        branding: false
     });
 
     // for tool bar :  tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol
 }
 
-
+//use this for solve type in search input  
 document.addEventListener('focusin', function (e) {
     if (e.target.closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root') !== null) {
         e.stopImmediatePropagation();
     }
 });
 
+initializeTinyMCE();
+
 function initializeSelect2() {
     $('.custom-select2').select2({
         theme: 'bootstrap-5',
-        dropdownParent: $('#show-form-modal'),
+        dropdownParent: $('#form-modal-place'), // For Search  
     });
 }
