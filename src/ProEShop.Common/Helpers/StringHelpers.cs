@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text;
 
@@ -50,5 +51,9 @@ public static class StringHelpers
             result.Add($"این {columnDisplayName} قبلا در سیستم ثبت شده است");
         }
         return result;
+    }
+    public static string GenerateFileName(this IFormFile file)
+    {
+        return GenerateGuid() + Path.GetExtension(file.FileName);
     }
 }

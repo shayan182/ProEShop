@@ -2,6 +2,7 @@
 using ProEShop.Entities.AuditableEntity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ProEShop.Entities;
 
@@ -24,6 +25,7 @@ public class Category : EntityBase, IAuditableEntity
     public string Slug { get; set; }
 
     [MaxLength(50)]
+    [AllowNull]
     public string? Picture { get; set; }
 
     public long? ParentId { get; set; }

@@ -23,13 +23,13 @@ public class ApplicationDbContext :
     {
         var value = this.Entry(entity).Property(propertyName).CurrentValue;
         return value != null
-            ? (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture)
-            : default;
+            ? (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture)!
+            : default!;
     }
 
     public object GetShadowPropertyValue(object entity, string propertyName)
     {
-        return this.Entry(entity).Property(propertyName).CurrentValue;
+        return this.Entry(entity)!.Property(propertyName)!.CurrentValue!;
     }
 
     public void MarkAsDeleted<TEntity>(TEntity entity)

@@ -15,9 +15,11 @@ public class IndexModel : PageBase
 
     private readonly ICategoryService _categoryService;
     private readonly IUnitOfWork _uow;
-    public IndexModel(ICategoryService categoryService,IUnitOfWork uow)
+    private readonly IUploadFileService _uploadFileService;
+    public IndexModel(ICategoryService categoryService,IUnitOfWork uow,IUploadFileService uploadFileService)
     {
         _categoryService = categoryService;
+        _uploadFileService = uploadFileService;
         _uow = uow;
     }
 
@@ -58,6 +60,11 @@ public class IndexModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
+        string pictureFileName = null;
+        if(model.Picture.IsFileUploded())
+        {
+            pictureFileName = model.Picture.GenerateFileName();
+        }
         var category = new Entities.Category
         {
             Description = model.Description,
@@ -65,7 +72,7 @@ public class IndexModel : PageBase
             Title = model.Title,
             Slug = model.Slug,
             ParentId = model.ParentId == 0 ? null : model.ParentId,
-            Picture = " "
+            Picture = pictureFileName 
         };
         var result = await _categoryService.AddAsync(category);
         if (!result.Ok)
@@ -76,6 +83,7 @@ public class IndexModel : PageBase
             });
         }
         await _uow.SaveChangesAsync();
+        await _uploadFileService.SaveFile(model.Picture, pictureFileName,"images","Categories");
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
     }
 }
