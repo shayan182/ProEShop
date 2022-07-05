@@ -26,13 +26,13 @@ public class IndexModel : PageBase
     #endregion
 
 
-    public SearchCategoryViewModel SearchCategories { get; set; }
+    public ShowCategoriesViewModel categories { get; set; }
     = new();
 
     public void OnGet()
     {
     }
-    public async Task<IActionResult> OnGetGetDataTable(SearchCategoryViewModel searchCategories)
+    public async Task<IActionResult> OnGetGetDataTable(ShowCategoriesViewModel categories)
     {
         if (!ModelState.IsValid)
         {
@@ -41,7 +41,8 @@ public class IndexModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
-        return Partial("List", await _categoryService.GetCategories(searchCategories));
+        categories.Pagination.Take = 1;
+        return Partial("List", await _categoryService.GetCategories(categories));
     }
     public IActionResult OnGetAdd()
     {

@@ -6,7 +6,10 @@ namespace ProEShop.ViewModels.Categories;
 public class ShowCategoriesViewModel
 {
     public List<ShowCategoryViewModel> Categories { get; set; }
+    = new();
     public SearchCategoryViewModel SearchCategories { get; set; }
+    = new();
+    public PaginationViewModel Pagination { get; set; }
     = new();
 }
 
