@@ -4,6 +4,7 @@ using ProEShop.ViewModels.Categories;
 namespace ProEShop.Services.Contracts;
 public interface ICategoryService : IGenericService<Category>
 {
-    Task<ShowCategoriesViewModel> GetCategories(SearchCategoryViewModel model);
+    Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model);
     Dictionary<long, string> GetCategoriesToShowInSelelctBox();
+    Task<EditCategoryViewModel> GetForEdit(long id);
 }

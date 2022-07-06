@@ -10,34 +10,35 @@
             @ViewData["Title"]
         </h5>
         <div class="d-grid d-lg-block mb-2">
-            <a asp-page-handler="Add" type="button" class="btn btn-outline-primary show-modal-form">
+            <a asp-page-handler="Add" class="btn btn-outline-primary show-modal-form">
                 افزودن دسته بندی
             </a>
         </div>
         <form class="alert alert-secondary search-form-via-ajax">
+            <input asp-for="categories.Pagination.CurrentPage" />
             <div asp-validation-summary="All" class="text-danger"></div>
             <h5>
                 جستجو در
                 @ViewData["Title"]
             </h5>
             <div class="row">
-               <div class="col-12 col-sm-6 col-lg-3 my-2">
-                    <label class="form-label" asp-for="SearchCategories.Title"></label>
-                    <input class="form-control" asp-for="SearchCategories.Title" />
-                    <span class="span-error-message" asp-validation-for="SearchCategories.Title"></span>
+                <div class="col-12 col-sm-6 col-lg-3 my-2">
+                    <label class="form-label" asp-for="categories.SearchCategories.Title"></label>
+                    <input class="form-control" asp-for="categories.SearchCategories.Title" />
+                    <span class="span-error-message" asp-validation-for="categories.SearchCategories.Title"></span>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
-                    <label class="form-label" asp-for="SearchCategories.Slug"></label>
-                    <input class="form-control" asp-for="SearchCategories.Slug" />
-                    <span class="span-error-message" asp-validation-for="SearchCategories.Slug"></span>
+                    <label class="form-label" asp-for="categories.SearchCategories.Slug"></label>
+                    <input class="form-control" asp-for="categories.SearchCategories.Slug" />
+                    <span class="span-error-message" asp-validation-for="categories.SearchCategories.Slug"></span>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
-                    <label class="form-label" asp-for="SearchCategories.ShowInMenusStatus"></label>
-                    <select class="form-select" asp-for="SearchCategories.ShowInMenusStatus" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.Categories.ShowInMenusStatus>()"></select>
+                    <label class="form-label" asp-for="categories.SearchCategories.ShowInMenusStatus"></label>
+                    <select class="form-select" asp-for="categories.SearchCategories.ShowInMenusStatus" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.Categories.ShowInMenusStatus>()"></select>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
-                    <label class="form-label" asp-for="SearchCategories.DeletedStatus"></label>
-                    <select class="form-select" asp-for="SearchCategories.DeletedStatus" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.DeletedStatus>()"></select>
+                    <label class="form-label" asp-for="categories.SearchCategories.DeletedStatus"></label>
+                    <select class="form-select" asp-for="categories.SearchCategories.DeletedStatus" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.DeletedStatus>()"></select>
                 </div>
                 <div class="col-12 my-2">
                     <div class="d-grid d-lg-block">
@@ -48,12 +49,12 @@
                     </div>
                 </div>
             </div>
-        </form>
-        <div class="data-table-place">
-            <div class="text-center data-table-loading">
-                <img src="/images/application/Time.gif" />
+            <div class="data-table-place">
+                <div class="text-center data-table-loading">
+                    <img src="/images/application/Time.gif" />
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -80,9 +81,10 @@
     <script src="~/lib/select2/js/select2.js"></script>
     <script src="~/lib/select2/js/i18n/fa.js"></script>
 }
-@section CustomScripts{
+    @section CustomScripts{
     <script src="~/Pages/Admin/Category/Index.cshtml.js"></script>
 }
-@section Styles{
-    <link rel="stylesheet" href="~/lib/select2/css/select2.css"/>
-    <link rel="stylesheet" href="~/lib/select2-bootstrap-5-theme/select2-bootstrap-5-theme.rtl.min.css"/>}
+    @section Styles{
+    <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
+    <link rel="stylesheet" href="~/lib/select2-bootstrap-5-theme/select2-bootstrap-5-theme.rtl.min.css" />
+}
