@@ -20,7 +20,7 @@ public class UploadFileService : IUploadFileService
         _environment = environment;
     }
 
-    public async Task SaveFile(IFormFile file, string fileName, params string[] destinationDirectoryNames)
+    public async Task SaveFile(IFormFile file, string fileName,string oldFileName = null, params string[] destinationDirectoryNames)
     {
         if (file == null || file.Length == 0)
         {
@@ -44,6 +44,12 @@ public class UploadFileService : IUploadFileService
 
         var filePath = Path.Combine(uploadsRootFolder, fileName);
 
+        if (oldFileName != null)
+        {
+            var oldFilePath = Path.Combine(uploadsRootFolder, oldFileName);
+            File.Delete(oldFilePath);
+        }
+
         await using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write,
             FileShare.None,
             MaxBufferSize,
@@ -52,4 +58,6 @@ public class UploadFileService : IUploadFileService
             useAsync: true);
         await file.CopyToAsync(fileStream);
     }
+
+   
 }

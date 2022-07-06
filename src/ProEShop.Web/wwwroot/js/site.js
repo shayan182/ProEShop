@@ -51,6 +51,9 @@ function showToastr(status, message) {
 // Enable tooltips
 function enabelingTooltips() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    })
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });

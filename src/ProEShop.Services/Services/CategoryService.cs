@@ -57,6 +57,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
             Categories = await paginationResult.Query
             .Select(x => new ShowCategoryViewModel()
             {
+                Id = x.Id,
                 Title = x.Title,
                 ShowInMenus = x.ShowInMenus,
                 Parent = x.ParentId != null ? x.Parent.Title : "دسته اصلی",
@@ -86,5 +87,34 @@ public class CategoryService : GenericService<Category>, ICategoryService
         {
             Columns = result
         };
+    }
+    public override async Task<DuplicateColumns> Update(Category entity)
+    {
+        var category = _categories.Where(x => x.Id != x.Id);
+        var result = new List<string>();
+        if (await category.AnyAsync(x => x.Title == entity.Title))
+            result.Add(nameof(entity.Title));
+        if (await category.AnyAsync(x => x.Slug == entity.Slug))
+            result.Add(nameof(entity.Slug));
+        if (!result.Any())
+            await base.Update(entity);
+        return new DuplicateColumns(!result.Any())
+        {
+            Columns = result
+        };
+    }
+
+    public async Task<EditCategoryViewModel> GetForEdit(long id)
+    {
+        return await _categories.Select(x => new EditCategoryViewModel()
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Description = x.Description,
+            ParentId = x.ParentId,
+            SelectedPicture = x.Picture,
+            Slug = x.Slug,
+            ShowInMenus = x.ShowInMenus
+        }).SingleOrDefaultAsync(x => x.Id == id);
     }
 }

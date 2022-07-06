@@ -48,7 +48,8 @@ public class IndexModel : PageBase
     {
         var model = new AddCategoryViewModel()
         {
-            MainCategories = _categoryService.GetCategoriesToShowInSelelctBox().CreateSelectListItem(firstItemText: "خودش دسته اصلی باشد")
+            MainCategories = _categoryService.GetCategoriesToShowInSelelctBox()
+            .CreateSelectListItem(firstItemText: "خودش دسته اصلی باشد")
         };
         return Partial("Add", model);
     }
@@ -85,6 +86,55 @@ public class IndexModel : PageBase
         }
         await _uow.SaveChangesAsync();
         await _uploadFileService.SaveFile(model.Picture, pictureFileName,"images","Categories");
+        return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
+    }
+
+    public async Task<IActionResult> OnGetEdit(int id)
+    {
+        var model = await _categoryService.GetForEdit(id);
+        model.MainCategories = _categoryService.GetCategoriesToShowInSelelctBox()
+           .CreateSelectListItem(firstItemText: "خودش دسته اصلی باشد");
+        return Partial("Edit", model);
+    }
+    public async Task<IActionResult> OnPostEditAsync(EditCategoryViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = ModelState.GetModelStateErrors()
+            });
+        }
+        string pictureFileName = null;
+        if (model.Picture.IsFileUploded())
+        {
+            pictureFileName = model.Picture.GenerateFileName();
+        }
+
+        var category = await _categoryService.FindByIdAsync(model.Id);
+        if (category == null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        }
+        var oldFileName = category.Picture;
+
+        category.Title = model.Title;
+        category.Description = model.Description;
+        category.ShowInMenus = model.ShowInMenus;
+        category.Slug = model.Slug;
+        category.ParentId = model.ParentId == 0 ? null : model.ParentId;
+        category.Picture = pictureFileName;
+
+        var result = await _categoryService.Update(category);
+        if (!result.Ok)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = result.Columns.SetDuplicateColumnsErrors<AddCategoryViewModel>()
+            });
+        }
+        await _uow.SaveChangesAsync();
+        await _uploadFileService.SaveFile(model.Picture, pictureFileName,oldFileName, "images", "Categories");
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
     }
 }
