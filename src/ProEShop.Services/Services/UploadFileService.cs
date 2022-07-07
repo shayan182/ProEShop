@@ -20,7 +20,7 @@ public class UploadFileService : IUploadFileService
         _environment = environment;
     }
 
-    public async Task SaveFile(IFormFile file, string fileName,string oldFileName = null, params string[] destinationDirectoryNames)
+    public async Task SaveFile(IFormFile file, string fileName, string oldFileName = null, params string[] destinationDirectoryNames)
     {
         if (file == null || file.Length == 0)
         {
@@ -58,6 +58,30 @@ public class UploadFileService : IUploadFileService
             useAsync: true);
         await file.CopyToAsync(fileStream);
     }
+    public void DeleteFile(string fileName, params string[] destinationDirectoryNames)
+    {
+        if (fileName == null || destinationDirectoryNames == null || !destinationDirectoryNames.Any())
+            return;
 
-   
+
+        var uploadsRootFolder = Path.Combine(_environment.WebRootPath);
+
+        if (destinationDirectoryNames is not null)
+        {
+            foreach (var folderName in destinationDirectoryNames)
+            {
+                uploadsRootFolder = Path.Combine(uploadsRootFolder, folderName);
+            }
+        }
+
+        if (!Directory.Exists(uploadsRootFolder))
+            return;
+
+        var filePath = Path.Combine(uploadsRootFolder, fileName);
+
+        File.Delete(filePath);
+
+    }
+
+
 }

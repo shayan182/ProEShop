@@ -34,6 +34,7 @@ public class IndexModel : PageBase
     }
     public async Task<IActionResult> OnGetGetDataTable(ShowCategoriesViewModel categories)
     {
+        Thread.Sleep(1000);
         if (!ModelState.IsValid)
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
@@ -41,13 +42,21 @@ public class IndexModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
-        categories.Pagination.Take = 1;
+        categories.Pagination.Take = 5;
         return Partial("List", await _categoryService.GetCategories(categories));
     }
-    public IActionResult OnGetAdd()
+    public async Task<IActionResult> OnGetAdd(long id =  0)
     {
+        if (id > 0)
+        {
+            if(! await _categoryService.IsExistsByIdAsync(id))
+            {
+                return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            }
+        }
         var model = new AddCategoryViewModel()
         {
+            ParentId = id,
             MainCategories = _categoryService.GetCategoriesToShowInSelelctBox()
             .CreateSelectListItem(firstItemText: "خودش دسته اصلی باشد")
         };
@@ -89,9 +98,12 @@ public class IndexModel : PageBase
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
     }
 
-    public async Task<IActionResult> OnGetEdit(int id)
+    public async Task<IActionResult> OnGetEdit(long id)
     {
         var model = await _categoryService.GetForEdit(id);
+        if (model is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+
         model.MainCategories = _categoryService.GetCategoriesToShowInSelelctBox()
            .CreateSelectListItem(firstItemText: "خودش دسته اصلی باشد");
         return Partial("Edit", model);
@@ -105,6 +117,10 @@ public class IndexModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
+
+        if (model.Id == model.ParentId)
+            return Json(new JsonResultOperation(false, "یک رکورد نمی تواند والد خودش باشد"));
+
         string pictureFileName = null;
         if (model.Picture.IsFileUploded())
         {
@@ -113,9 +129,8 @@ public class IndexModel : PageBase
 
         var category = await _categoryService.FindByIdAsync(model.Id);
         if (category == null)
-        {
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
-        }
+        
         var oldFileName = category.Picture;
 
         category.Title = model.Title;
@@ -136,5 +151,29 @@ public class IndexModel : PageBase
         await _uow.SaveChangesAsync();
         await _uploadFileService.SaveFile(model.Picture, pictureFileName,oldFileName, "images", "Categories");
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
+    }
+    public async Task<IActionResult> OnPostDeleteAsync(long elementId)
+    {
+        Thread.Sleep(1000);
+
+        var category = await _categoryService.FindByIdAsync(elementId);
+        if (category is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        _categoryService.SoftDelete(category);
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
+    } 
+    public async Task<IActionResult> OnPostDeletePicture(long elementId)
+    {
+        var category = await _categoryService.FindByIdAsync(elementId);
+        if (category is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+
+        var fileName = category.Picture;ggggggggggg
+        category.Picture = null;
+        await _uow.SaveChangesAsync();
+        _uploadFileService.DeleteFile(fileName, "images", "Categories");
+        return Json(new JsonResultOperation(true, "تصویر دسته بندی با موفقیت حذف شد."));
+
     }
 }
