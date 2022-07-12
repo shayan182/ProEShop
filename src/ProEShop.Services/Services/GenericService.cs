@@ -70,12 +70,24 @@ public abstract class GenericService<TEntity> : IGenericService<TEntity> where T
         return new()
         {
             Pagination = pagination,
-            Query = items.Skip(skip).OrderBy(x => x).Take(pagination.Take)
+            Query = items.Skip(skip).Take(pagination.Take)
         };
     }
 
     public void SoftDelete(TEntity entity)
     {
         entity.IsDeleted = true;
+    }
+    public void Restore(TEntity entity)
+    {
+        entity.IsDeleted = false;
+    }
+
+    public async Task<bool> IsExistsBy(string propertyToFilter, object propertyValue, long? id = null)
+    {
+        var exp = ExpressionHelpers.CreateExpression<TEntity>(propertyToFilter, propertyValue);
+        return await _entities
+            .Where(x => id == null || x.Id != id) // For Edit Methods
+            .AnyAsync(exp);
     }
 }

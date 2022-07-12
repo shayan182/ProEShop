@@ -3,12 +3,13 @@
 {
     <div class="table-responsive data-table-body">
         <table class="table table-bordered table-striped table-hover">
-            <thead class="table-light">
+            <thead class="table-light text-center align-middle">
                 <tr>
+                    <th>@Html.DisplayNameFor(x => x.Categories[0].Id)</th>
+                    <th>@Html.DisplayNameFor(x => x.Categories[0].Picture)</th>
                     <th>@Html.DisplayNameFor(x => x.Categories[0].Title)</th>
                     <th>@Html.DisplayNameFor(x => x.Categories[0].Parent)</th>
                     <th>@Html.DisplayNameFor(x => x.Categories[0].Slug)</th>
-                    <th>@Html.DisplayNameFor(x => x.Categories[0].Picture)</th>
                     <th>@Html.DisplayNameFor(x => x.Categories[0].ShowInMenus)</th>
                     <th>عملیات</th>
                 </tr>
@@ -17,15 +18,12 @@
                 @foreach (var category in Model.Categories)
                 {
                     <tr>
-                        <td>@category.Title</td>
-                        <td>@category.Parent</td>
-                        <td>@category.Slug</td>
-
+                        <td>@category.Id</td>
                         <td>
                             @if (category.Picture == "بدون عکس")
                             {
-                                <div class="d-grid">
-                                    <span class="btn btn-warning">بدون عکس</span>
+                                <div class="d-flex justify-content-center">
+                                    <i class="fa fa-remove fa-2x text-danger"></i>
                                 </div>
                             }
                             else
@@ -35,36 +33,54 @@
                                 </span>
                             }
                         </td>
+                        <td>@category.Title</td>
+                        <td>@category.Parent</td>
+                        <td>@category.Slug</td>
+
                         <td>
                             @if (category.ShowInMenus)
                             {
-                                <div class="d-grid">
-                                    <span class="btn btn-success" type="button">بله</span>
+                                <div class="d-flex justify-content-center">
+                                    @*<span class="btn btn-success" type="button">بله</span>*@
+                                    <i class="fa fa-check fa-2x text-success"></i>
+
                                 </div>
                             }
                             else
                             {
-                                <div class="d-grid">
-                                    <span class="btn btn-danger" type="button">خیر</span>
+                                <div class="d-flex justify-content-center">
+                                    @*<span class="btn btn-danger" type="button">خیر</span>*@
+                                    <i class="fa fa-remove fa-2x text-danger"></i>
+
                                 </div>
                             }
                         </td>
                         <td>
-                            <a custom-title="ویرایش دسته بندی" asp-page-handler="Edit" asp-route-id="@category.Id" class="btn btn-warning show-modal-form">
+                            <a custom-title="ویرایش دسته بندی" asp-page-handler="Edit" asp-route-id="@category.Id" class="btn btn-warning my-1 show-modal-form">
                                 ویرایش
                             </a>
-                            <form asp-page-handler="Delete" class="d-inline-block">
-                                <input type="hidden" name="elementId" value="@category.Id" />
-                                <button type="button" class="btn btn-danger delete-row-button">حذف</button>
-                            </form>
-                            <a asp-page-handler="Add" asp-route-id="@category.Id" class="btn btn-success show-modal-form">
+                            @if (!category.IsDeleted)
+                            {
+                                <form asp-page-handler="Delete" class="d-inline-block">
+                                    <input type="hidden" name="elementId" value="@category.Id" />
+                                    <button type="button" class="btn btn-danger my-1 delete-row-button">حذف</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-page-handler="Restor" class="d-inline-block">
+                                    <input type="hidden" name="elementId" value="@category.Id" />
+                                    <button custom-message="آیا مطمئن به بازگردانی هستید؟" type="button" class="btn btn-success my-1 delete-row-button">بازگرداندن</button>
+                                </form>
+                            }
+                            <a asp-page-handler="Add" asp-route-id="@category.Id" class="btn btn-info my-1 show-modal-form">
                                 افزودن زیر دسته
                             </a>
                             @if (category.Picture != "بدون عکس")
                             {
                                 <form asp-page-handler="DeletePicture" class="d-inline-block">
                                     <input type="hidden" name="elementId" value="@category.Id" />
-                                    <button type="button" class="btn btn-danger delete-row-button">حذف تصویر</button>
+                                    <button type="button" class="btn btn-danger delete-row-button my-1">حذف تصویر</button>
                                 </form>
                             }
                         </td>

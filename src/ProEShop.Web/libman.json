@@ -46,6 +46,10 @@
       "provider": "jsdelivr",
       "library": "sweetalert2@11.4.20",
       "destination": "wwwroot\\lib\\sweetalert2"
+    },
+    {
+      "library": "font-awesome@6.1.1",
+      "destination": "wwwroot\\lib\\font-awesome"
     }
   ]
 }

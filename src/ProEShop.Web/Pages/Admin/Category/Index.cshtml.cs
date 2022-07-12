@@ -34,7 +34,6 @@ public class IndexModel : PageBase
     }
     public async Task<IActionResult> OnGetGetDataTable(ShowCategoriesViewModel categories)
     {
-        Thread.Sleep(1000);
         if (!ModelState.IsValid)
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
@@ -49,7 +48,7 @@ public class IndexModel : PageBase
     {
         if (id > 0)
         {
-            if(! await _categoryService.IsExistsByIdAsync(id))
+            if (!await _categoryService.IsExistsBy(nameof(Entities.Category.Id), id)) ;
             {
                 return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
             }
@@ -94,7 +93,7 @@ public class IndexModel : PageBase
             });
         }
         await _uow.SaveChangesAsync();
-        await _uploadFileService.SaveFile(model.Picture, pictureFileName,"images","Categories");
+        await _uploadFileService.SaveFile(model.Picture, pictureFileName,null,"images","Categories");
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
     }
 
@@ -138,7 +137,7 @@ public class IndexModel : PageBase
         category.ShowInMenus = model.ShowInMenus;
         category.Slug = model.Slug;
         category.ParentId = model.ParentId == 0 ? null : model.ParentId;
-        category.Picture = pictureFileName;
+        category.Picture = pictureFileName == null ? oldFileName : pictureFileName;
 
         var result = await _categoryService.Update(category);
         if (!result.Ok)
@@ -154,14 +153,13 @@ public class IndexModel : PageBase
     }
     public async Task<IActionResult> OnPostDeleteAsync(long elementId)
     {
-        Thread.Sleep(1000);
 
         var category = await _categoryService.FindByIdAsync(elementId);
         if (category is null)
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
         _categoryService.SoftDelete(category);
         await _uow.SaveChangesAsync();
-        return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
+        return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت حذف شد."));
     } 
     public async Task<IActionResult> OnPostDeletePicture(long elementId)
     {
@@ -169,11 +167,38 @@ public class IndexModel : PageBase
         if (category is null)
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
 
-        var fileName = category.Picture;ggggggggggg
+        var fileName = category.Picture;
         category.Picture = null;
         await _uow.SaveChangesAsync();
         _uploadFileService.DeleteFile(fileName, "images", "Categories");
         return Json(new JsonResultOperation(true, "تصویر دسته بندی با موفقیت حذف شد."));
+    }
+    public async Task<IActionResult> OnPostRestorAsync(long elementId)
+    {
+        var category = await _categoryService.FindByIdAsync(elementId);
+        if (category is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        _categoryService.Restore(category);
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت بازگردانی شد."));
+    }
+    public async Task<IActionResult> OnPostCheckForTitle(string title)
+    {
+        return Json(!await _categoryService.IsExistsBy(nameof(Entities.Category.Title), title));
+    }
 
+    public async Task<IActionResult> OnPostCheckForSlug(string slug)
+    {
+        return Json(!await _categoryService.IsExistsBy(nameof(Entities.Category.Slug), slug));
+    }
+
+    public async Task<IActionResult> OnPostCheckForTitleOnEdit(string title, long id)
+    {
+        return Json(!await _categoryService.IsExistsBy(nameof(Entities.Category.Title), title, id));
+    }
+
+    public async Task<IActionResult> OnPostCheckForSlugOnEdit(string slug, long id)
+    {
+        return Json(!await _categoryService.IsExistsBy(nameof(Entities.Category.Slug), slug, id));
     }
 }

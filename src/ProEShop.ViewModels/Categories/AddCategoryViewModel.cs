@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
@@ -8,6 +9,10 @@ namespace ProEShop.ViewModels.Categories;
 
 public class AddCategoryViewModel
 {
+    [PageRemote(PageName ="Index",PageHandler ="CheckForTitle"
+        ,ErrorMessage =AttributesErrorMessages.RemoteMessage,
+        HttpMethod = "POST",
+        AdditionalFields =ViewModelConstants.AntiForgeryToken)]
     [Display(Name = "عنوان")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(100, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]

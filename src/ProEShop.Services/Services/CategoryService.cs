@@ -50,6 +50,10 @@ public class CategoryService : GenericService<Category>, ICategoryService
             default:
                 break;
         }
+
+        categories = categories.CreateOrderByExpression(model.SearchCategories.Sorting.ToString(),
+            model.SearchCategories.SortingOrder.ToString());
+
         var paginationResult = await GenericPaginationAsync(categories, model.Pagination);
 
         return new()
@@ -62,7 +66,8 @@ public class CategoryService : GenericService<Category>, ICategoryService
                 ShowInMenus = x.ShowInMenus,
                 Parent = x.ParentId != null ? x.Parent.Title : "دسته اصلی",
                 Slug = x.Slug,
-                Picture = x.Picture ?? "بدون عکس"
+                Picture = x.Picture ?? "بدون عکس",
+                IsDeleted = x.IsDeleted
             })
         .ToListAsync(),
             Pagination = paginationResult.Pagination

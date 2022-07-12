@@ -20,7 +20,7 @@ public class UploadFileService : IUploadFileService
         _environment = environment;
     }
 
-    public async Task SaveFile(IFormFile file, string fileName, string oldFileName = null, params string[] destinationDirectoryNames)
+    public async Task SaveFile(IFormFile file, string fileName, string? oldFileName = null, params string[] destinationDirectoryNames)
     {
         if (file == null || file.Length == 0)
         {
@@ -79,6 +79,8 @@ public class UploadFileService : IUploadFileService
 
         var filePath = Path.Combine(uploadsRootFolder, fileName);
 
+        if (!File.Exists(filePath))
+            return;
         File.Delete(filePath);
 
     }

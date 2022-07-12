@@ -1,12 +1,11 @@
 ﻿$(function () {
-
     function activatingDeleteButtons() {
         $('.delete-row-button').click(function () {
             var currentForm = $(this).parent();
-            console.log(currentForm.attr('action'));
+            var customMessage = $(this).attr('custom-message');
             Swal.fire({
                 title: 'اعلان',
-                text: 'آیا مطمئن به حذف هستید ؟',
+                text: customMessage == undefined ? 'آیا مطمئن به حذف هستید ؟' : customMessage,
                 icon: 'warning',
                 confirmButtonText: 'بله',
                 showDenyButton: true,
