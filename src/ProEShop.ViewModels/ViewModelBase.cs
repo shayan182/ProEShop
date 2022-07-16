@@ -3,6 +3,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProEShop.ViewModels;
 
+public enum PageCount
+{
+    [Display(Name = "10 سطر")]
+    Ten,
+
+    [Display(Name = "25 سطر")]
+    TwentyFive,
+
+    [Display(Name = "50 سطر")]
+    Fifty,
+
+    [Display(Name = "100 سطر")]
+    Hundred
+}
 public enum SortingOrder
 {
     [Display(Name = "صعودی")]
@@ -29,7 +43,9 @@ public class PaginationViewModel
 {
     [HiddenInput]
     public int CurrentPage { get; set; } = 1;
-    public byte Take { get; set; }
+
+    [HiddenInput]
+    public PageCount PageCount { get; set; } = PageCount.Ten;
     public int PagesCount { get; set; }
     public int StartPage => CurrentPage - 3 < 1 ? 1 : CurrentPage - 2;
     public int EndPage => CurrentPage + 3 > PagesCount ? PagesCount : CurrentPage + 2;

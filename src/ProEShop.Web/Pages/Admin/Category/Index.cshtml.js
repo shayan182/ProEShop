@@ -46,7 +46,7 @@
 
             e.preventDefault();
             var urlToLoadTheForm = $(this).attr('href');
-            
+
             var customTitle = $(this).attr('custom-Title');
             if (customTitle == undefined) {
                 customTitle = $(this).text().trim();
@@ -100,6 +100,7 @@
                 activatingGotoPage();
                 activationModalForm();
                 activatingDeleteButtons();
+                activatingPageCount();
                 enabelingTooltips();
             }
             else {
@@ -151,6 +152,14 @@
     var isMainPaginationClicked = false;
     var isGotoPageClicked = false;
 
+    function activatingPageCount() {
+        $('#page-count-selectbox').change(function () {
+            var pageCountValue = this.value;
+            $('form.search-form-via-ajax input[name$="Pagination.PageCount"]').val(pageCountValue);
+            $('form.search-form-via-ajax').submit();
+        })
+    }
+
     $(document).on('submit', 'form.search-form-via-ajax', function (e) {
         e.preventDefault();
         var currentForm = $(this);
@@ -191,6 +200,7 @@
                     activatingGotoPage();
                     activationModalForm();
                     activatingDeleteButtons();
+                    activatingPageCount();
                     enabelingTooltips();
                 }
             }
