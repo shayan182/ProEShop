@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
@@ -17,7 +15,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
     {
         _categories = uow.Set<Category>();
     }
-    public override async Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model)
+    public async Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model)
     {
         var categories = _categories.AsQueryable();
 

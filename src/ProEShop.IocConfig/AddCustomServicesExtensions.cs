@@ -46,6 +46,7 @@ public static class AddCustomServicesExtensions
         services.AddScoped<IIdentityDbInitializer, IdentityDbInitializer>();
         services.AddScoped<IUploadFileService, UploadFileService>();
         services.AddScoped<IFeatureService, FeatureService>();
+        services.AddScoped<ICategoryFeatureService, CategoryFeatureService>();
 
         return services;
     }

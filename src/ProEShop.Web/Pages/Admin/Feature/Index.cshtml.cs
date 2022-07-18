@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
@@ -13,20 +13,22 @@ public class IndexModel : PageBase
 {
     #region Constructor
 
-    private readonly IFeatureService _categoryFeatureService;
+    private readonly ICategoryFeatureService _categoryFeatureService;
+    private readonly IFeatureService _FeatureService;
     private readonly ICategoryService _categoryService;
     private readonly IUnitOfWork _uow;
 
-    public IndexModel(IFeatureService categoryFeatureService,
-        IUnitOfWork uow,
-        ICategoryService categoryService)
-    {
-        _categoryFeatureService = categoryFeatureService;
-        _uow = uow;
-        _categoryService = categoryService;
-    }
+    
 
     #endregion
+
+    public IndexModel(ICategoryFeatureService categoryFeatureService, IFeatureService featureService, ICategoryService categoryService, IUnitOfWork uow)
+    {
+        _categoryFeatureService = categoryFeatureService;
+        _FeatureService = featureService;
+        _categoryService = categoryService;
+        _uow = uow;
+    }
 
     public ShowFeaturesViewModel Features { get; set; }
         = new();
@@ -46,7 +48,18 @@ public class IndexModel : PageBase
             });
         }
 
-        var x = await _categoryFeatureService.GetCategoryFeatures(features);
-        return Partial("List", await _categoryFeatureService.GetCategoryFeatures(features));
+        var x = await _FeatureService.GetCategoryFeatures(features);
+        return Partial("List", await _FeatureService.GetCategoryFeatures(features));
+    }
+
+    public async Task<IActionResult> OnPostDelete(int categoryId,int featureId)
+    {
+        var category = await _categoryFeatureService.GetCategoryFeatureToRemove(categoryId, featureId);
+        if (category is not null)
+        { 
+            _categoryFeatureService.Remove(category);
+            await _uow.SaveChangesAsync();
+        }
+        return Json(new JsonResultOperation(true, "ویژگی دسته بندی مورد نظر با موفقیت حذف شد!"));
     }
 }

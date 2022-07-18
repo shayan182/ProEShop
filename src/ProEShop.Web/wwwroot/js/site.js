@@ -182,6 +182,8 @@ $(function () {
         $('.delete-row-button').click(function () {
             var currentForm = $(this).parent();
             var customMessage = $(this).attr('custom-message');
+            const formData = currentForm.serializeArray();
+            console.log(formData);
             Swal.fire({
                 title: 'اعلان',
                 text: customMessage == undefined ? 'آیا مطمئن به حذف هستید ؟' : customMessage,
@@ -193,12 +195,9 @@ $(function () {
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var data = {
-                        elementId: currentForm.find('input:first').val(),
-                        __RequestVerificationToken: currentForm.find('input:last').val()
-                    }
+                    
                     showLoading();
-                    $.post(currentForm.attr('action'), data, function (data, status) {
+                    $.post(currentForm.attr('action'), formData, function (data, status) {
                         if (data.isSuccessful == false) {
                             showToastr('warning', data.message);
                         }
@@ -356,7 +355,6 @@ $(function () {
         currentForm.find('.search-form-submit-button span').removeClass('d-none');
 
         $('.data-table-loading').removeClass('d-none');
-        debugger 
         $('.data-table-body').html(''); // not working :(
 
 
