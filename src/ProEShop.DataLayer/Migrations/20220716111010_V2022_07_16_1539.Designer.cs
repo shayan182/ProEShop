@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ProEShop.DataLayer.Context;
 namespace ProEShop.DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220716111010_V2022_07_16_1539")]
+    partial class V2022_07_16_1539
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,10 +101,13 @@ namespace ProEShop.DataLayer.Migrations
 
             modelBuilder.Entity("ProEShop.Entities.CategoryFeature", b =>
                 {
-                    b.Property<long>("CategoryId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("FeatureId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("CreatedByBrowserName")
@@ -119,6 +124,12 @@ namespace ProEShop.DataLayer.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("FeatureId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedByBrowserName")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -133,7 +144,9 @@ namespace ProEShop.DataLayer.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("CategoryId", "FeatureId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("FeatureId");
 

@@ -17,7 +17,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
     {
         _categories = uow.Set<Category>();
     }
-    public async Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model)
+    public override async Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model)
     {
         var categories = _categories.AsQueryable();
 
@@ -74,11 +74,11 @@ public class CategoryService : GenericService<Category>, ICategoryService
         };
     }
 
-    public Dictionary<long, string> GetCategoriesToShowInSelelctBox(long? id = null)
+    public async Task<Dictionary<long, string>> GetCategoriesToShowInSelectBoxAsync(long? id = null)
     {
-        return _categories
+        return await _categories
             .Where(x=>x.Id != id || id == null)
-            .ToDictionary(x => x.Id, x => x.Title);
+            .ToDictionaryAsync(x => x.Id, x => x.Title);
     }
 
     public override async Task<DuplicateColumns> AddAsync(Category entity)
