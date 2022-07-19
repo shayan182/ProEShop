@@ -5,5 +5,6 @@ namespace ProEShop.Services.Contracts;
 public interface IFeatureService : IGenericService<Feature>
 {
     Task<ShowFeaturesViewModel> GetCategoryFeatures(ShowFeaturesViewModel model);
-    
+    Task<Feature> FindByTitleAsync(string title);
+    Task<List<string>> AutoCompleteSearch(string input);
 }

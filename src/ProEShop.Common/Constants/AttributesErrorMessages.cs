@@ -1,4 +1,10 @@
-﻿namespace ProEShop.Common.Constants;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProEShop.Common.Constants;
 
 public static class AttributesErrorMessages
 {
@@ -10,4 +16,5 @@ public static class AttributesErrorMessages
     public const string RemoteMessage = "این {0} قبلا در سیستم ثبت شده است";
     public const string CompareMessage = "{1} با تکرار آن تطابق ندارد";
     public const string RangeMessage = "{0} باید در بازه {1} و {2} باشد";
+    public const string ComboBoxRequiredMessage = "لطفا {0} را انتخاب نمایید";
 }

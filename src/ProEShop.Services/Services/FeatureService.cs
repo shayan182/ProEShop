@@ -46,4 +46,17 @@ public class FeatureService : GenericService<Feature>, IFeatureService
         };
     }
 
+    public async Task<Feature> FindByTitleAsync(string title)
+    {
+        return await _features.SingleOrDefaultAsync(x => x.Title == title);
+
+    }
+
+    public async Task<List<string>> AutoCompleteSearch(string input)
+    {
+        return await _features
+            .Where(x => x.Title.Contains(input.Trim()))
+            .Select(x => x.Title)
+            .ToListAsync();
+    }
 }

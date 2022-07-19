@@ -219,8 +219,16 @@ $(function () {
     $('#modalOne').on('hide.bs.modal', function () {
         tinyMCE.editors = [];
     });
+
+    function initializingAutocomplete() {
+        $('.autocomplete').autocomplete({
+            source: `${location.pathname}?handler=AutocompleteSearch`,
+            minLength: 2,
+            delay: 500
+        });
+    }
     function activationModalForm() {
-        $('.show-modal-form').click(function (e) {
+        $('.show-modal-form-button').click(function (e) {
 
             e.preventDefault();
             var urlToLoadTheForm = $(this).attr('href');
@@ -238,6 +246,7 @@ $(function () {
                     $('#form-modal-place .modal-body').html(data);
                     initializeTinyMCE();
                     initializeSelect2();
+                    initializingAutocomplete();
                     $.validator.unobtrusive.parse($('#form-modal-place form'));
                     $('#form-modal-place').modal('show');
                 }
