@@ -9,6 +9,7 @@ namespace ProEShop.Entities;
 [Table("Sellers")]
 [Index(nameof(Seller.ShabaNumber), IsUnique = true)]
 [Index(nameof(Seller.ShopName), IsUnique = true)]
+[Index(nameof(Seller.SellerCode), IsUnique = true)]
 public class Seller : EntityBase, IAuditableEntity
 {
     #region Properties
@@ -35,11 +36,14 @@ public class Seller : EntityBase, IAuditableEntity
     public string? NationalId { get; set; }
 
     public CompanyType? CompanyType { get; set; }
+    #endregion
 
     public Gender? Gender { get; set; }
 
     public int? SellerCode { get; set; }
 
+    [Required]
+    [MaxLength(200)]
     public string? ShopName { get; set; }
 
     [Column(TypeName = "ntext")]
@@ -48,36 +52,43 @@ public class Seller : EntityBase, IAuditableEntity
     [MaxLength(50)]
     public string? Logo { get; set; }
 
+    /// <summary>
+    /// عکس کارت ملی
+    /// </summary>
+    [Required]
     [MaxLength(50)]
-    public string? IdCartPicture { get; set; }
+    public string IdCartPicture { get; set; }
 
     [MaxLength(24)]
     public string? ShabaNumber { get; set; }
 
-    public string? Phone { get; set; }
+    [Required]
+    [MaxLength(1)]
+    public string TelePhone { get; set; }
 
+    [MaxLength(200)]
     public string? Website { get; set; }
 
     public ProvinceAndCity? Province { get; set; }
 
     public ProvinceAndCity? City { get; set; }
 
+    [Required]
     [MaxLength(300)]
-    public string? Address { get; set; }
+    public string Address { get; set; }
 
+    [Required]
     [MaxLength(11)]
-    public string? PostalCode { get; set; }
+    public string PostalCode { get; set; }
     
     [MaxLength(100)]
     public string? Location { get; set; }
 
-    public bool IsDocumentApproved { get; set; }
+    public bool? IsDocumentApproved { get; set; }
 
-    public bool IsActive { get; set; }
+    public bool? IsActive { get; set; }
 
     public DateTime CreatedDateTime { get; set; }
-
-    #endregion
 
     #endregion
 

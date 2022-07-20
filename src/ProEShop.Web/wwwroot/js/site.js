@@ -79,39 +79,42 @@ function showErrorMessage(message) {
 
 
 function initializeTinyMCE() {
-    tinymce.remove('textarea.custom-tinymce');
-    tinymce.init({
-        selector: 'textarea.custom-tinymce',
-        height: 300,
-        max_height: 500,
-        language: 'fa_IR',
-        language_url: '/js/fa_IR.js',
-        content_style: 'body {font-family: Vazir}',
-        //plugins: ["link", "table", "preview", "wordcount", "media", "codesample", "emoticons", "insertdatetime", "a_tinymce_plugin", "advlist", "image", "textpattern", "template", "lists", "anchor", "print", "autolink", "noneditable", "pagebreak", "autosave", "code", "nonbreaking", "charmap"],
-        plugins: ["image", "code", "table", "link", "media", "codesample"],
-        //toolbar: 'link bold italic table preview ltr rtl a11ycheck addcommentContext showcommentContexts casechange  wordcount checklist  image export bullist formatpainter pagebreak charmap pageembed nonbreaking permanentpen table restoredraft numlist  table'
-        toolbar: [
-            {
-                name: 'history', items: ['undo', 'redo', 'preview']
-            },
-            {
-                name: 'styles', items: ['styleselect']
-            },
-            {
-                name: 'formatting', items: ['bold', 'italic', 'underline', 'link']
-            },
-            {
-                name: 'alignment', items: ['alignleft', 'aligncenter', 'alignright', 'alignjustify', 'forecolor', 'backcolor']
-            },
-            {
-                name: 'table', items: ['table', 'wordcount']
-            },
-            {
-                name: 'indentation', items: ['outdent', 'indent']
-            }
-        ],
-        branding: false
-    });
+    if (typeof (tinyMCE) != "undefined") {
+
+        tinymce.remove('textarea.custom-tinymce');
+        tinymce.init({
+            selector: 'textarea.custom-tinymce',
+            height: 300,
+            max_height: 500,
+            language: 'fa_IR',
+            language_url: '/js/fa_IR.js',
+            content_style: 'body {font-family: Vazir}',
+            //plugins: ["link", "table", "preview", "wordcount", "media", "codesample", "emoticons", "insertdatetime", "a_tinymce_plugin", "advlist", "image", "textpattern", "template", "lists", "anchor", "print", "autolink", "noneditable", "pagebreak", "autosave", "code", "nonbreaking", "charmap"],
+            plugins: ["image", "code", "table", "link", "media", "codesample"],
+            //toolbar: 'link bold italic table preview ltr rtl a11ycheck addcommentContext showcommentContexts casechange  wordcount checklist  image export bullist formatpainter pagebreak charmap pageembed nonbreaking permanentpen table restoredraft numlist  table'
+            toolbar: [
+                {
+                    name: 'history', items: ['undo', 'redo', 'preview']
+                },
+                {
+                    name: 'styles', items: ['styleselect']
+                },
+                {
+                    name: 'formatting', items: ['bold', 'italic', 'underline', 'link']
+                },
+                {
+                    name: 'alignment', items: ['alignleft', 'aligncenter', 'alignright', 'alignjustify', 'forecolor', 'backcolor']
+                },
+                {
+                    name: 'table', items: ['table', 'wordcount']
+                },
+                {
+                    name: 'indentation', items: ['outdent', 'indent']
+                }
+            ],
+            branding: false
+        });
+    }
 
     // for tool bar :  tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol
 }
@@ -134,44 +137,46 @@ function initializeSelect2() {
 
 // Validation
 
-// fileRequired
-jQuery.validator.addMethod("fileRequired", function (value, element, param) {
-    if (element.files[0] != null)
-        return element.files[0].size > 0;
-    return false;
-});
-jQuery.validator.unobtrusive.adapters.addBool("fileRequired");
+if (jQuery.validator) {
+    // fileRequired
+    jQuery.validator.addMethod("fileRequired", function (value, element, param) {
+        if (element.files[0] != null)
+            return element.files[0].size > 0;
+        return false;
+    });
+    jQuery.validator.unobtrusive.adapters.addBool("fileRequired");
 
-// allowExtensions
-jQuery.validator.addMethod('allowExtensions', function (value, element, param) {
-    if (element.files[0] != null) {
-        var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
-        return whiteListExtensions.includes(element.files[0].type);
-    }
-    return true;
-});
-jQuery.validator.unobtrusive.adapters.addBool('allowExtensions');
+    // allowExtensions
+    jQuery.validator.addMethod('allowExtensions', function (value, element, param) {
+        if (element.files[0] != null) {
+            var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
+            return whiteListExtensions.includes(element.files[0].type);
+        }
+        return true;
+    });
+    jQuery.validator.unobtrusive.adapters.addBool('allowExtensions');
 
-// isImage
-jQuery.validator.addMethod('isImage', function (value, element, param) {
-    if (element.files[0] != null) {
-        var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
-        return whiteListExtensions.includes(element.files[0].type);
-    }
-    return true;
-});
-jQuery.validator.unobtrusive.adapters.addBool('isImage');
+    // isImage
+    jQuery.validator.addMethod('isImage', function (value, element, param) {
+        if (element.files[0] != null) {
+            var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
+            return whiteListExtensions.includes(element.files[0].type);
+        }
+        return true;
+    });
+    jQuery.validator.unobtrusive.adapters.addBool('isImage');
 
-// maxFileSize
-jQuery.validator.addMethod('maxFileSize', function (value, element, param) {
-    if (element.files[0] != null) {
-        var maxFileSize = $(element).data('val-maxsize');
-        var selectedFileSize = element.files[0].size;
-        return maxFileSize >= selectedFileSize;
-    }
-    return true;
-});
-jQuery.validator.unobtrusive.adapters.addBool('maxFileSize');
+    // maxFileSize
+    jQuery.validator.addMethod('maxFileSize', function (value, element, param) {
+        if (element.files[0] != null) {
+            var maxFileSize = $(element).data('val-maxsize');
+            var selectedFileSize = element.files[0].size;
+            return maxFileSize >= selectedFileSize;
+        }
+        return true;
+    });
+    jQuery.validator.unobtrusive.adapters.addBool('maxFileSize');
+}
 
 // End validation
 
@@ -195,7 +200,7 @@ $(function () {
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
+
                     showLoading();
                     $.post(currentForm.attr('action'), formData, function (data, status) {
                         if (data.isSuccessful == false) {
@@ -221,11 +226,14 @@ $(function () {
     });
 
     function initializingAutocomplete() {
-        //$('.autocomplete').autocomplete({
-        //    source: `${location.pathname}?handler=AutocompleteSearch`,
-        //    minLength: 2,
-        //    delay: 500
-        //});
+        if (typeof ($('.autocomplete').autocomplete()) != "undefined") {
+            $('.autocomplete').autocomplete({
+                source: `${location.pathname}?handler=AutocompleteSearch`,
+                minLength: 2,
+                delay: 500
+            });
+
+        }
     }
     function activationModalForm() {
         $('.show-modal-form-button').click(function (e) {
@@ -349,7 +357,7 @@ $(function () {
 
     $(document).on('submit', 'form.search-form-via-ajax', function (e) {
         e.preventDefault();
-        
+
         var currentForm = $(this);
         var pageNumberInput = $('#page-number-input').val();
         if (isGotoPageClicked || $('#page-number-input').is(':focus')) {
@@ -411,4 +419,4 @@ $(function () {
 
     }
 });
-// End Ajax 
+// End Ajax
