@@ -16,7 +16,7 @@ public class IndexModel : PageBase
     private readonly ICategoryService _categoryService;
     private readonly IUnitOfWork _uow;
     private readonly IUploadFileService _uploadFileService;
-    public IndexModel(ICategoryService categoryService,IUnitOfWork uow,IUploadFileService uploadFileService)
+    public IndexModel(ICategoryService categoryService, IUnitOfWork uow, IUploadFileService uploadFileService)
     {
         _categoryService = categoryService;
         _uploadFileService = uploadFileService;
@@ -43,11 +43,11 @@ public class IndexModel : PageBase
         }
         return Partial("List", await _categoryService.GetCategories(categories));
     }
-    public async Task<IActionResult> OnGetAdd(long id =  0)
+    public async Task<IActionResult> OnGetAdd(long id = 0)
     {
         if (id > 0)
         {
-            if (!await _categoryService.IsExistsBy(nameof(Entities.Category.Id), id)) ;
+            if (!await _categoryService.IsExistsBy(nameof(Entities.Category.Id), id)) 
             {
                 return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
             }
@@ -72,7 +72,7 @@ public class IndexModel : PageBase
             });
         }
         string pictureFileName = null;
-        if(model.Picture.IsFileUploded())
+        if (model.Picture.IsFileUploded())
         {
             pictureFileName = model.Picture.GenerateFileName();
         }
@@ -83,7 +83,7 @@ public class IndexModel : PageBase
             Title = model.Title,
             Slug = model.Slug,
             ParentId = model.ParentId == 0 ? null : model.ParentId,
-            Picture = pictureFileName 
+            Picture = pictureFileName
         };
         var result = await _categoryService.AddAsync(category);
         if (!result.Ok)
@@ -94,7 +94,7 @@ public class IndexModel : PageBase
             });
         }
         await _uow.SaveChangesAsync();
-        await _uploadFileService.SaveFile(model.Picture, pictureFileName,null,"images","Categories");
+        await _uploadFileService.SaveFile(model.Picture, pictureFileName, null, "images", "Categories");
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
     }
 
@@ -108,6 +108,7 @@ public class IndexModel : PageBase
            .CreateSelectListItem(firstItemText: "خودش دسته اصلی باشد");
         return Partial("Edit", model);
     }
+
     public async Task<IActionResult> OnPostEditAsync(EditCategoryViewModel model)
     {
         if (!ModelState.IsValid)
@@ -119,7 +120,13 @@ public class IndexModel : PageBase
         }
 
         if (model.Id == model.ParentId)
-            return Json(new JsonResultOperation(false, "یک رکورد نمی تواند والد خودش باشد"));
+        {
+            return Json(new JsonResultOperation(false, "یک رکورد نمی تواند والد خودش باشد")
+            {
+                Data = new List<string> { "یک رکورد نمی تواند والد خودش باشد"}
+            });
+
+        }
 
         string pictureFileName = null;
         if (model.Picture.IsFileUploded())
@@ -130,7 +137,7 @@ public class IndexModel : PageBase
         var category = await _categoryService.FindByIdAsync(model.Id);
         if (category == null)
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
-        
+
         var oldFileName = category.Picture;
 
         category.Title = model.Title;
@@ -149,7 +156,7 @@ public class IndexModel : PageBase
             });
         }
         await _uow.SaveChangesAsync();
-        await _uploadFileService.SaveFile(model.Picture, pictureFileName,oldFileName, "images", "Categories");
+        await _uploadFileService.SaveFile(model.Picture, pictureFileName, oldFileName, "images", "Categories");
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت اضافه شد."));
     }
     public async Task<IActionResult> OnPostDeleteAsync(long elementId)
@@ -161,7 +168,7 @@ public class IndexModel : PageBase
         _categoryService.SoftDelete(category);
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت حذف شد."));
-    } 
+    }
     public async Task<IActionResult> OnPostDeletePicture(long elementId)
     {
         var category = await _categoryService.FindByIdAsync(elementId);

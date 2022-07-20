@@ -221,11 +221,11 @@ $(function () {
     });
 
     function initializingAutocomplete() {
-        $('.autocomplete').autocomplete({
-            source: `${location.pathname}?handler=AutocompleteSearch`,
-            minLength: 2,
-            delay: 500
-        });
+        //$('.autocomplete').autocomplete({
+        //    source: `${location.pathname}?handler=AutocompleteSearch`,
+        //    minLength: 2,
+        //    delay: 500
+        //});
     }
     function activationModalForm() {
         $('.show-modal-form-button').click(function (e) {
@@ -277,6 +277,7 @@ $(function () {
         $('.data-table-place .data-table-body').remove();
         $('.search-form-submit-button').attr('disabled', 'disabled');
         $('.data-table-loading').removeClass('d-none');
+        $('#RecordNotFound').remove();
 
         $.get(`${location.pathname}?handler=GetDataTable`, function (data, status) {
             $('.search-form-submit-button').removeAttr('disabled');
@@ -316,7 +317,6 @@ $(function () {
             },
             success: function (data, status) {
                 if (data.isSuccessful == false) {
-
                     fillValidationForm(data.data, currentForm);
                     showToastr('warning', data.message);
                 }

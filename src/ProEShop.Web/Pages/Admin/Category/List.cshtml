@@ -56,7 +56,7 @@
                             }
                         </td>
                         <td>
-                            <a custom-title="ویرایش دسته بندی" asp-page-handler="Edit" asp-route-id="@category.Id" class="btn btn-warning my-1 show-modal-form">
+                            <a custom-title="ویرایش دسته بندی" asp-page-handler="Edit" asp-route-id="@category.Id" class="btn btn-warning my-1 show-modal-form-button">
                                 ویرایش
                             </a>
                             @if (!category.IsDeleted)
@@ -73,7 +73,7 @@
                                     <button custom-message="آیا مطمئن به بازگردانی هستید؟" type="button" class="btn btn-success my-1 delete-row-button">بازگرداندن</button>
                                 </form>
                             }
-                            <a asp-page-handler="Add" asp-route-id="@category.Id" class="btn btn-info my-1 show-modal-form">
+                            <a asp-page-handler="Add" asp-route-id="@category.Id" class="btn btn-info my-1 show-modal-form-button">
                                 افزودن زیر دسته
                             </a>
                             @if (category.Picture != "بدون عکس")
