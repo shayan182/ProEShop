@@ -25,6 +25,8 @@ public class User : IdentityUser<long>, IAuditableEntity
 
     public Gender? Gender { get; set; }
 
+    public bool? IsSeller { get; set; }
+
 
     [Required]
     [MaxLength(50)]
