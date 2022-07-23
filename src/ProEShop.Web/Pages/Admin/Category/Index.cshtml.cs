@@ -122,9 +122,7 @@ public class IndexModel : PageBase
         if (model.Id == model.ParentId)
         {
             return Json(new JsonResultOperation(false, "یک رکورد نمی تواند والد خودش باشد")
-            {
-                Data = new List<string> { "یک رکورد نمی تواند والد خودش باشد"}
-            });
+            );
 
         }
 
