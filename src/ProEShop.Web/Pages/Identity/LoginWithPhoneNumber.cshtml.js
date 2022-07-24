@@ -51,7 +51,7 @@ function reSendActivationCode(phoneNumber, e, reSendSmsUrl) {
             showToastr('error', data.message);
         }
     }).fail(function () {
-        
+
         showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
     }).always(function () {
         hideLoading();
@@ -61,22 +61,8 @@ function getRVT(e) {
     return $(e).parents('form').find(`input[name="${rvt}"]`).val();
 }
 
-function onBeginLoginWithPhoneNumber() {
-    showLoading();
-}
-function onCompleteLoginWithPhoneNumber() {
-    hideLoading();
-}
-function onFailureLoginWithPhoneNumber() {
-    showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
-}
 
-function onSuccessLoginWithPhoneNumber(data, status) {
-    if (status == 'success' && data.isSuccessful) {
-        showToastr('success', 'شما با موفقیت وارد شدید');
-        location.href = '/';
-    }
-    else {
-        showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
-    }
+function LoginWithPhoneNumberInIdentity(message) {
+    showToastr('success', message);
+    location.href = '/';
 }

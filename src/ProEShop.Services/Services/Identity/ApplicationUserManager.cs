@@ -41,6 +41,13 @@ public class ApplicationUserManager :
         return result?.SendSmsLastTime;
     }
 
+    public async Task<bool> CheckForUserIsSeller(string phoneNumber)
+    {
+       return await _users.Where(x => x.UserName == phoneNumber)
+            .Where(x => x.UserRoles.All(r => r.Role.Name != ConstantRoles.Seller))
+            .AnyAsync(x => x.IsSeller == true);
+    }
+
     #endregion
 
 

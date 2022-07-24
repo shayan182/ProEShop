@@ -65,10 +65,12 @@ public class ConfirmationPhoneNumberModel : PageBase
         var result = await _userManager.VerifyChangePhoneNumberTokenAsync(user, Confirmation.ActivationCode, Confirmation.PhoneNumber);
         if (!result)
         {
-            return Json(new JsonResultOperation(false, "کد وارد شده صحیح نمیباشد"));
+            return Json(new JsonResultOperation(false, "کد وارد شده صحیح نمی باشد"));
         }
-        await _signInManager.SignInAsync(user, true);
-        return Json(new JsonResultOperation(true, "شما با موفقیت وارد شدید"));
+        return Json(new JsonResultOperation(true, "شماره تلفن شما با موفقیت تایید شد")
+        {
+            Data = Confirmation.PhoneNumber
+        });
     }
     public async Task<IActionResult> OnPostReSendSellerSmsActivationAsync(string phoneNumber)
     {
