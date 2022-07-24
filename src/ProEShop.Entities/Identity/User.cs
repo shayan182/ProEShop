@@ -7,9 +7,13 @@ namespace ProEShop.Entities.Identity;
 
 public class User : IdentityUser<long>, IAuditableEntity
 {
-    [MaxLength(200)] public string? FirstName { get; set; }
+    [Display(Name = "نام")] 
+    [MaxLength(200)] 
+    public string? FirstName { get; set; }
 
-    [MaxLength(200)] public string? LastName { get; set; }
+    [Display(Name = "نام خانوادگی")]
+    [MaxLength(200)]
+    public string? LastName { get; set; }
 
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}";
@@ -18,11 +22,14 @@ public class User : IdentityUser<long>, IAuditableEntity
 
     public DateTime CreatedDateTime { get; set; }
 
+    [Display(Name = "کد ملی")]
     [MaxLength(11)]
     public string? NationalCode { get; set; }
 
+    [Display(Name = "تاریخ تولد")]
     public DateTime? BirthDate { get; set; }
 
+    [Display(Name = "جنسیت")]
     public Gender? Gender { get; set; }
 
     public bool? IsSeller { get; set; }

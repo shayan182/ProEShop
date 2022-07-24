@@ -103,7 +103,9 @@ public class Seller : EntityBase, IAuditableEntity
 
 public enum Gender
 {
+    [Display(Name = "آقا")]
     Man,
+    [Display(Name = "خانوم")]
     Woman
 }
 
