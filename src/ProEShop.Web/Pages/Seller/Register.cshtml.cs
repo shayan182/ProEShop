@@ -71,6 +71,7 @@ public class RegisterModel : PageModel
         if (DateTime.Now > user.SendSmsLastTime.AddMinutes(3) || addNewUser)
         {
             var code = _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
+
             //Todo send SMS
             user.SendSmsLastTime = DateTime.Now;
             await _userManager.UpdateAsync(user);

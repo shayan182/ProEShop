@@ -129,15 +129,43 @@ document.addEventListener('focusin', function (e) {
 initializeTinyMCE();
 
 function initializeSelect2() {
-    $('.custom-select2').select2({
-        theme: 'bootstrap-5',
-        dropdownParent: $('#form-modal-place'), // For Search  
-    });
+    if ($('.custom-select2').length > 0) {
+        $('.custom-select2').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#form-modal-place') // For Search  
+        });
+    }
 }
+
+function initializeSelect2WithoutModal() {
+    if ($('.custom-select2').length > 0) {
+        $('.custom-select2').select2({
+            theme: 'bootstrap-5'
+        });
+    }
+}
+
+initializeSelect2WithoutModal();
 
 // Validation
 
 if (jQuery.validator) {
+
+    // Validate Hidden inputs in multiple pages (Create Seller) *************
+    $.validator.setDefaults({
+        ignore: []
+    });
+
+    var defaultRangeValidator = $.validator.methods.range;
+
+    $.validator.methods.range = function (value, element, param) {
+        if (element.type === 'checkbox') {
+            return element.checked;
+        } else {
+            return defaultRangeValidator.call(this, value, element, param);
+        }
+    }
+
     // fileRequired
     jQuery.validator.addMethod("fileRequired", function (value, element, param) {
         if (element.files[0] != null)
@@ -343,6 +371,10 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
     });
 });
 
+$('form input').blur(function () {
+    $(this).parents('form').valid();
+});
+
 $(document).on('submit', 'form.public-ajax-form', function (e) {
     e.preventDefault();
     var currentForm = $(this);
@@ -361,14 +393,14 @@ $(document).on('submit', 'form.public-ajax-form', function (e) {
             showLoading();
         },
         success: function (data, status) {
-            
+
             if (data.isSuccessful == false) {
                 var finalData = data.data != null ? data.data : [data.message];
                 fillValidationForm(finalData, currentForm);
                 showToastr('warning', data.message);
             }
             else {
-                window[functionName](data.message,data.data);
+                window[functionName](data.message, data.data);
             }
         },
         complete: function () {
@@ -456,3 +488,24 @@ function fillValidationForm(errors, currentForm) {
 
 }
 // End Ajax
+
+
+
+
+$('input[data-val-ltrdirection="true"]').attr('dir', 'ltr');
+$('input[data-val-isimage]').attr('accept', 'image/*');
+
+//show preview in under the input (Create Seller Page)
+$('.image-preivew-input').change(function () {
+    var selectedFile = this.files[0];
+    var imgPreviewBox = $(this).attr('image-preview-box');
+    if (selectedFile && selectedFile.size > 0) {
+        $(`#${imgPreviewBox}`).removeClass('d-none');
+        $(`#${imgPreviewBox} img`).attr('src', URL.createObjectURL(selectedFile));
+
+    } else {
+        $(`#${imgPreviewBox}`).addClass('d-none');
+        $(`#${imgPreviewBox} img`).attr('src', '');
+    }
+});
+
