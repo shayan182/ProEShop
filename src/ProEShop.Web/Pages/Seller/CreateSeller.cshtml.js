@@ -1,7 +1,6 @@
 ﻿$('#legal-person-checkbox-create-seller').change(function () {
     var labelEl = $(this).parents('.form-switch').find('label');
     if (this.checked) {
-        debugger 
         addRequiredRule('#CreateSeller_CompanyName');
         addRequiredRule('#CreateSeller_RegisterNumber');
         addRequiredRule('#CreateSeller_EconomicCode');
@@ -45,7 +44,7 @@ var lastTab = $('#create-seller-container .nav-tabs button:last').attr('data-bs-
 $('#create-seller-container #previous-tab-create-seller').attr('disabled', 'disabled');
 var currentTab = $('#create-seller-container .nav-tabs button').attr('data-bs-target');
 
-$('#create-seller-container #next-tab-create-seller').click(function() {
+$('#create-seller-container #next-tab-create-seller').click(function () {
     var nextTab = $(`#create-seller-container .nav-tabs button[data-bs-target="${currentTab}"]`).next();
 
     if (nextTab.attr('data-bs-target')) {
@@ -63,7 +62,7 @@ $('#create-seller-container #previous-tab-create-seller').click(function () {
     }
 });
 
-$('#create-seller-container .nav-tabs button').on('show.bs.tab' ,function(e) {
+$('#create-seller-container .nav-tabs button').on('show.bs.tab', function (e) {
     currentTab = $(e.target).attr('data-bs-target');
     if (currentTab == lastTab) {
         $('#create-seller-container #next-tab-create-seller').attr('disabled', 'disabled');
@@ -77,3 +76,22 @@ $('#create-seller-container .nav-tabs button').on('show.bs.tab' ,function(e) {
         $('#create-seller-container #previous-tab-create-seller').removeAttr('disabled');
     }
 });
+
+// End Next and previous Button in Page
+
+$('#CreateSeller_ProvinceId').change(function () {
+    var formData = {
+        provinceId: $(this).val()
+}
+    getDataWithAjax("/Seller/CreateSeller/test?handler=GetCities", formData, 'putCitiesInTheSelectBox');
+
+});
+
+function putCitiesInTheSelectBox(data,message) {
+    $('#CreateSeller_CityId option').remove();
+    $('#CreateSeller_CityId').append('<option value="0">انتخاب کنید</optoin>');
+    $.each(data, function (key, value) {
+        $('#CreateSeller_CityId').append(`<option value="${key}">${value}</optoin>`);
+    });
+}
+

@@ -45,37 +45,37 @@
                                 <!-- legal Properties-->
                                 <div class="row m-0 p-0" id="legal-person-box-create-seller">
                                     <div class="mb-3 col-md-6 col-lg-3">
-                                        <label asp-for="CreateSeller.CompanyName"></label>
+                                        <label class="form-label" asp-for="CreateSeller.CompanyName"></label>
                                         <input class="form-control" asp-for="CreateSeller.CompanyName" />
                                         <span asp-validation-for="CreateSeller.CompanyName" class="span-error-message"></span>
                                     </div>
 
                                     <div class="mb-3 col-md-6 col-lg-3">
-                                        <label asp-for="CreateSeller.RegisterNumber"></label>
+                                        <label class="form-label" asp-for="CreateSeller.RegisterNumber"></label>
                                         <input class="form-control" asp-for="CreateSeller.RegisterNumber" />
                                         <span asp-validation-for="CreateSeller.RegisterNumber" class="span-error-message"></span>
                                     </div>
 
                                     <div class="mb-3 col-md-6 col-lg-3">
-                                        <label asp-for="CreateSeller.EconomicCode"></label>
+                                        <label class="form-label" asp-for="CreateSeller.EconomicCode"></label>
                                         <input class="form-control" asp-for="CreateSeller.EconomicCode" />
                                         <span asp-validation-for="CreateSeller.EconomicCode" class="span-error-message"></span>
                                     </div>
 
                                     <div class="mb-3 col-md-6 col-lg-3">
-                                        <label asp-for="CreateSeller.SignatureOwners"></label>
+                                        <label class="form-label" asp-for="CreateSeller.SignatureOwners"></label>
                                         <input class="form-control" asp-for="CreateSeller.SignatureOwners" />
                                         <span asp-validation-for="CreateSeller.SignatureOwners" class="span-error-message"></span>
                                     </div>
 
                                     <div class="mb-3 col-md-6 col-lg-3">
-                                        <label asp-for="CreateSeller.NationalId"></label>
+                                        <label class="form-label" asp-for="CreateSeller.NationalId"></label>
                                         <input class="form-control" asp-for="CreateSeller.NationalId" />
                                         <span asp-validation-for="CreateSeller.NationalId" class="span-error-message"></span>
                                     </div>
 
                                     <div class="mb-3 col-md-6 col-lg-3">
-                                        <label asp-for="CreateSeller.CompanyType"></label>
+                                        <label class="form-label" asp-for="CreateSeller.CompanyType"></label>
                                         <select class="form-select" asp-for="CreateSeller.CompanyType" asp-items="Html.GetEnumSelectList<ProEShop.Entities.CompanyType>()"></select>
                                         <span asp-validation-for="CreateSeller.CompanyType" class="span-error-message"></span>
                                     </div>
@@ -83,48 +83,48 @@
 
                                 <!-- end legal Properties-->
                                 <div class="mb-3 col-md-6 col-lg-2">
-                                    <label asp-for="CreateSeller.FirstName"></label>
+                                    <label class="form-label" asp-for="CreateSeller.FirstName"></label>
                                     <input class="form-control" asp-for="CreateSeller.FirstName" />
                                     <span asp-validation-for="CreateSeller.FirstName" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-2">
-                                    <label asp-for="CreateSeller.LastName"></label>
+                                    <label class="form-label" asp-for="CreateSeller.LastName"></label>
                                     <input class="form-control" asp-for="CreateSeller.LastName" />
                                     <span asp-validation-for="CreateSeller.LastName" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label asp-for="CreateSeller.NationalCode"></label>
+                                    <label class="form-label" asp-for="CreateSeller.NationalCode"></label>
                                     <input class="form-control" asp-for="CreateSeller.NationalCode" />
                                     <span asp-validation-for="CreateSeller.NationalCode" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label asp-for="CreateSeller.BirthDate"></label>
+                                    <label class="form-label" asp-for="CreateSeller.BirthDate"></label>
                                     <input type="date" class="form-control" asp-for="CreateSeller.BirthDate" />
                                     <span asp-validation-for="CreateSeller.BirthDate" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-2">
-                                    <label asp-for="CreateSeller.Gender"></label>
+                                    <label class="form-label" asp-for="CreateSeller.Gender"></label>
                                     <select class="form-select" asp-for="CreateSeller.BirthDate" asp-items="Html.GetEnumSelectList<ProEShop.Entities.Gender>()"></select>
                                     <span asp-validation-for="CreateSeller.Gender" class="span-error-message"></span>
                                 </div>
 
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label asp-for="CreateSeller.ShopName"></label>
+                                    <label class="form-label" asp-for="CreateSeller.ShopName"></label>
                                     <input class="form-control" asp-for="CreateSeller.ShopName" />
                                     <span asp-validation-for="CreateSeller.ShopName" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label asp-for="CreateSeller.Logo"></label>
+                                    <label class="form-label" asp-for="CreateSeller.Logo"></label>
                                     <input class="form-control" asp-for="CreateSeller.Logo" />
                                     <span asp-validation-for="CreateSeller.Logo" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-lg-6">
-                                    <label asp-for="CreateSeller.Address"></label>
+                                    <label class="form-label" asp-for="CreateSeller.Address"></label>
                                     <input class="form-control" asp-for="CreateSeller.Address" />
                                     <span asp-validation-for="CreateSeller.Address" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label asp-for="CreateSeller.Website"></label>
+                                    <label class="form-label" asp-for="CreateSeller.Website"></label>
                                     <div class="input-group">
                                         <input class="form-control" asp-for="CreateSeller.Website" />
                                         <span class="input-group-text">
@@ -134,12 +134,12 @@
                                     <span asp-validation-for="CreateSeller.Website" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label asp-for="CreateSeller.PostalCode"></label>
+                                    <label class="form-label" asp-for="CreateSeller.PostalCode"></label>
                                     <input class="form-control" asp-for="CreateSeller.PostalCode" />
                                     <span asp-validation-for="CreateSeller.PostalCode" class="span-error-message"></span>
                                 </div>
                                 <div class="col-lg-6 mb-3">
-                                    <label asp-for="CreateSeller.ShabaNumber"></label>
+                                    <label class="form-label" asp-for="CreateSeller.ShabaNumber"></label>
                                     <div class="input-group">
                                         <input class="form-control" asp-for="CreateSeller.ShabaNumber" />
                                         <span class="input-group-text">IR</span>
@@ -147,18 +147,25 @@
                                     <span asp-validation-for="CreateSeller.ShabaNumber" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label asp-for="CreateSeller.Telephone"></label>
+                                    <label class="form-label" asp-for="CreateSeller.Telephone"></label>
                                     <input class="form-control" asp-for="CreateSeller.Telephone" placeholder="02144828090" />
                                     <span asp-validation-for="CreateSeller.Telephone" class="span-error-message"></span>
                                 </div>
                                 <div class="mb-3 col-md-6 col-lg-3">
-                                    <label class="form-label " asp-for="CreateSeller.Provinces"></label>
-                                    <select class="form-select custom-select2" asp-for="CreateSeller.Provinces" asp-items="Model.CreateSeller.Provinces">
+                                    <label class="form-label" asp-for="CreateSeller.ProvinceId"></label>
+                                    <select class="form-select custom-select2" asp-for="CreateSeller.ProvinceId" asp-items="Model.CreateSeller.Provinces">
                                     </select>
-                                    <span asp-validation-for="CreateSeller.Provinces" class="span-error-message"></span>
+                                    <span asp-validation-for="CreateSeller.ProvinceId" class="span-error-message"></span>
+                                </div>
+                                <div class="mb-3 col-md-6 col-lg-3">
+                                    <label class="form-label" asp-for="CreateSeller.CityId"></label>
+                                    <select class="form-select custom-select2" asp-for="CreateSeller.CityId">
+                                        <option value="0">انتخاب کنید</option>
+                                    </select>
+                                    <span asp-validation-for="CreateSeller.CityId" class="span-error-message"></span>
                                 </div>
                                 <div>
-                                    <label asp-for="CreateSeller.AboutSeller"></label>
+                                    <label class="form-label" asp-for="CreateSeller.AboutSeller"></label>
                                     <textarea class="form-control custom-tinymce" asp-for="CreateSeller.AboutSeller"></textarea>
                                     <span asp-validation-for="CreateSeller.AboutSeller" class="span-error-message"></span>
                                 </div>
@@ -169,12 +176,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <label asp-for="CreateSeller.IdCartPicture"></label>
+                                    <label class="form-label" asp-for="CreateSeller.IdCartPicture"></label>
                                     <input image-preview-box="id-cart-image-preview-box-create-seller" class="form-control image-preivew-input" asp-for="CreateSeller.IdCartPicture" />
                                     <span asp-validation-for="CreateSeller.IdCartPicture" class="span-error-message"></span>
                                 </div>
                                 <div class="d-none" id="id-cart-image-preview-box-create-seller">
-                                    <img src="" width="100" />
+                                    <img class="text-danger" alt="لطفا یک عکس استاندارد را انتخاب نمایید" src="" width="100" />
                                 </div>
                             </div>
                         </div>
@@ -224,6 +231,7 @@
                 </div>
             </div>
             <div class="card-footer text-center">
+                <button type="button" id="previous-tab-create-seller" class="btn btn-primary">قبلی</button>
                 <button type="button" id="next-tab-create-seller" class="btn btn-primary">بعدی</button>
                 <button class="btn btn-primary">تکمیل ثبت نام</button>
             </div>

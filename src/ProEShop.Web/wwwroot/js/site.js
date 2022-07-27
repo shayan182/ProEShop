@@ -215,7 +215,6 @@ function activatingDeleteButtons() {
         var currentForm = $(this).parent();
         var customMessage = $(this).attr('custom-message');
         const formData = currentForm.serializeArray();
-        console.log(formData);
         Swal.fire({
             title: 'اعلان',
             text: customMessage == undefined ? 'آیا مطمئن به حذف هستید ؟' : customMessage,
@@ -489,7 +488,35 @@ function fillValidationForm(errors, currentForm) {
 }
 // End Ajax
 
+function getDataWithAjax(url,formData,functionNameToCallInTheEnd) {
+    $.ajax({
+        url: url,
+        data: formData,
+        type: 'GET',
+        enctype: 'multipart/form-data',
+        dataType: 'json',
+        processData: true,
+        contentType: false,
+        beforeSend: function () {
+            showLoading();
+        },
+        success: function (data, status) {
 
+            if (data.isSuccessful == false) {
+                showToastr('warning', data.message);
+            }
+            else {
+                window[functionNameToCallInTheEnd](data.data ,data.message);
+            }
+        },
+        complete: function () {
+            hideLoading();
+        },
+        error: function () {
+            showErrorMessage();
+        }
+    });
+}
 
 
 $('input[data-val-ltrdirection="true"]').attr('dir', 'ltr');

@@ -137,7 +137,7 @@ public class CreateSellerViewModel
     [RegularExpression(@"^[\d]{10}",ErrorMessage = AttributesErrorMessages.RegularExpressionMessage)]
     public string PostalCode { get; set; }
 
-    public List<SelectListItem> Provinces { get; set; }
+    public List<SelectListItem>? Provinces { get; set; }
 
     [Display(Name = "قوانین و قرارداد را  به صورت کامل خوانده و قبول دارم")]
     [Range(typeof(bool), "true", "true", ErrorMessage = "شما باید قوانین و مقرررات را تایید نمایید")]
