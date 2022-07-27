@@ -37,3 +37,43 @@ function addRequiredRule(selector) {
             }
         });
 }
+
+// Next and previous Button in Page
+var firstTab = $('#create-seller-container .nav-tabs button:first').attr('data-bs-target');
+var lastTab = $('#create-seller-container .nav-tabs button:last').attr('data-bs-target');
+
+$('#create-seller-container #previous-tab-create-seller').attr('disabled', 'disabled');
+var currentTab = $('#create-seller-container .nav-tabs button').attr('data-bs-target');
+
+$('#create-seller-container #next-tab-create-seller').click(function() {
+    var nextTab = $(`#create-seller-container .nav-tabs button[data-bs-target="${currentTab}"]`).next();
+
+    if (nextTab.attr('data-bs-target')) {
+        currentTab = nextTab.attr('data-bs-target');
+        nextTab.tab('show');
+    }
+});
+
+$('#create-seller-container #previous-tab-create-seller').click(function () {
+    var preTab = $(`#create-seller-container .nav-tabs button[data-bs-target="${currentTab}"]`).prev();
+
+    if (preTab.attr('data-bs-target')) {
+        currentTab = preTab.attr('data-bs-target');
+        preTab.tab('show');
+    }
+});
+
+$('#create-seller-container .nav-tabs button').on('show.bs.tab' ,function(e) {
+    currentTab = $(e.target).attr('data-bs-target');
+    if (currentTab == lastTab) {
+        $('#create-seller-container #next-tab-create-seller').attr('disabled', 'disabled');
+    } else {
+        $('#create-seller-container #next-tab-create-seller').removeAttr('disabled');
+    }
+    if (currentTab == firstTab) {
+        $('#create-seller-container #previous-tab-create-seller').attr('disabled', 'disabled');
+    }
+    else {
+        $('#create-seller-container #previous-tab-create-seller').removeAttr('disabled');
+    }
+});
