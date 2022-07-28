@@ -49,15 +49,18 @@ function showToastr(status, message) {
 // End toastr
 
 // Enable tooltips
-function enabelingTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    $('[data-toggle="tooltip"]').tooltip({
-        trigger: 'hover'
-    })
+function enablingTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    //$('[data-toggle="tooltip"]').tooltip({
+    //    trigger: 'hover'
+    //});
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
+        return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
+
+
+enablingTooltips();
 
 function showErrorMessage(message) {
     showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
@@ -149,6 +152,20 @@ initializeSelect2WithoutModal();
 
 // Validation
 
+// this is for IsImage
+var imageInputsWithProblems = [];
+
+
+function removeItemInArray(arr, item) {
+    var found = arr.indexOf(item);
+
+    while (found !== -1) {
+        arr.splice(found, 1);
+        found = arr.indexOf(item);
+    }
+}
+
+
 if (jQuery.validator) {
 
     // Validate Hidden inputs in multiple pages (Create Seller) *************
@@ -186,10 +203,32 @@ if (jQuery.validator) {
 
     // isImage
     jQuery.validator.addMethod('isImage', function (value, element, param) {
-        if (element.files[0] != null) {
-            var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
-            return whiteListExtensions.includes(element.files[0].type);
+        var selectedFile = element.files[0];
+        if (selectedFile === undefined) {
+            return true;
         }
+        var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
+        if (!whiteListExtensions.includes(selectedFile.type)) {
+            return false;
+        }
+        var currentElementId = $(element).attr('id');
+        var currentForm = $(element).parents('form');
+
+        if (imageInputsWithProblems.includes(currentElementId)) {
+            removeItemInArray(imageInputsWithProblems, currentElementId);
+            return false;
+        }
+
+        if ($('#image-preview-box-temp').length === 0) {
+            $('body').append('<img class="d-none" id="image-preview-box-temp" />');
+        }
+        $('#image-preview-box-temp').attr('src', URL.createObjectURL(selectedFile));
+        $('#image-preview-box-temp').off('error');
+        $('#image-preview-box-temp').on('error',
+            function () {
+                imageInputsWithProblems.push(currentElementId);
+                currentForm.validate().element(`#${currentElementId}`);
+            });
         return true;
     });
     jQuery.validator.unobtrusive.adapters.addBool('isImage');
@@ -281,6 +320,7 @@ function activationModalForm() {
                 initializeTinyMCE();
                 initializeSelect2();
                 initializingAutocomplete();
+                activatingInputAttributes();
                 $.validator.unobtrusive.parse($('#form-modal-place form'));
                 $('#form-modal-place').modal('show');
             }
@@ -323,7 +363,7 @@ function fillDataTable() {
             activationModalForm();
             activatingDeleteButtons();
             activatingPageCount();
-            enabelingTooltips();
+            enablingTooltips();
         }
         else {
             showErrorMessage();
@@ -468,7 +508,7 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
                 activationModalForm();
                 activatingDeleteButtons();
                 activatingPageCount();
-                enabelingTooltips();
+                enablingTooltips();
             }
         }
         else {
@@ -488,7 +528,7 @@ function fillValidationForm(errors, currentForm) {
 }
 // End Ajax
 
-function getDataWithAjax(url,formData,functionNameToCallInTheEnd) {
+function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
     $.ajax({
         url: url,
         data: formData,
@@ -506,7 +546,7 @@ function getDataWithAjax(url,formData,functionNameToCallInTheEnd) {
                 showToastr('warning', data.message);
             }
             else {
-                window[functionNameToCallInTheEnd](data.data ,data.message);
+                window[functionNameToCallInTheEnd](data.data, data.message);
             }
         },
         complete: function () {
@@ -518,10 +558,12 @@ function getDataWithAjax(url,formData,functionNameToCallInTheEnd) {
     });
 }
 
+function activatingInputAttributes() {
+    $('input[data-val-ltrdirection="true"]').attr('dir', 'ltr');
+    $('input[data-val-isimage]').attr('accept', 'image/*');
+}
 
-$('input[data-val-ltrdirection="true"]').attr('dir', 'ltr');
-$('input[data-val-isimage]').attr('accept', 'image/*');
-
+activatingInputAttributes();
 //show preview in under the input (Create Seller Page)
 $('.image-preivew-input').change(function () {
     var selectedFile = this.files[0];

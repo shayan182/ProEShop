@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Services.Contracts;
 using ProEShop.Services.Contracts.Identity;
 using ProEShop.ViewModels.Sellers;
 using ProEShop.Common;
-using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
-using ProEShop.Common.IdentityToolkit;
 
 namespace ProEShop.Web.Pages.Seller;
 
 public class CreateSellerModel : PageBase
 {
+    private readonly ISellerService _sellerService;
     private readonly IApplicationUserManager _userManager;
     private readonly IProvinceAndCityService _provinceAndCityService;
-    public CreateSellerModel(IApplicationUserManager userManager, IProvinceAndCityService provinceAndCityService)
+    public CreateSellerModel(IApplicationUserManager userManager, IProvinceAndCityService provinceAndCityService, ISellerService sellerService)
     {
         _userManager = userManager;
         _provinceAndCityService = provinceAndCityService;
+        _sellerService = sellerService;
     }
 
     [BindProperty]
@@ -55,13 +54,19 @@ public class CreateSellerModel : PageBase
         if (provinceId < 0)
             return Json(new JsonResultOperation(true, "لطفااستان مورد نظر را به درستی وارد نمایید "));
 
-        if (!await _provinceAndCityService.IsExistsBy("Id", provinceId))
+        if (!await _provinceAndCityService.IsExistsBy(nameof(Entities.ProvinceAndCity.Id), provinceId))
             return Json(new JsonResultOperation(true, "استان مورد نظر یافت نشد."));
 
-        var Cities = await _provinceAndCityService.GetCitiesByProvinceIdToShowInSelectBoxAsync(provinceId);
+        var cities = await _provinceAndCityService.GetCitiesByProvinceIdToShowInSelectBoxAsync(provinceId);
         return Json(new JsonResultOperation(true, String.Empty)
         {
-            Data = Cities
+            Data = cities
         });
+    }
+
+    public async Task<IActionResult> OnGetCheckForShopName(CreateSellerViewModel createSeller)
+    {
+        return Json(!await _sellerService.IsExistsBy(nameof(Entities.Seller.ShopName),
+            CreateSeller.ShopName));
     }
 }

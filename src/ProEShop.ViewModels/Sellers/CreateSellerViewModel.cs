@@ -27,7 +27,7 @@ public class CreateSellerViewModel
     [Display(Name = "کد ملی")]
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
-    [MaxLength(11, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
+    [MaxLength(10, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string NationalCode { get; set; }
 
     [Display(Name = "تاریخ تولد")]
@@ -76,6 +76,9 @@ public class CreateSellerViewModel
 
     #endregion
 
+    [PageRemote(PageName = "CreateSeller",PageHandler = "CheckForShopName",
+        HttpMethod = "GET",
+        ErrorMessage = AttributesErrorMessages.RemoteMessage)]
     [Display(Name = "نام فروشگاه")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]

@@ -6,6 +6,7 @@
         addRequiredRule('#CreateSeller_EconomicCode');
         addRequiredRule('#CreateSeller_SignatureOwners');
         addRequiredRule('#CreateSeller_NationalId');
+        addRangeRule('#CreateSeller_CompanyType');
         labelEl.html('شخص حقوقی');
     }
     else {
@@ -14,6 +15,7 @@
         removeRequiredRule('#CreateSeller_EconomicCode');
         removeRequiredRule('#CreateSeller_SignatureOwners');
         removeRequiredRule('#CreateSeller_NationalId');
+        removeRangeRule('#CreateSeller_CompanyType');
         labelEl.html('شخص حقیقی');
     }
     $(this).parents('form').valid();
@@ -26,6 +28,11 @@ function removeRequiredRule(selector) {
     $(selector).rules('remove', 'required');
 }
 
+function removeRangeRule(selector) {
+    debugger 
+    $(selector).rules('remove', 'range');
+}
+
 function addRequiredRule(selector) {
     var displayName = $(selector).parent().find('label').html().trim();
     $(selector).rules('add',
@@ -35,6 +42,17 @@ function addRequiredRule(selector) {
                 required: `لطفا ${displayName} را وارد نمایید`
             }
         });
+}
+function addRangeRule(selector) {
+    debugger 
+
+    var displayName = $(selector).parent().find('label').html().trim();
+    $(selector).rules('add', {
+        range: [0, 4],
+        messages: {
+            range: `لطفا ${displayName} را وارد نمایید`
+        }
+    });
 }
 
 // Next and previous Button in Page

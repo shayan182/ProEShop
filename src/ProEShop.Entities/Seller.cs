@@ -101,7 +101,7 @@ public class Seller : EntityBase, IAuditableEntity
     #endregion
 }
 
-public enum Gender
+public enum Gender : byte
 {
     [Display(Name = "آقا")]
     Man,
@@ -109,7 +109,7 @@ public enum Gender
     Woman
 }
 
-public enum CompanyType
+public enum CompanyType : byte
 {
     [Display(Name = "سهمی عام")]
     PublicStock,
