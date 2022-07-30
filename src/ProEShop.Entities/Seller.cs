@@ -111,11 +111,11 @@ public enum Gender : byte
 
 public enum CompanyType : byte
 {
-    [Display(Name = "سهمی عام")]
+    [Display(Name = "سهامی عام")]
     PublicStock,
 
     [Display(Name = "سهامی خاص")]
-    PrivatePerson,
+    PrivateEquity,
 
     [Display(Name = "مسئولیت محدود")]
     LimitedResponsibility,

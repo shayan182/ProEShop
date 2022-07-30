@@ -37,6 +37,7 @@ public class CreateSellerViewModel
     public string BirthDateEn { get; set; }
 
     [Display(Name = "جنسیت")]
+    [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     public Gender? Gender { get; set; }
 
     [Display(Name = "شماره تلفن")]
@@ -55,11 +56,13 @@ public class CreateSellerViewModel
 
     [Display(Name = "شماره ثبت شرکت")]
     [MaxLength(100, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
+    [RegularExpression(@"^[\d]+$",ErrorMessage = AttributesErrorMessages.RegularExpressionMessage)]
     public string? RegisterNumber { get; set; }
 
     [Display(Name = "کد اقتصادی")]
     [LtrDirection]
     [MaxLength(12, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
+    [RegularExpression(@"^[\d]+$", ErrorMessage = AttributesErrorMessages.RegularExpressionMessage)]
     public string? EconomicCode { get; set; }
 
     [Display(Name = "نام افراد دارای حق امضا")]
@@ -84,7 +87,7 @@ public class CreateSellerViewModel
     [Display(Name = "لوگو فروشگاه")]
     [IsImage("لوگو فروشگاه")]
     [MaxFileSize("لوگو فروشگاه", 1)]
-    public IFormFile? Logo { get; set; }
+    public IFormFile? LogoPicture { get; set; }
 
     /// <summary>
     /// عکس کارت ملی
@@ -94,7 +97,7 @@ public class CreateSellerViewModel
     [IsImage("تصویر کارت ملی")]
     [MaxFileSize("تصویر کارت ملی", 1)]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
-    public IFormFile IdCartPicture { get; set; }
+    public IFormFile IdCartPictureFile { get; set; }
 
     [Display(Name = "شماره شبا")]
     [LtrDirection]
@@ -102,7 +105,7 @@ public class CreateSellerViewModel
     [MaxLength(24, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string ShabaNumber { get; set; }
 
-    [Display(Name = "شماره تلفن")]
+    [Display(Name = "شماره تلفن ثابت")]
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(11, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]

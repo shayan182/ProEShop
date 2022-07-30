@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProEShop.Services.Contracts;
 using ProEShop.Services.Contracts.Identity;
@@ -7,6 +8,7 @@ using ProEShop.Common;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.ViewModels;
+using ProEShop.Common.IdentityToolkit;
 
 namespace ProEShop.Web.Pages.Seller;
 
@@ -15,6 +17,8 @@ public class CreateSellerModel : PageBase
     private readonly ISellerService _sellerService;
     private readonly IApplicationUserManager _userManager;
     private readonly IProvinceAndCityService _provinceAndCityService;
+    private readonly IMapper _mapper;
+
     public CreateSellerModel(IApplicationUserManager userManager, IProvinceAndCityService provinceAndCityService, ISellerService sellerService)
     {
         _userManager = userManager;
@@ -48,9 +52,20 @@ public class CreateSellerModel : PageBase
         return Page();
     }
 
-    public void OnPost()
+    public IActionResult OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = ModelState.GetModelStateErrors()
+            });
+        }
+
+        var seller = _mapper.Map<Entities.Seller>(CreateSeller);
+        seller.ShopName = ShopName;
         //await _signInManager.SignInAsync(user, true);
+        return RedirectToPage("SellerPanel");
     }
 
     public async Task<IActionResult> OnGetGetCities(long provinceId)

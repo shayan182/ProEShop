@@ -417,6 +417,9 @@ $('form input').blur(function () {
 $('form select').change(function () {
     $(this).parents('form').valid();
 });
+$('form input[type="checkbox"] , form input[type="file"]').change(function () {
+    $(this).parents('form').valid();
+});
 
 $(document).on('submit', 'form.public-ajax-form', function (e) {
     e.preventDefault();
