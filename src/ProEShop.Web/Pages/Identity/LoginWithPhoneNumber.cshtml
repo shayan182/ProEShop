@@ -27,7 +27,8 @@
         <div id="login-register-text" class="mt-3 rem1and3 d-flex">
             <span>کد تایید را وارد نمایید</span>
         </div>
-        <form asp-page="./LoginWithPhoneNumber"
+        <form autocomplete="off"
+            asp-page="./LoginWithPhoneNumber"
             call-function-in-the-end="LoginWithPhoneNumberInIdentity"
             method="post"
               class="mt-3 public-ajax-form">

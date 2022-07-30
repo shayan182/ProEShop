@@ -1,9 +1,11 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using AutoMapper;
 using DNTCommon.Web.Core;
 using Microsoft.Extensions.WebEncoders;
 using ProEShop.IocConfig;
 using ProEShop.ViewModels.Identity.Settings;
+using ProEShop.Web.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -18,6 +20,12 @@ builder.Services.Configure<WebEncoderOptions>(options =>
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
 });
 
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+var mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 app.Services.InitializeDb();

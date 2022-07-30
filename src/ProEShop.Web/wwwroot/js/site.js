@@ -414,6 +414,10 @@ $('form input').blur(function () {
     $(this).parents('form').valid();
 });
 
+$('form select').change(function () {
+    $(this).parents('form').valid();
+});
+
 $(document).on('submit', 'form.public-ajax-form', function (e) {
     e.preventDefault();
     var currentForm = $(this);

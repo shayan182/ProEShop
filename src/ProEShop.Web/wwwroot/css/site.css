@@ -65,3 +65,6 @@ a{
 .custom-overflow-y {
     overflow-y: scroll;
 }
+.pointer-cursor {
+    cursor: pointer;
+}

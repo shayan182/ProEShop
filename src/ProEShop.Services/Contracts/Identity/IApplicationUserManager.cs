@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using ProEShop.Entities.Identity;
+using ProEShop.ViewModels.Sellers;
 
 namespace ProEShop.Services.Contracts.Identity;
 
@@ -119,6 +120,7 @@ public interface IApplicationUserManager : IDisposable
 
     Task<DateTime?> GetSendSmsLastTimeAsync(string phoneNumber);
     Task<bool> CheckForUserIsSeller(string phoneNumber);
+    Task<CreateSellerViewModel> GetUserInfoForCreateSeller(string phoneNumber);
 
     #endregion
 }
