@@ -422,6 +422,7 @@ $('form input[type="checkbox"] , form input[type="file"]').change(function () {
 });
 
 $(document).on('submit', 'form.public-ajax-form', function (e) {
+    debugger 
     e.preventDefault();
     var currentForm = $(this);
     var formAction = currentForm.attr('action');

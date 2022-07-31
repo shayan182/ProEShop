@@ -9,6 +9,8 @@ using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.ViewModels;
 using ProEShop.Common.IdentityToolkit;
+using ProEShop.DataLayer.Context;
+using ProEShop.Services.Services.Identity;
 
 namespace ProEShop.Web.Pages.Seller;
 
@@ -18,12 +20,22 @@ public class CreateSellerModel : PageBase
     private readonly IApplicationUserManager _userManager;
     private readonly IProvinceAndCityService _provinceAndCityService;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _uow;
+    private readonly IUploadFileService _uploadFile;
 
-    public CreateSellerModel(IApplicationUserManager userManager, IProvinceAndCityService provinceAndCityService, ISellerService sellerService)
+    public CreateSellerModel(IApplicationUserManager userManager,
+        IProvinceAndCityService provinceAndCityService,
+        ISellerService sellerService,
+        IMapper mapper,
+        IUploadFileService uploadFile,
+        IUnitOfWork uow)
     {
         _userManager = userManager;
         _provinceAndCityService = provinceAndCityService;
         _sellerService = sellerService;
+        _mapper = mapper;
+        _uploadFile = uploadFile;
+        _uow = uow;
     }
     [BindProperty]
     [PageRemote(PageName = "CreateSeller", PageHandler = "CheckForShopName",
@@ -48,11 +60,10 @@ public class CreateSellerModel : PageBase
         CreateSeller = await _userManager.GetUserInfoForCreateSeller(phoneNumber);
         var provinces = await _provinceAndCityService.GetProvincesToShowInSelectBoxAsync();
         CreateSeller.Provinces = provinces.CreateSelectListItem();
-
         return Page();
     }
 
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPost()
     {
         if (!ModelState.IsValid)
         {
@@ -62,10 +73,49 @@ public class CreateSellerModel : PageBase
             });
         }
 
+        var user = await _userManager.GetUserForCreateSeller(CreateSeller.PhoneNumber);
+        if (user is null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        }
+
         var seller = _mapper.Map<Entities.Seller>(CreateSeller);
+        seller.UserId = user.Id;
         seller.ShopName = ShopName;
+
+        var logoFileName = CreateSeller.LogoFile.GenerateFileName();
+        var idCartPictureName = CreateSeller.IdCartPictureFile.GenerateFileName();
+
+        seller.IdCartPicture = idCartPictureName;
+        seller.Logo = logoFileName;
+
+        seller.SellerCode = await _sellerService.GetSellerCodeForCreateSeller();
+
+        var result = await _sellerService.AddAsync(seller);
+        if (!result.Ok)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.DuplicateErrorMessage)
+            {
+                Data = result.Columns.SetDuplicateColumnsErrors<CreateSellerViewModel>()
+            });
+        }
+
+        var roleResult = await _userManager.AddToRoleAsync(user, ConstantRoles.Seller);
+        if (!roleResult.Succeeded)
+        {
+            ModelState.AddErrorsFromResult(roleResult);
+            return Json(new JsonResultOperation(false)
+            {
+                Data = ModelState.GetModelStateErrors()
+            });
+        }
         //await _signInManager.SignInAsync(user, true);
-        return RedirectToPage("SellerPanel");
+        await _uow.SaveChangesAsync();
+
+        await _uploadFile.SaveFile(CreateSeller.IdCartPictureFile, idCartPictureName, null, "images", "seller-id-cart-pictures");
+        await _uploadFile.SaveFile(CreateSeller.LogoFile, logoFileName, null, "images", "seller-logos");
+
+        return Json(new JsonResultOperation(true, "شما با موفقیت به عنوان فروشنده ثبت شدید"));
     }
 
     public async Task<IActionResult> OnGetGetCities(long provinceId)
@@ -96,4 +146,6 @@ public class CreateSellerModel : PageBase
         return Json(!await _sellerService.IsExistsBy(
             nameof(Entities.Seller.ShopName), ShopName));
     }
+
+    
 }

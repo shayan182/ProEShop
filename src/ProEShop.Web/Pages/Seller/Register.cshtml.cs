@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
+using ProEShop.DataLayer.Context;
 using ProEShop.Entities.Identity;
 using ProEShop.IocConfig;
 using ProEShop.Services.Contracts.Identity;
@@ -18,6 +19,8 @@ public class RegisterModel : PageModel
     private readonly SiteSettings _siteSettings;
     private readonly IApplicationUserManager _userManager;
     private readonly ILogger<RegisterModel> _logger;
+    private readonly IUnitOfWork _uow;
+
     public RegisterModel(
         IApplicationUserManager userManager,
         IOptionsMonitor<SiteSettings> siteSettings,
@@ -58,6 +61,7 @@ public class RegisterModel : PageModel
             var result = await _userManager.CreateAsync(user);
             if (result.Succeeded)
             {
+                await _uow.SaveChangesAsync();
                 _logger.LogInformation(LogCodes.RegisterCode, $"User {user.UserName} created a new account with phone number");
                 addNewUser = true;
             }
@@ -75,6 +79,7 @@ public class RegisterModel : PageModel
             //Todo send SMS
             user.SendSmsLastTime = DateTime.Now;
             await _userManager.UpdateAsync(user);
+            await _uow.SaveChangesAsync();
         }
 
         return RedirectToPage("./ConfirmationPhoneNumber", new { phoneNumber = RegisterSeller.PhoneNumber });

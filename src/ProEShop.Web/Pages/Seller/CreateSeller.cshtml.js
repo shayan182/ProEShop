@@ -29,7 +29,6 @@ function removeRequiredRule(selector) {
 }
 
 function removeRangeRule(selector) {
-    debugger 
     $(selector).rules('remove', 'range');
 }
 
@@ -44,7 +43,6 @@ function addRequiredRule(selector) {
         });
 }
 function addRangeRule(selector) {
-    debugger 
 
     var displayName = $(selector).parent().find('label').html().trim();
     $(selector).rules('add', {
@@ -111,6 +109,10 @@ function putCitiesInTheSelectBox(data,message) {
     $.each(data, function (key, value) {
         $('#CreateSeller_CityId').append(`<option value="${key}">${value}</optoin>`);
     });
+}
+
+function test() {
+    
 }
 
 const dtp1Instance = new mds.MdsPersianDateTimePicker(document.getElementById('birth-date-icon-create-seller'), {

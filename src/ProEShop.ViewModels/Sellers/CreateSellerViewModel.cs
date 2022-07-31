@@ -34,7 +34,7 @@ public class CreateSellerViewModel
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     public string BirthDate { get; set; }
-    public string BirthDateEn { get; set; }
+    public string? BirthDateEn { get; set; }
 
     [Display(Name = "جنسیت")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
@@ -87,7 +87,7 @@ public class CreateSellerViewModel
     [Display(Name = "لوگو فروشگاه")]
     [IsImage("لوگو فروشگاه")]
     [MaxFileSize("لوگو فروشگاه", 1)]
-    public IFormFile? LogoPicture { get; set; }
+    public IFormFile? LogoFile { get; set; }
 
     /// <summary>
     /// عکس کارت ملی

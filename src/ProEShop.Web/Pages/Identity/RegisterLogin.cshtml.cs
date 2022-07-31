@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
+using ProEShop.DataLayer.Context;
 using ProEShop.Entities.Identity;
 using ProEShop.IocConfig;
 using ProEShop.Services.Contracts.Identity;
@@ -17,6 +18,7 @@ public class RegisterLoginModel : PageBase
     private readonly IApplicationUserManager _userManager;
     private readonly ILogger<RegisterLoginModel> _logger;
     private readonly SiteSettings _siteSettings;
+    private readonly IUnitOfWork _uow;
 
     public RegisterLoginModel(IApplicationUserManager userManager, 
         ILogger<RegisterLoginModel> logger,
@@ -56,6 +58,7 @@ public class RegisterLoginModel : PageBase
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _uow.SaveChangesAsync();
                     _logger.LogInformation(LogCodes.RegisterCode, $"User {user.UserName} created a new account with phone number");
                     addNewUser = true;
                 }
@@ -72,6 +75,7 @@ public class RegisterLoginModel : PageBase
                 //Todo send SMS
                 user.SendSmsLastTime = DateTime.Now;
                 await _userManager.UpdateAsync(user);
+                await _uow.SaveChangesAsync();
             }
         }
         return RedirectToPage("./LoginWithPhoneNumber", new { phoneNumber = registerLogin.PhoneNumberOrEmail });
