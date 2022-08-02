@@ -5,9 +5,9 @@
 }
 
 <div class="container" id="create-seller-container">
-<form call-function-in-the-end="test"
-      class="public-ajax-form"
-    asp-page="./CreateSeller" >
+    <form call-function-in-the-end="createSeller"
+          class="public-ajax-form"
+          asp-page="./CreateSeller">
         <input asp-for="CreateSeller.PhoneNumber" />
         <div class="card mt-5">
             <div class="card-header">
@@ -99,7 +99,7 @@
                                 <div class="mb-3 col-md-6 col-lg-3">
                                     <label class="form-label" asp-for="CreateSeller.BirthDate"></label>
                                     <div class="input-group">
-                                        <input birth-date-en="@Model.CreateSeller.BirthDateEn" readonly="readonly" class="form-control" asp-for="CreateSeller.BirthDate" />
+                                        <input birth-date-en="@Model.CreateSeller.BirthDateEn" readonly="readonly" class="form-control custom-md-persian-datepicker" asp-for="CreateSeller.BirthDate" />
                                         <span class="input-group-text">
                                             <i id="birth-date-icon-create-seller" class="pointer-cursor bi bi-calendar2-date"></i>
                                         </span>
@@ -233,8 +233,8 @@
                                 2- قانون دو
                             </div>
                             <div class="form-check my-2">
-                                <input class="form-check-input" asp-for="CreateSeller.AcceptToTheTerms">
                                 <label class="form-check-label" asp-for="CreateSeller.AcceptToTheTerms"></label>
+                                <input class="form-check-input" asp-for="CreateSeller.AcceptToTheTerms">
                                 <span asp-validation-for="CreateSeller.AcceptToTheTerms" class="span-error-message"></span>
                             </div>
                         </div>

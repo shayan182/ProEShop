@@ -111,8 +111,9 @@ function putCitiesInTheSelectBox(data,message) {
     });
 }
 
-function test() {
-    
+function createSeller(message,data) {
+    showToastr('success', message);
+    location.href = data;
 }
 
 const dtp1Instance = new mds.MdsPersianDateTimePicker(document.getElementById('birth-date-icon-create-seller'), {
@@ -122,3 +123,26 @@ const dtp1Instance = new mds.MdsPersianDateTimePicker(document.getElementById('b
     selectedDateToShow: new Date($('#CreateSeller_BirthDate').attr('birth-date-en') || new Date())
 });
 
+
+
+
+
+
+$('#CreateSeller_CompanyName').val('اسم شرکت تست');
+$('#CreateSeller_RegisterNumber').val('456465456465456');
+$('#CreateSeller_EconomicCode').val('123123123123');
+$('#CreateSeller_SignatureOwners').val('علی احمدی - محمد محمودی');
+$('#CreateSeller_NationalId').val('56456465456456');
+$('#CreateSeller_CompanyType').val('2');
+$('#ShopName').val('فروشگاه تست');
+$('#CreateSeller_Address').val('آدرس کامل');
+$('#CreateSeller_Website').val('https://google.com');
+$('#CreateSeller_PostalCode').val('1234567890');
+$('#CreateSeller_ShabaNumber').val('12345678901234567890');
+$('#CreateSeller_Telephone').val('02122334455');
+$('#CreateSeller_AboutSeller').val('<h3>Hello</h3>');
+var firstOptionProvince = $('#CreateSeller_ProvinceId option:eq(1)').val();
+$('#CreateSeller_AcceptToTheTerms').attr('checked', true);
+setTimeout(function () {
+    $('#CreateSeller_ProvinceId').val(firstOptionProvince).trigger('change');
+}, 500);

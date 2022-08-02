@@ -73,20 +73,63 @@ public class CreateSellerModel : PageBase
             });
         }
 
+        if (!CreateSeller.IsLegalPerson)
+        {
+            CreateSeller.CompanyName
+                = CreateSeller.RegisterNumber
+                    = CreateSeller.EconomicCode
+                        = CreateSeller.SignatureOwners
+                            = CreateSeller.NationalId
+                                = null;
+            CreateSeller.CompanyType = null;
+        }
+        else
+        {
+            var legalPersonProperties = new List<string>
+            {
+                nameof(CreateSeller.CompanyName),
+                nameof(CreateSeller.RegisterNumber),
+                nameof(CreateSeller.EconomicCode),
+                nameof(CreateSeller.SignatureOwners),
+                nameof(CreateSeller.NationalId)
+            };
+            ModelState.CheckStringInputs(legalPersonProperties,CreateSeller);
+            if (!ModelState.IsValid)
+            {
+                return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+                {
+                    Data = ModelState.GetModelStateErrors()
+                });
+            }
+        }
+        
         var user = await _userManager.GetUserForCreateSeller(CreateSeller.PhoneNumber);
         if (user is null)
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
         }
+        user = _mapper.Map(CreateSeller, user);
 
+        var birthDateResult = CreateSeller.BirthDate.ToGregorianDateForCreateSeller();
+        if (!birthDateResult.IsOk)
+        {
+            return Json(new JsonResultOperation(false, "تاریخ تولد را به درستی وارد نمایید"));
+        }
+        if (!birthDateResult.IsGreaterThan18)
+        {
+            return Json(new JsonResultOperation(false, "سن شما باید بیشتر از 18 سال باشد"));
+        }
+
+        user.BirthDate = birthDateResult.ConvetedDateTime;
         var seller = _mapper.Map<Entities.Seller>(CreateSeller);
         seller.UserId = user.Id;
         seller.ShopName = ShopName;
 
-        var logoFileName = CreateSeller.LogoFile.GenerateFileName();
-        var idCartPictureName = CreateSeller.IdCartPictureFile.GenerateFileName();
+        string logoFileName = null;
+        if (CreateSeller.LogoFile != null)
+            logoFileName = CreateSeller.LogoFile.GenerateFileName();
 
-        seller.IdCartPicture = idCartPictureName;
+        seller.IdCartPicture = CreateSeller.IdCartPictureFile.GenerateFileName();
         seller.Logo = logoFileName;
 
         seller.SellerCode = await _sellerService.GetSellerCodeForCreateSeller();
@@ -109,13 +152,19 @@ public class CreateSellerModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
-        //await _signInManager.SignInAsync(user, true);
+
         await _uow.SaveChangesAsync();
 
-        await _uploadFile.SaveFile(CreateSeller.IdCartPictureFile, idCartPictureName, null, "images", "seller-id-cart-pictures");
-        await _uploadFile.SaveFile(CreateSeller.LogoFile, logoFileName, null, "images", "seller-logos");
+        //await _signInManager.SignInAsync(user, true);
 
-        return Json(new JsonResultOperation(true, "شما با موفقیت به عنوان فروشنده ثبت شدید"));
+        if (logoFileName != null)
+            await _uploadFile.SaveFile(CreateSeller.LogoFile, logoFileName, null, "images", "seller-logos");
+        await _uploadFile.SaveFile(CreateSeller.IdCartPictureFile, seller.IdCartPicture, null, "images", "seller-id-cart-pictures");
+
+        return Json(new JsonResultOperation(true, "شما با موفقیت به عنوان فروشنده ثبت شدید")
+        {
+            Data = "/Seller/RegistrationDone"
+        });
     }
 
     public async Task<IActionResult> OnGetGetCities(long provinceId)
@@ -146,6 +195,10 @@ public class CreateSellerModel : PageBase
         return Json(!await _sellerService.IsExistsBy(
             nameof(Entities.Seller.ShopName), ShopName));
     }
+    public async Task<IActionResult> OnGetCheckForShabaNumber(CreateSellerViewModel createSeller)
+    {
+        return Json(!await _sellerService.IsExistsBy(
+            nameof(Entities.Seller.ShabaNumber), createSeller.ShabaNumber));
+    }
 
-    
 }

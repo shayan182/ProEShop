@@ -24,11 +24,13 @@ public class RegisterModel : PageModel
     public RegisterModel(
         IApplicationUserManager userManager,
         IOptionsMonitor<SiteSettings> siteSettings,
-        ILogger<RegisterModel> logger)
+        ILogger<RegisterModel> logger,
+        IUnitOfWork uow)
     {
         _userManager = userManager;
         _logger = logger;
         _siteSettings = siteSettings.CurrentValue;
+        _uow = uow;
     }
     #endregion
     [BindProperty]

@@ -32,6 +32,7 @@ public class CreateSellerViewModel
 
     [Display(Name = "تاریخ تولد")]
     [LtrDirection]
+    [RegularExpression(@"^۱۳[۰-۸][۰-۹]\/(۰[۱-۹]|۱[۰-۲])\/(۰[۱-۹]|[۱۲][۰-۹]|۳[۰۱])$", ErrorMessage = AttributesErrorMessages.RegularExpressionMessage)]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     public string BirthDate { get; set; }
     public string? BirthDateEn { get; set; }
@@ -103,13 +104,16 @@ public class CreateSellerViewModel
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(24, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
+    [PageRemote(PageName = "CreateSeller",PageHandler = "CheckForShabaNumber",
+        HttpMethod = "GET",
+        ErrorMessage = AttributesErrorMessages.RemoteMessage)]
     public string ShabaNumber { get; set; }
 
     [Display(Name = "شماره تلفن ثابت")]
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(11, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
-    [RegularExpression(@"^[\d]{10}$",ErrorMessage = AttributesErrorMessages.RegularExpressionMessage)]
+    [RegularExpression(@"^[\d]{11}$",ErrorMessage = AttributesErrorMessages.RegularExpressionMessage)]
     public string Telephone { get; set; }
 
     [Display(Name = "آدرس وبسایت")]

@@ -21,8 +21,6 @@ public class SellerService : GenericService<Seller>, ISellerService
             result.Add(nameof(entity.ShopName));
         if (await _sellers.AnyAsync(x => x.ShabaNumber == entity.ShabaNumber))
             result.Add(nameof(entity.ShabaNumber));
-        if (await _sellers.AnyAsync(x => x.SellerCode == entity.SellerCode))
-            result.Add(nameof(entity.SellerCode));
         if (!result.Any())
             await base.AddAsync(entity);
         return new DuplicateColumns(!result.Any())
@@ -36,6 +34,6 @@ public class SellerService : GenericService<Seller>, ISellerService
         var latestSellerCode = await _sellers.OrderByDescending(x => x.Id)
             .Select(x => x.SellerCode)
             .FirstOrDefaultAsync();
-        return (int)(latestSellerCode + 1);
+        return (int)((latestSellerCode == null?0 : latestSellerCode) + 1);
     }
 }

@@ -38,7 +38,6 @@ public class Seller : EntityBase, IAuditableEntity
     public CompanyType? CompanyType { get; set; }
     #endregion
 
-    public Gender? Gender { get; set; }
 
     public int? SellerCode { get; set; }
 
@@ -64,7 +63,7 @@ public class Seller : EntityBase, IAuditableEntity
     public string? ShabaNumber { get; set; }
 
     [Required]
-    [MaxLength(1)]
+    [MaxLength(11)]
     public string TelePhone { get; set; }
 
     [MaxLength(200)]

@@ -24,10 +24,10 @@ public abstract class GenericService<TEntity> : IGenericService<TEntity> where T
         return new DuplicateColumns();
     }
 
-    public virtual async  Task<DuplicateColumns> Update(TEntity entity)
+    public virtual Task<DuplicateColumns> Update(TEntity entity)
     {
         _entities.Update(entity);
-        return new DuplicateColumns();
+        return Task.FromResult(new DuplicateColumns());
     }
 
     public void Remove(TEntity entity)

@@ -6,9 +6,6 @@ using ProEShop.Services.Services.Identity;
 namespace ProEShop.Web.Pages.SellerPanel;
 
 [Authorize(Roles = ConstantRoles.Seller)]
-public class IndexModel : PageBase
+public class SellerPanelBase : PageBase 
 {
-    public void OnGet()
-    {
-    }
 }

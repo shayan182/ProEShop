@@ -417,12 +417,20 @@ $('form input').blur(function () {
 $('form select').change(function () {
     $(this).parents('form').valid();
 });
-$('form input[type="checkbox"] , form input[type="file"]').change(function () {
+$('form input.custom-md-persian-datepicker').change(function () {
+    $(this).parents('form').valid();
+});
+$('form input[type="file"]').change(function () {
+
+    $(this).parents('form').valid();
+});
+$('form input[type="checkbox"] ').change(function () {
+     
     $(this).parents('form').valid();
 });
 
+
 $(document).on('submit', 'form.public-ajax-form', function (e) {
-    debugger 
     e.preventDefault();
     var currentForm = $(this);
     var formAction = currentForm.attr('action');
@@ -440,8 +448,7 @@ $(document).on('submit', 'form.public-ajax-form', function (e) {
             showLoading();
         },
         success: function (data, status) {
-
-            if (data.isSuccessful == false) {
+            if (data.isSuccessful === false) {
                 var finalData = data.data != null ? data.data : [data.message];
                 fillValidationForm(finalData, currentForm);
                 showToastr('warning', data.message);
@@ -526,6 +533,7 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
 });
 
 function fillValidationForm(errors, currentForm) {
+
     var result = '<ul>';
     errors.forEach(function (e) {
         result += `<li>${e}</li>`;
