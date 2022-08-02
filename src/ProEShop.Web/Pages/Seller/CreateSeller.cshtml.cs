@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Mvc;
 using ProEShop.Services.Contracts;
 using ProEShop.Services.Contracts.Identity;
@@ -22,13 +23,16 @@ public class CreateSellerModel : PageBase
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _uow;
     private readonly IUploadFileService _uploadFile;
+    private readonly IApplicationSignInManager _signInManager;
+    private readonly IHtmlSanitizer _htmlSanitizer;
 
     public CreateSellerModel(IApplicationUserManager userManager,
         IProvinceAndCityService provinceAndCityService,
         ISellerService sellerService,
         IMapper mapper,
         IUploadFileService uploadFile,
-        IUnitOfWork uow)
+        IUnitOfWork uow,
+        IApplicationSignInManager signInManager)
     {
         _userManager = userManager;
         _provinceAndCityService = provinceAndCityService;
@@ -36,6 +40,7 @@ public class CreateSellerModel : PageBase
         _mapper = mapper;
         _uploadFile = uploadFile;
         _uow = uow;
+        _signInManager = signInManager;
     }
     [BindProperty]
     [PageRemote(PageName = "CreateSeller", PageHandler = "CheckForShopName",
@@ -115,12 +120,17 @@ public class CreateSellerModel : PageBase
         {
             return Json(new JsonResultOperation(false, "تاریخ تولد را به درستی وارد نمایید"));
         }
-        if (!birthDateResult.IsGreaterThan18)
+        if (!birthDateResult.IsRangeOk)
         {
-            return Json(new JsonResultOperation(false, "سن شما باید بیشتر از 18 سال باشد"));
+            return Json(new JsonResultOperation(false, "سن شما باید بین 18 تا 100 سال باشد"));
         }
 
         user.BirthDate = birthDateResult.ConvetedDateTime;
+        if (CreateSeller.AboutSeller != null)
+        {
+            CreateSeller.AboutSeller = _htmlSanitizer.Sanitize(CreateSeller.AboutSeller);
+        }
+
         var seller = _mapper.Map<Entities.Seller>(CreateSeller);
         seller.UserId = user.Id;
         seller.ShopName = ShopName;
@@ -153,13 +163,21 @@ public class CreateSellerModel : PageBase
             });
         }
 
-        await _uow.SaveChangesAsync();
+        try
+        {
+            await _uow.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            var a = e;
+        }
 
-        //await _signInManager.SignInAsync(user, true);
 
         if (logoFileName != null)
             await _uploadFile.SaveFile(CreateSeller.LogoFile, logoFileName, null, "images", "seller-logos");
         await _uploadFile.SaveFile(CreateSeller.IdCartPictureFile, seller.IdCartPicture, null, "images", "seller-id-cart-pictures");
+
+        await _signInManager.SignInAsync(user, true);
 
         return Json(new JsonResultOperation(true, "شما با موفقیت به عنوان فروشنده ثبت شدید")
         {

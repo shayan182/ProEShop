@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -50,6 +51,11 @@ public static class AddCustomServicesExtensions
         services.AddScoped<IProvinceAndCityService, ProvinceAndCityService>();
         services.AddScoped<ISellerService, SellerService>();
 
+        #region Html sanitizer
+        IHtmlSanitizer sanitizer = new HtmlSanitizer();
+        //services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
+        services.AddSingleton(sanitizer);
+        #endregion
         return services;
     }
 }

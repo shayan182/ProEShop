@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace ProEShop.Common.Helpers;
 public class ConvertDateForCreateSeller
 {
-    public ConvertDateForCreateSeller(bool isOk, bool isGreaterThan18 = default, DateTime convetedDateTime = default)
+    public ConvertDateForCreateSeller(bool isOk, bool isRangeOk = default, DateTime convetedDateTime = default)
     {
         IsOk = isOk;
-        IsGreaterThan18 = isGreaterThan18;
+        IsRangeOk = isRangeOk;
         ConvetedDateTime = convetedDateTime;
     }
 
     public bool IsOk { get; set; }
-    public bool IsGreaterThan18 { get; set; }
+    public bool IsRangeOk { get; set; }
     public DateTime ConvetedDateTime { get; set; }
 
 }

@@ -90,6 +90,8 @@ public abstract class GenericService<TEntity> : IGenericService<TEntity> where T
         entity.IsDeleted = false;
     }
 
+    public async Task<bool> AnyAsync() => await _entities.AnyAsync();
+
     public async Task<bool> IsExistsBy(string propertyToFilter, object propertyValue, long? id = null)
     {
         var exp = ExpressionHelpers.CreateExpression<TEntity>(propertyToFilter, propertyValue);

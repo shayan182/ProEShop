@@ -14,7 +14,7 @@ public class ApplicationRoleStore :
         IdentityErrorDescriber describer = null) 
         : base((ApplicationDbContext)uow, describer)
     {
-
+        AutoSaveChanges = false;
     }
     #region Custom Class
 
