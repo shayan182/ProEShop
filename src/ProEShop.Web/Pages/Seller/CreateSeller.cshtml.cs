@@ -198,10 +198,10 @@ public class CreateSellerModel : PageBase
         }
 
         if (provinceId < 0)
-            return Json(new JsonResultOperation(true, "لطفااستان مورد نظر را به درستی وارد نمایید "));
+            return Json(new JsonResultOperation(false, "لطفااستان مورد نظر را به درستی وارد نمایید "));
 
         if (!await _provinceAndCityService.IsExistsBy(nameof(Entities.ProvinceAndCity.Id), provinceId))
-            return Json(new JsonResultOperation(true, "استان مورد نظر یافت نشد."));
+            return Json(new JsonResultOperation(false, "استان مورد نظر یافت نشد."));
 
         var cities = await _provinceAndCityService.GetCitiesByProvinceIdToShowInSelectBoxAsync(provinceId);
         return Json(new JsonResultOperation(true, String.Empty)

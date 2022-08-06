@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ProEShop.Common.Constants;
 using ProEShop.Entities;
 using ProEShop.ViewModels.Categories;
@@ -35,6 +36,14 @@ public class SearchSellersViewModel
 
     [Display(Name = "وضعیت مدارک")]
     public DocumentStatus? DocumentStatus { get; set; }
+
+    [Display(Name = "استان")]
+    public long? ProvinceId { get; set; }
+    public List<SelectListItem>? Provinces { get; set; }
+
+    [Display(Name = "استان")]
+    public long? CityId { get; set; }
+    public List<SelectListItem>? Cities { get; set; }
 
     [Display(Name = "نمایش بر اساس")]
     public SortingSellers Sorting { get; set; }

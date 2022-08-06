@@ -23,17 +23,17 @@
                     <input class="form-control" asp-for="Sellers.SearchSellers.SellerCode" />
                     <span class="span-error-message" asp-validation-for="Sellers.SearchSellers.SellerCode"></span>
                 </div>
-                 <div class="col-12 col-sm-6 col-lg-3 my-2">
+                <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Sellers.SearchSellers.FullName"></label>
                     <input class="form-control" asp-for="Sellers.SearchSellers.FullName" />
                     <span class="span-error-message" asp-validation-for="Sellers.SearchSellers.FullName"></span>
-                </div> 
+                </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Sellers.SearchSellers.ShopName"></label>
                     <input class="form-control" asp-for="Sellers.SearchSellers.ShopName" />
                     <span class="span-error-message" asp-validation-for="Sellers.SearchSellers.ShopName"></span>
                 </div>
-                  <div class="col-12 col-sm-6 col-lg-3 my-2">
+                <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Sellers.SearchSellers.IsRealPersonStatus"></label>
                     <select class="form-select" asp-for="Sellers.SearchSellers.IsRealPersonStatus" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.Sellers.IsRealPersonStatus>()"></select>
                     <span class="span-error-message" asp-validation-for="Sellers.SearchSellers.IsRealPersonStatus"></span>
@@ -49,11 +49,23 @@
                         <option value="">نمایش همه</option>
                     </select>
                 </div>
-                 <div class="col-12 col-sm-6 col-lg-3 my-2">
+                <div class="col-12 col-sm-6 col-lg-3 my-2">
+                    <label class="form-label" asp-for="Sellers.SearchSellers.ProvinceId"></label>
+                    <select class="form-select custom-select2" asp-for="Sellers.SearchSellers.ProvinceId" asp-items="Model.Sellers.SearchSellers.Provinces">
+                    </select>
+                    <span asp-validation-for="Sellers.SearchSellers.ProvinceId" class="span-error-message"></span>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 my-2">
+                    <label class="form-label" asp-for="Sellers.SearchSellers.CityId"></label>
+                    <select class="form-select custom-select2" asp-for="Sellers.SearchSellers.CityId" asp-items="Model.Sellers.SearchSellers.Cities">
+                    </select>
+                    <span asp-validation-for="Sellers.SearchSellers.CityId" class="span-error-message"></span>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Sellers.SearchSellers.Sorting"></label>
-                     <select class="form-select" asp-for="Sellers.SearchSellers.Sorting" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.Sellers.SortingSellers>()"></select>
-                     <span class="span-error-message" asp-validation-for="Sellers.SearchSellers.Sorting"></span>
-                 </div>
+                    <select class="form-select" asp-for="Sellers.SearchSellers.Sorting" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.Sellers.SortingSellers>()"></select>
+                    <span class="span-error-message" asp-validation-for="Sellers.SearchSellers.Sorting"></span>
+                </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Sellers.SearchSellers.SortingOrder"></label>
                     <select class="form-select" asp-for="Sellers.SearchSellers.SortingOrder" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.SortingOrder>()"></select>
@@ -93,8 +105,15 @@
 </div>
 
 @section Scripts{
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
+        <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/lib/select2/js/i18n/fa.js"></script>
 }
-@section CustomScripts{
-<script src="~/Pages/Admin/Seller/Index.cshtml.js"></script>
+    @section CustomScripts{
+    <script src="~/Pages/Admin/Seller/Index.cshtml.js"></script>
+   
+}
+@section Styles{
+    <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
+    <link rel="stylesheet" href="~/lib/select2-bootstrap-5-theme/select2-bootstrap-5-theme.rtl.min.css" />
 }

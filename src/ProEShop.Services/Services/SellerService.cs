@@ -82,9 +82,16 @@ public class SellerService : GenericService<Seller>, ISellerService
 
         var searchedDocumentStatus = model.SearchSellers.DocumentStatus;
         if (searchedDocumentStatus != null)
-        {
             sellers = sellers.Where(x => x.DocumentStatus == searchedDocumentStatus);
-        }
+        
+
+        var searchedProvinceId = model.SearchSellers.ProvinceId;
+        if (searchedProvinceId != null && searchedProvinceId != 0)
+            sellers = _sellers.Where(x => x.ProvinceId == searchedProvinceId);
+
+        var searchedCityId = model.SearchSellers.CityId;
+        if (searchedCityId != null && searchedCityId != 0)
+            sellers = _sellers.Where(x => x.CityId == searchedCityId);
 
         #region OrderBy
 
