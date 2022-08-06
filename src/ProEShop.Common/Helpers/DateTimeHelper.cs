@@ -26,6 +26,31 @@ public static class DateTimeHelper
         return $"{year}{month}{day}";
     }
 
+
+    public static string ToLongPersianDate(this DateTime dateTime)
+    {
+        var monthsNames = new[]
+        {
+                "فروردین",
+                "اردیبهشت",
+                "خرداد",
+                "تیر",
+                "مرداد",
+                "شهریور",
+                "مهر",
+                "آبان",
+                "آذر",
+                "دی",
+                "بهمن",
+                "اسفند",
+            };
+        var pc = new PersianCalendar();
+        var day = pc.GetDayOfMonth(dateTime).ToString("00");
+        var month = monthsNames[pc.GetMonth(dateTime) - 1];
+        var year = pc.GetYear(dateTime).ToString("0000");
+        return $"{day} {month} {year}".ToPersianNumbers();
+    }
+
     public static ConvertDateForCreateSeller ToGregorianDateForCreateSeller(this string input)
     {
         input = input.ToEnglishNumbers();
@@ -41,7 +66,7 @@ public static class DateTimeHelper
             var convertedDateTime = new DateTime(year, month, day, new PersianCalendar());
             var age = convertedDateTime.GetAge();
             if (age is < 18 or > 100)
-                 return new(true, false);
+                return new(true, false);
 
             return new(true, true, convertedDateTime);
         }

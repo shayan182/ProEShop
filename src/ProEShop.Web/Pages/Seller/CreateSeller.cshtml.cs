@@ -32,7 +32,8 @@ public class CreateSellerModel : PageBase
         IMapper mapper,
         IUploadFileService uploadFile,
         IUnitOfWork uow,
-        IApplicationSignInManager signInManager)
+        IApplicationSignInManager signInManager,
+        IHtmlSanitizer htmlSanitizer)
     {
         _userManager = userManager;
         _provinceAndCityService = provinceAndCityService;
@@ -41,6 +42,7 @@ public class CreateSellerModel : PageBase
         _uploadFile = uploadFile;
         _uow = uow;
         _signInManager = signInManager;
+        _htmlSanitizer = htmlSanitizer;
     }
     [BindProperty]
     [PageRemote(PageName = "CreateSeller", PageHandler = "CheckForShopName",

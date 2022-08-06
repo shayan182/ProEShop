@@ -1,4 +1,5 @@
-﻿using ProEShop.Entities;
+﻿using ProEShop.Common.Helpers;
+using ProEShop.Entities;
 using ProEShop.Entities.Identity;
 using ProEShop.ViewModels.Sellers;
 
@@ -8,12 +9,27 @@ public class MappingProfile : AutoMapper.Profile
 {
     public MappingProfile()
     {
-        this.CreateMap<string, string>()
-            .ConvertUsing(str => str == null ? null : str.Trim());
+       
+        //if you wanna trim all of the strings (read and create)
+        //this.CreateMap<string, string>()
+        //    .ConvertUsing(str => str != null ? str.Trim() : null);
+
         this.CreateMap<User, CreateSellerViewModel>();
-        this.CreateMap<CreateSellerViewModel, Seller>();
+        this.CreateMap<CreateSellerViewModel, Seller>()
+            .AddTransform<string>(str => str != null ? str.Trim() : null); // if you wanna trim strings (create)
         this.CreateMap<CreateSellerViewModel, User>()
+            .AddTransform<string>(str => str != null ? str.Trim() : null) // if you wanna trim strings (create)
             .ForMember(x => x.BirthDate,
-                opt => opt.Ignore()); ;
+                opt => opt.Ignore());
+        this.CreateMap<Seller, ShowSellerViewModel>()
+            .ForMember(dest => dest.FullName,
+                options =>
+                    options.MapFrom(src => src.User.FullName))
+            .ForMember(dest => dest.ProvinceAndCity,
+                options =>
+                    options.MapFrom(src => $"{src.Province.Title} - {src.City.Title}"))
+            .ForMember(dest => dest.CreatedDateTime,
+                options =>
+                    options.MapFrom(src => src.CreatedDateTime.ToLongPersianDate()));
     }
 }
