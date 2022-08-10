@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ganss.XSS;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Common;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
+using ProEShop.DataLayer.Context;
+using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.Sellers;
 
@@ -15,12 +18,18 @@ public class IndexModel : PageBase
 
     private readonly ISellerService _sellerService;
     private readonly IProvinceAndCityService _provinceAndCityService;
+    private readonly IHtmlSanitizer _htmlSanitizer;
+    private readonly IUnitOfWork _uow;
 
     public IndexModel(ISellerService sellerService
-        ,IProvinceAndCityService provinceAndCity)
+        ,IProvinceAndCityService provinceAndCity,
+        IHtmlSanitizer htmlSanitizer,
+        IUnitOfWork uow)
     {
         _sellerService = sellerService;
         _provinceAndCityService = provinceAndCity;
+        _htmlSanitizer = htmlSanitizer;
+        _uow = uow;
     }
 
     #endregion
@@ -80,5 +89,23 @@ public class IndexModel : PageBase
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
         }
         return Partial("SellerDetails", seller);
+    }
+
+    public async Task<IActionResult> OnPostRejectSellerDocuments(SellerDetailsViewModel model)  
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, "لطفا دلایل رد مدارک فروشنده را وارد نمایید!"));
+        }
+
+        var seller = await _sellerService.FindByIdAsync(model.Id);
+        if (seller is null)
+            return Json(new JsonResultOperation(false, "فروشنده مورد نظر یافت نشد!"));
+
+        seller.DocumentStatus = DocumentStatus.Rejected;
+        seller.RejectReason = _htmlSanitizer.Sanitize(model.RejectReason);
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "مدارک فروشنده مورد نظر با موفقیت رد شد."));
+
     }
 }

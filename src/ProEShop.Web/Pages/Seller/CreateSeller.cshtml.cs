@@ -100,7 +100,7 @@ public class CreateSellerModel : PageBase
                 nameof(CreateSeller.SignatureOwners),
                 nameof(CreateSeller.NationalId)
             };
-            ModelState.CheckStringInputs(legalPersonProperties,CreateSeller);
+            ModelState.CheckStringInputs(legalPersonProperties, CreateSeller);
             if (!ModelState.IsValid)
             {
                 return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
@@ -109,7 +109,7 @@ public class CreateSellerModel : PageBase
                 });
             }
         }
-        
+
         var user = await _userManager.GetUserForCreateSeller(CreateSeller.PhoneNumber);
         if (user is null)
         {
@@ -165,14 +165,8 @@ public class CreateSellerModel : PageBase
             });
         }
 
-        try
-        {
-            await _uow.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            var a = e;
-        }
+
+        await _uow.SaveChangesAsync();
 
 
         if (logoFileName != null)

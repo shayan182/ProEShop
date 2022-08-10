@@ -101,7 +101,7 @@ public class Seller : EntityBase, IAuditableEntity
 
     public DocumentStatus? DocumentStatus { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool? IsActive { get; set; } = true;
 
     [Display(Name = "تاریخ ثبت نام")]
     public DateTime CreatedDateTime { get; set; }
@@ -117,6 +117,9 @@ public class Seller : EntityBase, IAuditableEntity
 
     public ProvinceAndCity? City { get; set; }
 
+    [Display(Name = "دلایل رد مدارک فروشنده")]
+    [Column(TypeName = "ntext")]
+    public string? RejectReason { get; set; }
     #endregion
 }
 

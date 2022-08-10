@@ -28,4 +28,11 @@ function showSellerDetailsInModal(result, clickedButton) {
     currnetModal.find('.modal-body').html(result);
     currnetModal.modal('show');
     $('#html-modal-place .modal-header h5').html($(clickedButton).text().trim());
+    initializeTinyMCE();
 } 
+
+function rejectReasonInManagingSellers(message) {
+    showToastr('success', message);
+    $('#html-modal-place').modal('hide');
+    fillDataTable();
+}
