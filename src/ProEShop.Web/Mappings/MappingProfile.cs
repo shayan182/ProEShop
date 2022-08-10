@@ -31,5 +31,10 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.CreatedDateTime,
                 options =>
                     options.MapFrom(src => src.CreatedDateTime.ToLongPersianDate()));
+        this.CreateMap<Seller, SellerDetailsViewModel>()
+            .ForMember(dest => dest.CreatedDateTime,
+                options =>
+                    options.MapFrom(src => src.CreatedDateTime.ToLongPersianDate())); ;
+
     }
 }

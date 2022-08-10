@@ -56,3 +56,7 @@
 #main-content {
     transition: all .3s;
 }
+/*Seller Details Modal*/
+.show-status h5 {
+    display: inline-block;
+}

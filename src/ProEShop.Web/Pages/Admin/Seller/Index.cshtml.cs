@@ -11,15 +11,19 @@ namespace ProEShop.Web.Pages.Admin.Seller;
 
 public class IndexModel : PageBase
 {
+    #region Ctor
+
     private readonly ISellerService _sellerService;
     private readonly IProvinceAndCityService _provinceAndCityService;
 
     public IndexModel(ISellerService sellerService
-    ,IProvinceAndCityService provinceAndCity)
+        ,IProvinceAndCityService provinceAndCity)
     {
         _sellerService = sellerService;
         _provinceAndCityService = provinceAndCity;
     }
+
+    #endregion
     [BindProperty(SupportsGet = true)] 
     public ShowSellersViewModel Sellers { get; set; }
         = new();
@@ -66,5 +70,15 @@ public class IndexModel : PageBase
         {
             Data = cities
         });
+    }
+    
+    public async Task<IActionResult> OnGetGetSellerDetails(long sellerId)
+    {
+        var seller = await _sellerService.GetSellerDetails(sellerId);
+        if (seller is null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        }
+        return Partial("SellerDetails", seller);
     }
 }

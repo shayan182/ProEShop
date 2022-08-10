@@ -1,5 +1,46 @@
 ﻿//__RequestVerificationToken
 var rvt = '__RequestVerificationToken';
+var htmlModalPlace = `<div class="modal fade" id="html-modal-place" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer d-flex justify-content-start">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>`;
+
+function appendHtmlModalPlaceToBody() {
+    if ($('#html-modal-place').length === 0) {
+        $('body').append(htmlModalPlace);
+    }
+}
+
+var formModalPlace = `<div class="modal fade" id="form-modal-place" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer d-flex justify-content-start">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>`;
+
+function appendFormModalPlaceToBody() {
+    if ($('#form-modal-place').length === 0) {
+        $('body').append(formModalPlace);
+    }
+}
 
 var loadingModalHtml = `<div class="modal" id="loading-modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -267,7 +308,7 @@ function activatingDeleteButtons() {
             if (result.isConfirmed) {
 
                 showLoading();
-                $.post(currentForm.attr('action'), formData, function (data, status) {
+                $.post(currentForm.attr('action'), formData, function (data) {
                     if (data.isSuccessful == false) {
                         showToastr('warning', data.message);
                     }
@@ -302,7 +343,7 @@ function initializingAutocomplete() {
 }
 function activationModalForm() {
     $('.show-modal-form-button').click(function (e) {
-
+         
         e.preventDefault();
         var urlToLoadTheForm = $(this).attr('href');
 
@@ -313,9 +354,11 @@ function activationModalForm() {
         $('#form-modal-place .modal-header h5').html(customTitle);
         showLoading();
         $.get(urlToLoadTheForm, function (data, status) {
-            if (data.isSuccessful == false) {
-                showToastr("warning", data.message)
-            } else {
+            debugger
+            if (data.isSuccessful === false) {
+                showToastr('warning', data.message);
+            }
+            else {
                 $('#form-modal-place .modal-body').html(data);
                 initializeTinyMCE();
                 initializeSelect2();
@@ -324,7 +367,6 @@ function activationModalForm() {
                 $.validator.unobtrusive.parse($('#form-modal-place form'));
                 $('#form-modal-place').modal('show');
             }
-
         }).fail(function () {
             showErrorMessage();
         }).always(function () {
@@ -332,6 +374,8 @@ function activationModalForm() {
         });
     });
 }
+
+
 
 function activatingPagination() {
     $('#main-pagianation button').click(function () {
@@ -347,27 +391,44 @@ function activatingGotoPage() {
         isGotoPageClicked = true;
     });
 }
+
 function fillDataTable() {
     $('.data-table-place .data-table-body').remove();
     $('.search-form-submit-button').attr('disabled', 'disabled');
     $('.data-table-loading').removeClass('d-none');
     $('#RecordNotFound').remove();
 
-    $.get(`${location.pathname}?handler=GetDataTable`, function (data, status) {
-        $('.search-form-submit-button').removeAttr('disabled');
-        $('.data-table-loading').addClass('d-none');
-        if (status == 'success') {
-            $('.data-table-place').append(data);
-            activatingPagination();
-            activatingGotoPage();
-            activationModalForm();
-            activatingDeleteButtons();
-            activatingPageCount();
-            enablingTooltips();
-        }
-        else {
+    var currentForm = $('form.search-form-via-ajax');
+    var formData = currentForm.serializeArray();
+
+    $.get(`${location.pathname}?handler=GetDataTable`, formData,
+        function (data) {
+
+            if (data.isSuccessful == false) {
+                fillValidationForm(data.data, currentForm);
+                showToastr('warning', data.message);
+            } else {
+                $('.data-table-place').append(data);
+                activatingPagination();
+                activatingGotoPage();
+                activationModalForm();
+                activatingDeleteButtons();
+                activatingPageCount();
+                enablingTooltips();
+                activatingGetHtmlWithAjax();
+            }
+
+        }).fail(function () {
             showErrorMessage();
-        }
+        }).always(function () {
+            $('.search-form-submit-button').removeAttr('disabled');
+            $('.data-table-loading').addClass('d-none');
+        });
+}
+function activatingGetHtmlWithAjax() {
+    $('.get-html-with-ajax').click(function () {
+        var funcToCall = $(this).attr('functionNameToCallOnClick');
+        window[funcToCall](this);
     });
 }
 
@@ -388,7 +449,7 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
             currentForm.find('.submit-custom-ajax-button span').removeClass('d-none');
             currentForm.find('.submit-custom-ajax-button').attr('disabled', 'disabled');
         },
-        success: function (data, status) {
+        success: function (data) {
             if (data.isSuccessful == false) {
                 var finalData = data.data != null ? data.data : [data.message];
                 fillValidationForm(finalData, currentForm);
@@ -425,7 +486,7 @@ $('form input[type="file"]').change(function () {
     $(this).parents('form').valid();
 });
 $('form input[type="checkbox"] ').change(function () {
-     
+
     $(this).parents('form').valid();
 });
 
@@ -434,7 +495,7 @@ $(document).on('submit', 'form.public-ajax-form', function (e) {
     e.preventDefault();
     var currentForm = $(this);
     var formAction = currentForm.attr('action');
-    var functionName = currentForm.attr('call-function-in-the-end');
+    var functionName = currentForm.attr('functionNameToCallInTheEnd');
     var formData = new FormData(this);
     $.ajax({
         url: formAction,
@@ -447,7 +508,7 @@ $(document).on('submit', 'form.public-ajax-form', function (e) {
         beforeSend: function () {
             showLoading();
         },
-        success: function (data, status) {
+        success: function (data) {
             if (data.isSuccessful === false) {
                 var finalData = data.data != null ? data.data : [data.message];
                 fillValidationForm(finalData, currentForm);
@@ -500,7 +561,7 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
     $('[data-bs-toggle="tooltip"], .tooltip').tooltip("hide");
     $('#record-not-found-box').remove();
 
-    $.get(`${location.pathname}?handler=GetDataTable`, formData, function (data, status) {
+    $.get(`${location.pathname}?handler=GetDataTable`, formData, function (data) {
         isMainPaginationClicked = false;
         isGotoPageClicked = false;
         //Hide loading and activation button
@@ -508,26 +569,21 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
         currentForm.find('.search-form-submit-button span').addClass('d-none');
         $('.data-table-loading').addClass('d-none');
 
-        if (status == 'success') {
-            if (data.isSuccessful == false) {
-                var finalData = data.data != null ? data.data : [data.message];
-                fillValidationForm(finalData, currentForm);
-                showToastr('warning', data.message);
-            }
-            else {
-                $('.data-table-place ').html('');
-                $('.data-table-place ').append(data);
-                currentForm.find('div[class*="validation-summary"]').html('');
-                activatingPagination();
-                activatingGotoPage();
-                activationModalForm();
-                activatingDeleteButtons();
-                activatingPageCount();
-                enablingTooltips();
-            }
+        if (data.isSuccessful == false) {
+            var finalData = data.data != null ? data.data : [data.message];
+            fillValidationForm(finalData, currentForm);
+            showToastr('warning', data.message);
         }
         else {
-            showErrorMessage();
+            $('.data-table-place ').html('');
+            $('.data-table-place ').append(data);
+            currentForm.find('div[class*="validation-summary"]').html('');
+            activatingPagination();
+            activatingGotoPage();
+            activationModalForm();
+            activatingDeleteButtons();
+            activatingPageCount();
+            enablingTooltips();
         }
     });
 });
@@ -556,7 +612,7 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
         beforeSend: function () {
             showLoading();
         },
-        success: function (data, status) {
+        success: function (data) {
 
             if (data.isSuccessful == false) {
                 showToastr('warning', data.message);
@@ -571,6 +627,23 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
         error: function () {
             showErrorMessage();
         }
+    });
+}
+// خواندن صفحات
+// html
+// از سمت سرور
+function getHtmlWithAJAX(url, formData, functionNameToCallInTheEnd,clickedButton) {
+    showLoading();
+    $.get(url, formData, function (data) {
+        if (data.isSuccessful === false) {
+            showToastr('warning', data.message);
+        } else {
+            window[functionNameToCallInTheEnd](data, clickedButton);
+        }
+    }).fail(function () {
+        showErrorMessage();
+    }).always(function () {
+        hideLoading();
     });
 }
 

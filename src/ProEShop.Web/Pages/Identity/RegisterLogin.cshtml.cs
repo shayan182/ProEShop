@@ -22,11 +22,13 @@ public class RegisterLoginModel : PageBase
 
     public RegisterLoginModel(IApplicationUserManager userManager, 
         ILogger<RegisterLoginModel> logger,
-        IOptionsMonitor<SiteSettings> siteSettings)
+        IOptionsMonitor<SiteSettings> siteSettings,
+        IUnitOfWork uow)
     {
         _userManager = userManager;
         _logger = logger;
         _siteSettings = siteSettings.CurrentValue;
+        _uow = uow;
     }
 
     public RegisterLoginViewModel RegisterLogin { get; set;}
