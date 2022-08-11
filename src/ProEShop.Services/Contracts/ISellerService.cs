@@ -8,5 +8,5 @@ public interface ISellerService : IGenericService<Seller>
 
     Task<ShowSellersViewModel> GetSellers(ShowSellersViewModel model);
     Task<SellerDetailsViewModel> GetSellerDetails(long id);
-
+    Task<Seller> GetSellerToRemoveInManagingSeller(long id);
 }

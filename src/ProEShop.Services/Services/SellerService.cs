@@ -150,4 +150,10 @@ public class SellerService : GenericService<Seller>, ISellerService
             _sellers
         ).SingleOrDefaultAsync(x => x.Id == id);
     }
+
+    public async Task<Seller> GetSellerToRemoveInManagingSeller(long id)
+    {
+        return await _sellers.Where(x => x.DocumentStatus == DocumentStatus.AwaitingInitialApproval)
+            .SingleOrDefaultAsync(x => x.Id == id);
+    }
 }

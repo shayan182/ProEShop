@@ -11,6 +11,7 @@ using ProEShop.Common.Helpers;
 using ProEShop.ViewModels;
 using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
+using ProEShop.Entities;
 using ProEShop.Services.Services.Identity;
 
 namespace ProEShop.Web.Pages.Seller;
@@ -164,7 +165,9 @@ public class CreateSellerModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
-
+         
+        // custom code
+        seller.DocumentStatus = DocumentStatus.AwaitingInitialApproval;
 
         await _uow.SaveChangesAsync();
 

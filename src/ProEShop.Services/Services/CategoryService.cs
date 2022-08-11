@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DNTPersianUtils.Core;
+using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
@@ -75,7 +76,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
     public async Task<Dictionary<long, string>> GetCategoriesToShowInSelectBoxAsync(long? id = null)
     {
         return await _categories
-            .Where(x=>x.Id != id || id == null)
+            .Where(x => x.Id != id || id == null)
             .ToDictionaryAsync(x => x.Id, x => x.Title);
     }
 
@@ -123,5 +124,32 @@ public class CategoryService : GenericService<Category>, ICategoryService
         }).SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    
+    public async Task<List<List<ShowCategoryForCreateProductViewModel>>> GetCategoriesForCreateProduct(long[] selectedCategoriesIds)
+    {
+        var result = new List<List<ShowCategoryForCreateProductViewModel>>
+        {
+            await _categories.Where(x => x.ParentId == null)
+                .Select(x => new ShowCategoryForCreateProductViewModel()
+                {
+                    Title = x.Title,
+                    Id = x.Id,
+                    HasChild = x.Categories.Any()
+                }).ToListAsync()
+        };
+        for (int counter = 0; counter < selectedCategoriesIds.Length; counter++)
+        {
+
+            var selectedCategoryId = selectedCategoriesIds[counter];
+            result.Add(await _categories.Where(x => x.ParentId == selectedCategoryId)
+                .Select(x => new ShowCategoryForCreateProductViewModel()
+                {
+                    Title = x.Title,
+                    Id = x.Id,
+                    HasChild = x.Categories.Any()
+                }).ToListAsync());
+
+        }
+
+        return result;
+    }
 }

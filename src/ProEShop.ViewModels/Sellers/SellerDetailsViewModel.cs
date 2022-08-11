@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using ProEShop.Common.Constants;
+using ProEShop.Common.Attributes;
 using ProEShop.Entities;
 
 namespace ProEShop.ViewModels.Sellers;
@@ -10,6 +10,9 @@ public class SellerDetailsViewModel
     [HiddenInput]
     [Display(Name = "شناسه")]
     public long Id { get; set; }
+
+    [Display(Name = "شماره همراه")]
+    public string? UserPhoneNumber { get; set; }
 
     [Display(Name = "نام فروشنده")]
     public string? UserFirstName { get; set; }
@@ -93,7 +96,7 @@ public class SellerDetailsViewModel
     [Display(Name = "تاریخ ثبت نام")]
     public string? CreatedDateTime { get; set; }
 
-    [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [Display(Name = "دلایل رد مدارک فروشنده")]
+    [MakeTinyMceRequired]
     public string? RejectReason { get; set; }
 }

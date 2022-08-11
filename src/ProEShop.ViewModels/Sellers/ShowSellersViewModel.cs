@@ -18,6 +18,7 @@ public class ShowSellersViewModel
 
 public class SearchSellersViewModel
 {
+
     [Display(Name = "کد فروشنده")]
     public int? SellerCode { get; set; }
     [Display(Name = "نام فروشنده")]
@@ -106,9 +107,11 @@ public class ShowSellerViewModel
     public bool IsRealPerson { get; set; }
     [Display(Name = "نام فروشگاه")]
     public string ShopName { get; set; }
+    [Display(Name = "شماره همراه")]
+    public string UserPhoneNumber { get; set; }
 
     [Display(Name = "نام فروشنده")]
-    public string FullName { get; set; }
+    public string UserFullName { get; set; }
 
     [Display(Name = "کد فروشنده")]
     public int SellerCode { get; set; }

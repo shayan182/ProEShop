@@ -128,6 +128,12 @@ function initializeTinyMCE() {
         tinymce.remove('textarea.custom-tinymce');
         tinymce.init({
             selector: 'textarea.custom-tinymce',
+            setup: function (editor) {
+                editor.on('blur', function (e) {
+                    var elementId = $(e.target.targetElm).attr('id');
+                    $(e.target.formElement).validate().element(`#${elementId}`);
+                });
+            },
             height: 300,
             max_height: 500,
             language: 'fa_IR',
@@ -284,13 +290,32 @@ if (jQuery.validator) {
         return true;
     });
     jQuery.validator.unobtrusive.adapters.addBool('maxFileSize');
+
+    // makeTinyMceRequired
+    jQuery.validator.addMethod('makeTinyMceRequired', function (value, element, param) {
+        var editorId = $(element).attr('id');
+        var editorContent = tinyMCE.get(editorId).getContent();
+        $('body').append(`<div id="test-makeTinyMceRequired">${editorContent}</div>`);
+        var result = isNullOrWhitespace($('#test-makeTinyMceRequired').text());
+        $('#test-makeTinyMceRequired').remove();
+        return !result;
+    });
+    jQuery.validator.unobtrusive.adapters.addBool('makeTinyMceRequired');
+
 }
 
 // End validation
 
+function isNullOrWhitespace(input) {
+
+    if (typeof input === 'undefined' || input == null) return true;
+
+    return input.replace(/\s/g, '').length < 1;
+}
+
 // Ajax (JQuery)                          *****************
 
-function activatingDeleteButtons() {
+function activatingDeleteButtons(isModalMode) {
     $('.delete-row-button').click(function () {
         var currentForm = $(this).parent();
         var customMessage = $(this).attr('custom-message');
@@ -313,8 +338,11 @@ function activatingDeleteButtons() {
                         showToastr('warning', data.message);
                     }
                     else {
-                        fillDataTable();
+                        if (isModalMode) {
+                            $('#html-modal-place').modal('hide');
+                        }
                         showToastr('success', data.message);
+                        fillDataTable();
                     }
                 }).always(function () {
                     hideLoading();
@@ -326,8 +354,8 @@ function activatingDeleteButtons() {
     });
 }
 
-
 $('#modalOne').on('hide.bs.modal', function () {
+
     tinyMCE.editors = [];
 });
 
@@ -633,18 +661,29 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
 // خواندن صفحات
 // html
 // از سمت سرور
-function getHtmlWithAJAX(url, formData, functionNameToCallInTheEnd,clickedButton) {
-    showLoading();
-    $.get(url, formData, function (data) {
-        if (data.isSuccessful === false) {
-            showToastr('warning', data.message);
-        } else {
-            window[functionNameToCallInTheEnd](data, clickedButton);
+function getHtmlWithAJAX(url, formData, functionNameToCallInTheEnd, clickedButton) {
+    $.ajax({
+        url: url,
+        data: formData,
+        type: 'GET',
+        dataType: 'html',
+        traditional: true,
+        beforeSend: function () {
+            showLoading();
+        },
+        success: function (data) {
+            if (data.isSuccessful === false) {
+                showToastr('warning', data.message);
+            } else {
+                window[functionNameToCallInTheEnd](data, clickedButton);
+            }
+        },
+        complete: function () {
+            hideLoading();
+        },
+        error: function () {
+            showErrorMessage();
         }
-    }).fail(function () {
-        showErrorMessage();
-    }).always(function () {
-        hideLoading();
     });
 }
 
