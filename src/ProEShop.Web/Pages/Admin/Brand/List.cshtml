@@ -1,0 +1,124 @@
+﻿@using ProEShop.Common.Helpers
+@using ProEShop.Entities
+@model ProEShop.ViewModels.Brands.ShowBrandsViewModel
+@if (Model.Brands.Any())
+{
+    <div class="table-responsive data-table-body">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].Id)</th>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].TitleFa)</th>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].TitleEn)</th>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].IsIranianBrand)</th>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].LogoPicture)</th>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].BrandRegistrationPicture)</th>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].JudiciaryLink)</th>
+                    <th>@Html.DisplayNameFor(x => x.Brands[0].BrandLinkEn)</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var brand in Model.Brands)
+                {
+                    <tr>
+                        <td>@brand.Id</td>
+                        <td>@brand.TitleFa</td>
+                        <td>@brand.TitleEn</td>
+                        <td class="text-center">
+                            @if (brand.IsIranianBrand)
+                            {
+                                <img src="~/images/application/iran-logo.png" width="100" alt="ایرانی" />
+                            }
+                            else
+                            {
+                                <img src="~/images/application/global-icon.png" width="64" alt="خارجی" />
+                            }
+                        </td>
+                        <td class="text-center">
+                            <img src="~/images/brands/@brand.LogoPicture" alt="@brand.TitleFa" width="64" />
+                        </td>
+                        <td class="text-center">
+                            @if (brand.BrandRegistrationPicture is null)
+                            {
+                                <div class="d-flex justify-content-center">
+                                    <i class="fa fa-remove fa-2x text-danger"></i>
+                                </div>
+                            }
+                            else
+                            {
+                                <img src="~/images/brandregistrationpicture/@brand.LogoPicture" alt="برگه ثبت برند" width="64" />
+                            }
+                        </td>
+                        <td>
+                            @if (brand.JudiciaryLink is null)
+                            {
+                                <div class="d-flex justify-content-center">
+                                    <i class="fa fa-remove fa-2x text-danger"></i>
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="@brand.JudiciaryLink" target="_blank">@brand.JudiciaryLink</a>
+                            }
+                        </td>
+                        <td>
+                            @if (brand.BrandLinkEn is null)
+                            {
+                                <div class="d-flex justify-content-center">
+                                    <i class="fa fa-remove fa-2x text-danger"></i>
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="@brand.BrandLinkEn" target="_blank">@brand.BrandLinkEn</a>
+                            }
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <!-- Pagination -->
+    <div class="btn-toolbar my-3 d-flex justify-content-center" id="main-pagianation">
+            <div class="btn-group me-2">
+                @if (Model.Pagination.CurrentPage != 1)
+                {
+                    <button value="1" type="button" class="btn btn-outline-primary">
+                        <i class="bi bi-chevron-double-right"></i>
+                    </button>
+                    <button value="@(Model.Pagination.CurrentPage - 1)" type="button" class="btn btn-outline-primary">قبلی</button>
+                }
+                @for (int counter = Model.Pagination.StartPage; counter <= Model.Pagination.EndPage; counter++)
+                {
+                    <button value="@counter" type="button"
+                    class="@(counter == Model.Pagination.CurrentPage ? "active " : string.Empty)btn btn-outline-primary">
+                        @counter
+                    </button>
+                }
+                @if (Model.Pagination.CurrentPage != Model.Pagination.PagesCount)
+                {
+                    <button value="@(Model.Pagination.CurrentPage + 1)" type="button" class="btn btn-outline-primary">بعدی</button>
+                    <button data-bs-toggle="tooltip" data-bs-placement="top" title="کل صفحات @Model.Pagination.PagesCount" value="@Model.Pagination.PagesCount" type="button" class="btn btn-outline-primary">
+                        <i class="bi bi-chevron-double-left"></i>
+                        @Model.Pagination.PagesCount
+                    </button>
+                }
+            </div>
+            <div>
+                <select id="page-count-selectbox" asp-for="Pagination.PageCount" class="form-select" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.PageCount>()"></select>
+            </div>
+        </div>
+        <div class="col-10 col-sm-6 col-md-4 col-xl-3 m-auto">
+            <div class="input-group">
+                <input id="page-number-input" value="@Model.Pagination.CurrentPage" min="1" max="@Model.Pagination.PagesCount" type="number" class="form-control rtl-direction" placeholder="شماره صفحه">
+                <button id="go-to-page-button" class="btn btn-outline-primary" type="submit">برو به صفحه</button>
+            </div>
+        </div>
+        <!-- End pagination -->
+</div>
+}
+else
+{
+    <partial name="_RecordNotFound" />
+}

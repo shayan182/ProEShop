@@ -72,7 +72,7 @@ public class IndexModel : PageBase
             });
         }
         string pictureFileName = null;
-        if (model.Picture.IsFileUploded())
+        if (model.Picture.IsFileUploaded())
         {
             pictureFileName = model.Picture.GenerateFileName();
         }
@@ -127,7 +127,7 @@ public class IndexModel : PageBase
         }
 
         string pictureFileName = null;
-        if (model.Picture.IsFileUploded())
+        if (model.Picture.IsFileUploaded())
         {
             pictureFileName = model.Picture.GenerateFileName();
         }

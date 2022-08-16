@@ -382,7 +382,6 @@ function activationModalForm() {
         $('#form-modal-place .modal-header h5').html(customTitle);
         showLoading();
         $.get(urlToLoadTheForm, function (data, status) {
-            debugger
             if (data.isSuccessful === false) {
                 showToastr('warning', data.message);
             }
@@ -392,6 +391,11 @@ function activationModalForm() {
                 initializeSelect2();
                 initializingAutocomplete();
                 activatingInputAttributes();
+                if (typeof actionsAfterLoadModalForm === 'function') {
+                    actionsAfterLoadModalForm();
+                    //این یک فانکشن هست برای کد های اختصاصی و این فقط وقتی اجرا میشه که
+                    //این رو خودتون بنویسید داخل فایل جاوااسکریپت اون صفحه
+                }
                 $.validator.unobtrusive.parse($('#form-modal-place form'));
                 $('#form-modal-place').modal('show');
             }

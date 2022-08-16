@@ -1,5 +1,6 @@
 ﻿using ProEShop.Common.Constants;
 using System.ComponentModel.DataAnnotations;
+using ProEShop.ViewModels.Brands;
 
 namespace ProEShop.ViewModels.Categories;
 

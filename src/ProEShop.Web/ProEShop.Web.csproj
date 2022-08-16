@@ -24,6 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Admin\Brand\Index.cshtml" />
+    <None Include="Pages\Admin\Brand\List.cshtml" />
     <None Include="Pages\Admin\Seller\Index.cshtml" />
     <None Include="Pages\Admin\Seller\List.cshtml" />
     <None Include="Pages\SellerPanel\Product\Create.cshtml" />
@@ -45,6 +47,17 @@
     <ProjectReference Include="..\ProEShop.IocConfig\ProEShop.IocConfig.csproj" />
     <ProjectReference Include="..\ProEShop.Services\ProEShop.Services.csproj" />
     <ProjectReference Include="..\ProEShop.ViewModels\ProEShop.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\brandregistrationpictures\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Pages\Admin\Brand\Add.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
