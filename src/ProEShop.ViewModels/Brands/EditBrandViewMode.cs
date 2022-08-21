@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
 
 namespace ProEShop.ViewModels.Brands;
 
-public class AddBrandViewModel
+public class EditBrandViewMode
 {
+    [HiddenInput]
+    public long Id { get; set; }
+
     [Display(Name = "نام فارسی برند")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
@@ -28,22 +31,27 @@ public class AddBrandViewModel
 
     [Display(Name = "لوگوی برند")]
     [IsImage]
-    [FileRequired]
     [MaxFileSize(3)]
-    public IFormFile? LogoPicture { get; set; }
+    public IFormFile? NewLogoPicture { get; set; }
 
     [Display(Name = "برگه ثبت برند")]
     [IsImage]
     [MaxFileSize(3)]
-    public IFormFile? BrandRegistrationPicture { get; set; }
+    public IFormFile? NewBrandRegistrationPicture { get; set; }
 
-    [Display(Name = "لینک سایت قوه قضاییه")]
     [LtrDirection]
+    [Display(Name = "لینک سایت قوه قضاییه")]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string? JudiciaryLink { get; set; }
 
-    [Display(Name = "لینک سایت معتبر خارجی")]
     [LtrDirection]
+    [Display(Name = "لینک سایت معتبر خارجی")]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string? BrandLinkEn { get; set; }
+
+    [Display(Name = "لوگوی برند از قبل بارگذاری شده")]
+    public string? LogoPicture { get; set; }
+
+    [Display(Name = "برگه ثبت برند از قبل بارگذاری شده")]
+    public string? BrandRegistrationPicture { get; set; }
 }

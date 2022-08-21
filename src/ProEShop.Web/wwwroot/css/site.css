@@ -50,6 +50,9 @@ a{
 .max-width-200{
     max-width: 200px;
 }
+.max-width-100 {
+    max-width: 100px;
+}
 .rtl-direction{
     direction : rtl;
 }

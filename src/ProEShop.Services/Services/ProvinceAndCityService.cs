@@ -16,16 +16,19 @@ public class ProvinceAndCityService : GenericService<ProvinceAndCity> , IProvinc
     public Task<Dictionary<long, string>> GetProvincesToShowInSelectBoxAsync()
     {
         return _provinceAndCities.Where(x => x.ParentId == null)
+            .AsNoTracking()
             .ToDictionaryAsync(x => x.Id, x => x.Title);
     }
     public Task<Dictionary<long, string>> GetCitiesToShowInSelectBoxAsync()
     {
         return _provinceAndCities.Where(x => x.ParentId != null)
+            .AsNoTracking()
             .ToDictionaryAsync(x => x.Id, x => x.Title);
     }
     public async Task<Dictionary<long, string>> GetCitiesByProvinceIdToShowInSelectBoxAsync(long provinceId)
     {
         return await _provinceAndCities.Where(x => x.ParentId == provinceId)
+            .AsNoTracking()
             .ToDictionaryAsync(x => x.Id, x => x.Title);
     }
 
@@ -36,14 +39,14 @@ public class ProvinceAndCityService : GenericService<ProvinceAndCity> , IProvinc
             {
                 x.Title,
                 x.Id
-            }).SingleAsync(x => x.Title == "تهران");
+            }).AsNoTracking().SingleAsync(x => x.Title == "تهران");
 
         var city = await _provinceAndCities.Where(x => x.ParentId != null)
             .Select(x => new
             {
                 x.Title,
                 x.Id
-            }).SingleAsync(x => x.Title == "تهران");
+            }).AsNoTracking().SingleAsync(x => x.Title == "تهران");
         return (province.Id, city.Id);
     }
 }

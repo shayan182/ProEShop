@@ -29,12 +29,13 @@
             @if (Model.SelectedPicture != null)
             {
                 <p>
-                    <img src="~/images/categories/@Model.SelectedPicture" class="rounded w-100" />
+                    <img src="~/images/categories/@Model.SelectedPicture" width="100px" class="rounded w-100" />
                 </p>
             }
             else
             {
-                <p>بدون تصویر</p>
+                <br/>
+                <div class="badge bg-danger">عکسی بارگذاری نشده است</div>
             }
         </div>
         <div class="col-12 col-sm-6 my-2 form-check form-switch px-3">

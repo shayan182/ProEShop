@@ -45,7 +45,7 @@ public class SellerService : GenericService<Seller>, ISellerService
 
     public async Task<ShowSellersViewModel> GetSellers(ShowSellersViewModel model)
     {       
-        var sellers = _sellers.AsQueryable();
+        var sellers = _sellers.AsQueryable().AsNoTracking();
 
         var searchedFullName = model.SearchSellers.FullName;
         if(!string.IsNullOrWhiteSpace(searchedFullName))
@@ -54,12 +54,12 @@ public class SellerService : GenericService<Seller>, ISellerService
 
         var searchedSellerCode = model.SearchSellers.SellerCode.ToString();
         if (!string.IsNullOrWhiteSpace(searchedSellerCode))
-            sellers = _sellers.Where(x => x.SellerCode.ToString()
+            sellers = _sellers.Where(x => x.SellerCode.ToString()!
                 .Contains(searchedSellerCode));
 
         var searchedShopName = model.SearchSellers.ShopName;
         if (!string.IsNullOrWhiteSpace(searchedShopName))
-            sellers = _sellers.Where(x => x.ShopName.Contains(searchedShopName));
+            sellers = _sellers.Where(x => x.ShopName!.Contains(searchedShopName));
 
         switch (model.SearchSellers.IsRealPersonStatus)
         {
@@ -144,16 +144,17 @@ public class SellerService : GenericService<Seller>, ISellerService
             Pagination = paginationResult.Pagination
         };
     }
-    public async Task<SellerDetailsViewModel> GetSellerDetails(long id)
+    public async Task<SellerDetailsViewModel?> GetSellerDetails(long id)
     {
         return await _mapper.ProjectTo<SellerDetailsViewModel>(
             _sellers
         ).SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<Seller> GetSellerToRemoveInManagingSeller(long id)
+    public async Task<Seller?> GetSellerToRemoveInManagingSeller(long id)
     {
         return await _sellers.Where(x => x.DocumentStatus == DocumentStatus.AwaitingInitialApproval)
+            .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 }

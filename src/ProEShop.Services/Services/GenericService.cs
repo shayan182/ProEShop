@@ -43,11 +43,11 @@ public abstract class GenericService<TEntity> : IGenericService<TEntity> where T
         _uow.MarkAsDeleted(tEntity);
     }
 
-    public async Task<TEntity> FindByIdAsync(long id)
+    public async Task<TEntity?> FindByIdAsync(long id)
         => await _entities.FindAsync(id);
 
     public async Task<bool> IsExistsByIdAsync(long id)
-        => await _entities.AnyAsync(x => x.Id == id);
+        => await _entities.AsNoTracking().AnyAsync(x => x.Id == id);
 
     public async Task<PaginationResultViewModel<T>> GenericPaginationAsync<T>(IQueryable<T> items, PaginationViewModel pagination)
     {
@@ -90,13 +90,14 @@ public abstract class GenericService<TEntity> : IGenericService<TEntity> where T
         entity.IsDeleted = false;
     }
 
-    public async Task<bool> AnyAsync() => await _entities.AnyAsync();
+    public async Task<bool> AnyAsync() => await _entities.AsNoTracking().AnyAsync();
 
     public async Task<bool> IsExistsBy(string propertyToFilter, object propertyValue, long? id = null)
     {
         var exp = ExpressionHelpers.CreateExpression<TEntity>(propertyToFilter, propertyValue);
         return await _entities
             .Where(x => id == null || x.Id != id) // For Edit Methods
+            .AsNoTracking()
             .AnyAsync(exp);
     }
 }

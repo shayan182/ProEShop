@@ -1,5 +1,4 @@
-﻿using DNTPersianUtils.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
@@ -18,7 +17,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
     }
     public async Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model)
     {
-        var categories = _categories.AsQueryable();
+        var categories = _categories.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(model.SearchCategories.Title))
             categories = categories.Where(x => x.Title.Contains(model.SearchCategories.Title.Trim()));
@@ -75,7 +74,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
 
     public async Task<Dictionary<long, string>> GetCategoriesToShowInSelectBoxAsync(long? id = null)
     {
-        return await _categories
+        return await _categories.AsNoTracking()
             .Where(x => x.Id != id || id == null)
             .ToDictionaryAsync(x => x.Id, x => x.Title);
     }
@@ -110,9 +109,9 @@ public class CategoryService : GenericService<Category>, ICategoryService
         };
     }
 
-    public async Task<EditCategoryViewModel> GetForEdit(long id)
+    public async Task<EditCategoryViewModel?> GetForEdit(long id)
     {
-        return await _categories.Select(x => new EditCategoryViewModel()
+        return await _categories.AsNoTracking().Select(x => new EditCategoryViewModel()
         {
             Id = x.Id,
             Title = x.Title,
@@ -134,7 +133,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
                     Title = x.Title,
                     Id = x.Id,
                     HasChild = x.Categories.Any()
-                }).ToListAsync()
+                }).AsNoTracking().ToListAsync()
         };
         for (int counter = 0; counter < selectedCategoriesIds.Length; counter++)
         {
@@ -146,7 +145,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
                     Title = x.Title,
                     Id = x.Id,
                     HasChild = x.Categories.Any()
-                }).ToListAsync());
+                }).AsNoTracking().ToListAsync());
 
         }
 

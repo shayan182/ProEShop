@@ -7,4 +7,5 @@ public interface IBrandService: IGenericService<Brand>
 {
     Task<ShowBrandsViewModel> GetBrands(ShowBrandsViewModel model);
 
+    Task<EditBrandViewMode?> GetForEdit(long id);
 }

@@ -12,9 +12,9 @@ public class CategoryFeatureService : CustomGenericService<CategoryFeature>, ICa
     {
         _categoryFeatures = uow.Set<CategoryFeature>();
     }
-    public async Task<CategoryFeature> GetCategoryFeature(long categoryId, long featureId)
+    public async Task<CategoryFeature?> GetCategoryFeature(long categoryId, long featureId)
     {
-        return await _categoryFeatures.Where(x => x.CategoryId == categoryId)
+        return await _categoryFeatures.Where(x => x.CategoryId == categoryId).AsNoTracking()
             .SingleOrDefaultAsync(x => x.FeatureId == featureId);
     }
 }

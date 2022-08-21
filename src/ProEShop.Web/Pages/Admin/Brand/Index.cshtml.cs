@@ -22,7 +22,10 @@ public class IndexModel : PageBase
 
     #endregion
 
-    public IndexModel(IBrandService brandService, IMapper mapper, IUnitOfWork uow, IUploadFileService uploadFileService)
+    public IndexModel(IBrandService brandService,
+        IMapper mapper,
+        IUnitOfWork uow,
+        IUploadFileService uploadFileService)
     {
         _brandService = brandService;
         _mapper = mapper;
@@ -75,5 +78,51 @@ public class IndexModel : PageBase
         await _uploadFileService.SaveFile(model.LogoPicture, brand.LogoPicture, null, "images", "brands");
         await _uploadFileService.SaveFile(model.BrandRegistrationPicture, brandRegistrationFileName, null, "images", "brandregistrationpictures");
         return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت اضافه شد"));
+    }
+
+    public async Task<IActionResult> OnGetEdit(long id)
+    {
+        var model = await _brandService.GetForEdit(id);
+        if (model is null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        }
+        return Partial("Edit", model);
+    }
+    public async Task<IActionResult> OnPostEditAsync(EditBrandViewMode model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = ModelState.GetModelStateErrors()
+            });
+        }
+        var brandToUpdate = await _brandService.FindByIdAsync(model.Id);
+        if (brandToUpdate == null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+
+        var oldLogoPictureFileName = brandToUpdate.LogoPicture;
+        var oldBrandRegistrationFileName = brandToUpdate.BrandRegistrationPicture;
+
+        brandToUpdate = _mapper.Map(model, brandToUpdate);
+
+        string logoPictureFileName = null;
+        if (model.NewLogoPicture.IsFileUploaded())
+            logoPictureFileName = model.NewLogoPicture.GenerateFileName();
+        brandToUpdate.LogoPicture = logoPictureFileName == null ? oldLogoPictureFileName : logoPictureFileName;
+
+        string brandRegistrationFileName = null;
+        if (model.NewBrandRegistrationPicture.IsFileUploaded())
+            brandRegistrationFileName = model.NewBrandRegistrationPicture.GenerateFileName();
+        brandToUpdate.BrandRegistrationPicture = brandRegistrationFileName == null ? oldBrandRegistrationFileName : brandRegistrationFileName;
+
+
+        await _brandService.Update(brandToUpdate);
+        await _uow.SaveChangesAsync();
+
+        await _uploadFileService.SaveFile(model.NewLogoPicture, brandToUpdate.LogoPicture, oldLogoPictureFileName, "images", "brands");
+        await _uploadFileService.SaveFile(model.NewBrandRegistrationPicture, brandToUpdate.BrandRegistrationPicture, oldBrandRegistrationFileName, "images", "brandregistrationpictures");
+        return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت ویرایش شد"));
     }
 }

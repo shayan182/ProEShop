@@ -18,10 +18,10 @@ public class FeatureService : GenericService<Feature>, IFeatureService
 
     public async Task<ShowFeaturesViewModel> GetCategoryFeatures(ShowFeaturesViewModel model)
     {
-        var features = _features.AsQueryable();
+        var features = _features.AsQueryable().AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(model.SearchFeatures.Title))
-            features.Where(x => x.Title.Contains(model.SearchFeatures.Title));
+            features = features.Where(x => x.Title.Contains(model.SearchFeatures.Title));
 
         features = _features.SelectMany(x => x.categoryFeatures)
             .Where(x => x.CategoryId == model.SearchFeatures.CategoryId)
@@ -46,9 +46,9 @@ public class FeatureService : GenericService<Feature>, IFeatureService
         };
     }
 
-    public async Task<Feature> FindByTitleAsync(string title)
+    public async Task<Feature?> FindByTitleAsync(string title)
     {
-        return await _features.SingleOrDefaultAsync(x => x.Title == title);
+        return await _features.AsNoTracking().SingleOrDefaultAsync(x => x.Title == title);
 
     }
 
@@ -57,6 +57,7 @@ public class FeatureService : GenericService<Feature>, IFeatureService
         return await _features
             .Where(x => x.Title.Contains(input.Trim()))
             .Select(x => x.Title)
+            .AsNoTracking()
             .ToListAsync();
     }
 }
