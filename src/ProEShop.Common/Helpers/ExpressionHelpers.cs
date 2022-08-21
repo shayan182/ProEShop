@@ -26,4 +26,96 @@ public static class ExpressionHelpers
         result = isAsc == "Asc" ? query.OrderBy(exp) : query.OrderByDescending(exp);
         return result;
     }
+    /// <summary>
+    /// Search in the text properties
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="Query"></param>
+    /// <param name="ViewModel"></param>
+    /// <returns></returns>
+    public static IQueryable<T> CreateContainsExpressions<T>(IQueryable<T> query, object model)
+    {
+        var result = query;
+        var propertiesToSearch = model.GetType().GetProperties()
+            .Where(x => Attribute.IsDefined(x, typeof(ContainsSearchAttribute)))
+            .ToList();
+        if (propertiesToSearch.Count > 0)
+        {
+            foreach (var propertyInfo in propertiesToSearch)
+            {
+                var propertyValue = propertyInfo.GetValue(model);
+                if (!string.IsNullOrWhiteSpace(propertyValue?.ToString()))
+                {
+                    var parameter = Expression.Parameter(typeof(T));
+                    var property = Expression.Property(parameter, propertyInfo.Name);
+                    if (propertyValue is string)
+                        propertyValue = propertyValue.ToString()?.Trim();
+                    var constantValue = Expression.Constant(propertyValue);
+                    var method = typeof(string).GetMethod("Contains", new[] { typeof(string) }); // for get Contains method
+                    var containsMethodExp = Expression.Call(property, method, constantValue);
+                    var exp = Expression.Lambda<Func<T, bool>>(containsMethodExp, parameter);
+                    result = result.Where(exp);
+                }
+            }
+        }
+
+        return result;
+    }
+    /// <summary>
+    /// Search in the bool(True or False) properties
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="query"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public static IQueryable<T> CreateEqualExpressions<T>(IQueryable<T> query, object model)
+    {
+        var result = query;
+        var propertiesToSearch = model.GetType().GetProperties()
+            .Where(x => Attribute.IsDefined(x, typeof(EqualSearchAttribute)))
+            .ToList();
+        if (propertiesToSearch.Count > 0)
+        {
+            foreach (var propertyInfo in propertiesToSearch)
+            {
+                var propertyValue = propertyInfo.GetValue(model);
+                if (!string.IsNullOrWhiteSpace(propertyValue?.ToString()))
+                {
+                    var parameter = Expression.Parameter(typeof(T));
+                    var property = Expression.Property(parameter, propertyInfo.Name);
+                    if (propertyValue is string)
+                        propertyValue = propertyValue.ToString()?.Trim();
+                    var constantValue = Expression.Constant(propertyValue);
+                    var equal = Expression.Equal(property, constantValue);
+                    var exp = Expression.Lambda<Func<T, bool>>(equal, parameter);
+                    result = result.Where(exp);
+                }
+            }
+        }
+
+        return result;
+    }
+    /// <summary>
+    /// Search in the DeletedStatus properties
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="query"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public static IQueryable<T> CreateDeletedStatusExpression<T>(IQueryable<T> query, object model)
+    {
+        var result = query;
+        var deletedStatusValue = model.GetType().GetProperty("DeletedStatus")!.GetValue(model)!.ToString();
+        if (deletedStatusValue != "True")
+        {
+            var finalValue = deletedStatusValue == "OnlyDeleted";
+            var parameter = Expression.Parameter(typeof(T));
+            var property = Expression.Property(parameter, "IsDeleted");
+            var constantValue = Expression.Constant(finalValue);
+            var equal = Expression.Equal(property, constantValue);
+            var exp = Expression.Lambda<Func<T, bool>>(equal, parameter);
+            result = result.Where(exp);
+        }
+        return result;
+    }
 }

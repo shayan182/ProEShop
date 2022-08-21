@@ -29,37 +29,41 @@ public class BrandService : GenericService<Brand>, IBrandService
 
         #region Search
 
-        var searchedTitleFa = model.SearchBrands.TitleFa?.Trim();
-        if (!string.IsNullOrWhiteSpace(searchedTitleFa))
-            brands = brands.Where(x => x.TitleFa.Contains(searchedTitleFa));
-        
+        brands = ExpressionHelpers.CreateContainsExpressions(brands, model.SearchBrands);
+        brands = ExpressionHelpers.CreateEqualExpressions(brands, model.SearchBrands);
+        brands = ExpressionHelpers.CreateDeletedStatusExpression(brands, model.SearchBrands);
 
-        var searchedTitleEn = model.SearchBrands.TitleEn?.Trim();
-        if (!string.IsNullOrWhiteSpace(searchedTitleEn))
-        {
-            brands = brands.Where(x => x.TitleEn.Contains(searchedTitleEn));
-        }
-
-        var searchedBrandLinkEnd = model.SearchBrands.BrandLinkEn?.Trim();
-        if (!string.IsNullOrWhiteSpace(searchedBrandLinkEnd))
-            brands = brands.Where(x => x.BrandLinkEn.Contains(searchedBrandLinkEnd));
-        
-
-        var searchedJudiciaryLink = model.SearchBrands.JudiciaryLink?.Trim();
-        if (!string.IsNullOrWhiteSpace(searchedJudiciaryLink))
-            brands = brands.Where(x => x.JudiciaryLink.Contains(searchedJudiciaryLink));
-        
-
-        var searchedIsIranianBrand = model.SearchBrands.IsIranianBrand;
-        if (searchedIsIranianBrand is not null)
-            brands = brands.Where(x => x.IsIranianBrand == searchedIsIranianBrand.Value);
+        //var searchedTitleFa = model.SearchBrands.TitleFa?.Trim();
+        //if (!string.IsNullOrWhiteSpace(searchedTitleFa))
+        //    brands = brands.Where(x => x.TitleFa.Contains(searchedTitleFa));
 
 
-        if (model.SearchBrands.DeletedStatus != DeletedStatus.True)
-        {
-            var isOnlyDeleted = model.SearchBrands.DeletedStatus == DeletedStatus.OnlyDeleted;
-            brands = brands.Where(x => x.IsDeleted == isOnlyDeleted);
-        }
+        //var searchedTitleEn = model.SearchBrands.TitleEn?.Trim();
+        //if (!string.IsNullOrWhiteSpace(searchedTitleEn))
+        //{
+        //    brands = brands.Where(x => x.TitleEn.Contains(searchedTitleEn));
+        //}
+
+        //var searchedBrandLinkEnd = model.SearchBrands.BrandLinkEn?.Trim();
+        //if (!string.IsNullOrWhiteSpace(searchedBrandLinkEnd))
+        //    brands = brands.Where(x => x.BrandLinkEn.Contains(searchedBrandLinkEnd));
+
+
+        //var searchedJudiciaryLink = model.SearchBrands.JudiciaryLink?.Trim();
+        //if (!string.IsNullOrWhiteSpace(searchedJudiciaryLink))
+        //    brands = brands.Where(x => x.JudiciaryLink.Contains(searchedJudiciaryLink));
+
+
+        //var searchedIsIranianBrand = model.SearchBrands.IsIranianBrand;
+        //if (searchedIsIranianBrand is not null)
+        //    brands = brands.Where(x => x.IsIranianBrand == searchedIsIranianBrand.Value);
+
+
+        //if (model.SearchBrands.DeletedStatus != DeletedStatus.True)
+        //{
+        //    var isOnlyDeleted = model.SearchBrands.DeletedStatus == DeletedStatus.OnlyDeleted;
+        //    brands = brands.Where(x => x.IsDeleted == isOnlyDeleted);
+        //}
 
         #endregion
 
