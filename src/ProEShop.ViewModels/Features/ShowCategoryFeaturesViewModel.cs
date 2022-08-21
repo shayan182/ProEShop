@@ -20,6 +20,7 @@ public class ShowFeatureViewModel
     public string Title { get; set; }
 
     public long CategoryId { get; set; }
+    [Display(Name = "شناسه")]
     public long FeatureId { get; set; }
 }
 public class SearchFeaturesViewModel

@@ -16,10 +16,15 @@ public class IndexModel : PageBase
     private readonly ICategoryService _categoryService;
     private readonly IUnitOfWork _uow;
     private readonly IUploadFileService _uploadFileService;
-    public IndexModel(ICategoryService categoryService, IUnitOfWork uow, IUploadFileService uploadFileService)
+    private readonly IBrandService _brandServices;
+
+    public IndexModel(ICategoryService categoryService,
+        IUnitOfWork uow, IUploadFileService uploadFileService,
+        IBrandService brandServices)
     {
         _categoryService = categoryService;
         _uploadFileService = uploadFileService;
+        _brandServices = brandServices;
         _uow = uow;
     }
 
@@ -188,6 +193,27 @@ public class IndexModel : PageBase
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت بازگردانی شد."));
     }
+
+    public IActionResult OnGetAddBrand()
+    {
+        return Partial("AddBrand");
+    }
+    public IActionResult OnPostAddBrand(AddBrandToCategoryViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = ModelState.GetModelStateErrors()
+            });
+        }
+
+        if (model.SelectedCategoryId < 1)
+            return Json(new JsonResultOperation(false));
+
+        return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت به دسته بندی اضافه شد."));
+
+    }
     public async Task<IActionResult> OnPostCheckForTitle(string title)
     {
         return Json(!await _categoryService.IsExistsBy(nameof(Entities.Category.Title), title));
@@ -206,5 +232,10 @@ public class IndexModel : PageBase
     public async Task<IActionResult> OnPostCheckForSlugOnEdit(string slug, long id)
     {
         return Json(!await _categoryService.IsExistsBy(nameof(Entities.Category.Slug), slug, id));
+    }
+    public async Task<IActionResult> OnGetAutocompleteSearch(string term)
+    {
+        var x = await _brandServices.AutoCompleteSearch(term);
+        return Json(await _brandServices.AutoCompleteSearch(term));
     }
 }

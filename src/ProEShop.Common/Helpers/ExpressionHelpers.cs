@@ -118,4 +118,14 @@ public static class ExpressionHelpers
         }
         return result;
     }
+    public static IQueryable<T> CreateSearchExpressions<T>(IQueryable<T> query, object model, bool callDeletedStatusExpression = true)
+    {
+        var containsExpressions = CreateContainsExpressions(query, model);
+        var equalExpressions = CreateEqualExpressions(containsExpressions, model);
+        if (callDeletedStatusExpression)
+        {
+            return CreateDeletedStatusExpression(equalExpressions, model);
+        }
+        return equalExpressions;
+    }
 }

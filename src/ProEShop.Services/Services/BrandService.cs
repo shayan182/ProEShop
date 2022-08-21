@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
@@ -7,7 +6,6 @@ using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels;
 using ProEShop.ViewModels.Brands;
-using ProEShop.ViewModels.Categories;
 
 namespace ProEShop.Services.Services;
 
@@ -29,9 +27,7 @@ public class BrandService : GenericService<Brand>, IBrandService
 
         #region Search
 
-        brands = ExpressionHelpers.CreateContainsExpressions(brands, model.SearchBrands);
-        brands = ExpressionHelpers.CreateEqualExpressions(brands, model.SearchBrands);
-        brands = ExpressionHelpers.CreateDeletedStatusExpression(brands, model.SearchBrands);
+        brands = ExpressionHelpers.CreateSearchExpressions(brands, model);
 
         //var searchedTitleFa = model.SearchBrands.TitleFa?.Trim();
         //if (!string.IsNullOrWhiteSpace(searchedTitleFa))
@@ -125,5 +121,13 @@ public class BrandService : GenericService<Brand>, IBrandService
         return await _mapper.ProjectTo<EditBrandViewMode>(
             _brands
         ).SingleOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<List<string>> AutoCompleteSearch(string input)
+    {
+        return await _brands
+            .Where(x => x.TitleFa.Contains(input) || x.TitleEn.Contains(input))
+            .Select(x => x.TitleFa + " " + x.TitleEn)
+            .ToListAsync();
     }
 }
