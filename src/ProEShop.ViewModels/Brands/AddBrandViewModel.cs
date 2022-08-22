@@ -1,18 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
-
 namespace ProEShop.ViewModels.Brands;
 
 public class AddBrandViewModel
 {
+    [PageRemote(PageName = "Index", PageHandler = "CheckForTitleFa"
+        , ErrorMessage = AttributesErrorMessages.RemoteMessage,
+        HttpMethod = "POST",
+        AdditionalFields = ViewModelConstants.AntiForgeryToken)]
     [Display(Name = "نام فارسی برند")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string TitleFa { get; set; }
 
+    [PageRemote(PageName = "Index", PageHandler = "CheckForTitleEn"
+        , ErrorMessage = AttributesErrorMessages.RemoteMessage,
+        HttpMethod = "POST",
+        AdditionalFields = ViewModelConstants.AntiForgeryToken)]
     [Display(Name = "نام انگلیسی برند")]
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]

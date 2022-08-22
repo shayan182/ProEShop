@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using ProEShop.Entities.AuditableEntity;
 
 namespace ProEShop.Entities;
 
 [Table("Brands")]
+[Index(nameof(TitleFa),IsUnique = true)]
+[Index(nameof(TitleEn),IsUnique = true)]
 public class Brand : EntityBase, IAuditableEntity
 {
     #region Properties

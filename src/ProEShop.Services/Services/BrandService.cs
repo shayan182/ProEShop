@@ -27,7 +27,7 @@ public class BrandService : GenericService<Brand>, IBrandService
 
         #region Search
 
-        brands = ExpressionHelpers.CreateSearchExpressions(brands, model);
+        brands = ExpressionHelpers.CreateSearchExpressions(brands, model.SearchBrands);
 
         //var searchedTitleFa = model.SearchBrands.TitleFa?.Trim();
         //if (!string.IsNullOrWhiteSpace(searchedTitleFa))
@@ -121,6 +121,24 @@ public class BrandService : GenericService<Brand>, IBrandService
         return await _mapper.ProjectTo<EditBrandViewMode>(
             _brands
         ).SingleOrDefaultAsync(x => x.Id == id);
+    }
+
+    public override async Task<DuplicateColumns> AddAsync(Brand entity)
+    {
+        var result = new List<string>();
+
+        if (await _brands.AnyAsync(x => x.TitleFa == entity.TitleFa))
+            result.Add(nameof(Brand.TitleFa));
+
+        if (await _brands.AnyAsync(x => x.TitleEn == entity.TitleEn))
+            result.Add(nameof(Brand.TitleEn));
+
+        if (!result.Any())
+            await base.AddAsync(entity);
+        return new(!result.Any())
+        {
+            Columns = result
+        };
     }
 
     public async Task<List<string>> AutoCompleteSearch(string input)
