@@ -4,7 +4,9 @@ using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
+using ProEShop.Entities;
 using ProEShop.Services.Contracts;
+using ProEShop.Services.Services;
 using ProEShop.ViewModels.Categories;
 
 namespace ProEShop.Web.Pages.Admin.Category;
@@ -52,7 +54,7 @@ public class IndexModel : PageBase
     {
         if (id > 0)
         {
-            if (!await _categoryService.IsExistsBy(nameof(Entities.Category.Id), id)) 
+            if (!await _categoryService.IsExistsBy(nameof(Entities.Category.Id), id))
             {
                 return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
             }
@@ -194,11 +196,16 @@ public class IndexModel : PageBase
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت بازگردانی شد."));
     }
 
-    public IActionResult OnGetAddBrand()
+    public async Task<IActionResult> OnGetAddBrand(long selectedCategoryId)
     {
-        return Partial("AddBrand");
+        var model = new AddBrandToCategoryViewModel
+        {
+            //چون نام آرگومان ورودی با یک یاز پراپرتی های داخل مودل یکی هست خودش اونو بایند میکنه
+            SelectedBrands = await _categoryService.GetCategoryBrands(selectedCategoryId)
+        };
+        return Partial("AddBrand", model);
     }
-    public IActionResult OnPostAddBrand(AddBrandToCategoryViewModel model)
+    public async Task<IActionResult> OnPostAddBrandAsync(AddBrandToCategoryViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -211,6 +218,22 @@ public class IndexModel : PageBase
         if (model.SelectedCategoryId < 1)
             return Json(new JsonResultOperation(false));
 
+        var selectedCategory = await _categoryService.FindByIdAsync(model.SelectedCategoryId);
+        if (selectedCategory is null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        }
+        selectedCategory.CategoryBrands.Clear();
+
+        model.SelectedBrands = model.SelectedBrands.Distinct().ToList();
+
+        var brandIds = await _brandServices.GetBrandIdsByList(model.SelectedBrands);
+        brandIds.ForEach(brandId => selectedCategory.CategoryBrands.Add(new CategoryBrand()
+        {
+            BrandId = brandId
+        }));
+
+        await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت به دسته بندی اضافه شد."));
 
     }
@@ -235,7 +258,6 @@ public class IndexModel : PageBase
     }
     public async Task<IActionResult> OnGetAutocompleteSearch(string term)
     {
-        var x = await _brandServices.AutoCompleteSearch(term);
         return Json(await _brandServices.AutoCompleteSearch(term));
     }
 }

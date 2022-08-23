@@ -56,6 +56,7 @@ public class FeatureService : GenericService<Feature>, IFeatureService
     {
         return await _features
             .Where(x => x.Title.Contains(input.Trim()))
+            .Take(20)
             .Select(x => x.Title)
             .AsNoTracking()
             .ToListAsync();

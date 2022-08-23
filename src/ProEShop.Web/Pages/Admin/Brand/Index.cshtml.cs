@@ -107,7 +107,7 @@ public class IndexModel : PageBase
             });
         }
         var brandToUpdate = await _brandService.FindByIdAsync(model.Id);
-        if (brandToUpdate == null)
+        if (brandToUpdate is null)
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
 
         var oldLogoPictureFileName = brandToUpdate.LogoPicture;
@@ -126,9 +126,15 @@ public class IndexModel : PageBase
         brandToUpdate.BrandRegistrationPicture = brandRegistrationFileName == null ? oldBrandRegistrationFileName : brandRegistrationFileName;
 
 
-        await _brandService.Update(brandToUpdate);
+        var result = await _brandService.Update(brandToUpdate);
+        if (!result.Ok)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = result.Columns.SetDuplicateColumnsErrors<EditBrandViewMode>()
+            });
+        }
         await _uow.SaveChangesAsync();
-
         await _uploadFileService.SaveFile(model.NewLogoPicture, brandToUpdate.LogoPicture, oldLogoPictureFileName, "images", "brands");
         await _uploadFileService.SaveFile(model.NewBrandRegistrationPicture, brandToUpdate.BrandRegistrationPicture, oldBrandRegistrationFileName, "images", "brandregistrationpictures");
         return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت ویرایش شد"));
@@ -140,5 +146,13 @@ public class IndexModel : PageBase
     public async Task<IActionResult> OnPostCheckForTitleEn(string titleEn)
     {
         return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleEn), titleEn));
+    }
+    public async Task<IActionResult> OnPostCheckForTitleFaOnEdit(string titleFa,long id)
+    {
+        return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleFa), titleFa,id));
+    }
+    public async Task<IActionResult> OnPostCheckForTitleEnOnEdit(string titleEn, long id)
+    {
+        return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleEn), titleEn, id));
     }
 }

@@ -76,7 +76,7 @@
                             <a asp-page-handler="Add" asp-route-id="@category.Id" class="btn btn-info my-1 show-modal-form-button">
                                 افزودن زیر دسته
                             </a>
-                            <a asp-page-handler="AddBrand" asp-route-categoryId="@category.Id" class="btn btn-primary my-1 show-modal-form-button">
+                            <a asp-page-handler="AddBrand" asp-route-selectedCategoryId="@category.Id" class="btn btn-primary my-1 show-modal-form-button">
                                 افزودن برند
                             </a>
                             @if (category.Picture != "بدون عکس")

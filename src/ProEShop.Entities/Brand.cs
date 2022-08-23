@@ -48,4 +48,8 @@ public class Brand : EntityBase, IAuditableEntity
     public string BrandLinkEn { get; set; }
 
     #endregion
+
+    #region Relations
+    public ICollection<CategoryBrand> CategoryBrands { get; set; }
+    #endregion
 }

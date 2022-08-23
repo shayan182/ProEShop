@@ -11,11 +11,19 @@ public class EditBrandViewMode
     [HiddenInput]
     public long Id { get; set; }
 
+    [PageRemote(PageName = "Index", PageHandler = "CheckForTitleFaOnEdit"
+        , ErrorMessage = AttributesErrorMessages.RemoteMessage,
+        HttpMethod = "POST",
+        AdditionalFields = ViewModelConstants.AntiForgeryToken + "," + nameof(Id))]
     [Display(Name = "نام فارسی برند")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string TitleFa { get; set; }
 
+    [PageRemote(PageName = "Index", PageHandler = "CheckForTitleEnOnEdit"
+        , ErrorMessage = AttributesErrorMessages.RemoteMessage,
+        HttpMethod = "POST",
+        AdditionalFields = ViewModelConstants.AntiForgeryToken + "," + nameof(Id))]
     [Display(Name = "نام انگلیسی برند")]
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]

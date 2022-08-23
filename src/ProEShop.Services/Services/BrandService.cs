@@ -25,43 +25,10 @@ public class BrandService : GenericService<Brand>, IBrandService
     {
         var brands = _brands.AsNoTracking().AsQueryable();
 
-        #region Search
 
         brands = ExpressionHelpers.CreateSearchExpressions(brands, model.SearchBrands);
 
-        //var searchedTitleFa = model.SearchBrands.TitleFa?.Trim();
-        //if (!string.IsNullOrWhiteSpace(searchedTitleFa))
-        //    brands = brands.Where(x => x.TitleFa.Contains(searchedTitleFa));
-
-
-        //var searchedTitleEn = model.SearchBrands.TitleEn?.Trim();
-        //if (!string.IsNullOrWhiteSpace(searchedTitleEn))
-        //{
-        //    brands = brands.Where(x => x.TitleEn.Contains(searchedTitleEn));
-        //}
-
-        //var searchedBrandLinkEnd = model.SearchBrands.BrandLinkEn?.Trim();
-        //if (!string.IsNullOrWhiteSpace(searchedBrandLinkEnd))
-        //    brands = brands.Where(x => x.BrandLinkEn.Contains(searchedBrandLinkEnd));
-
-
-        //var searchedJudiciaryLink = model.SearchBrands.JudiciaryLink?.Trim();
-        //if (!string.IsNullOrWhiteSpace(searchedJudiciaryLink))
-        //    brands = brands.Where(x => x.JudiciaryLink.Contains(searchedJudiciaryLink));
-
-
-        //var searchedIsIranianBrand = model.SearchBrands.IsIranianBrand;
-        //if (searchedIsIranianBrand is not null)
-        //    brands = brands.Where(x => x.IsIranianBrand == searchedIsIranianBrand.Value);
-
-
-        //if (model.SearchBrands.DeletedStatus != DeletedStatus.True)
-        //{
-        //    var isOnlyDeleted = model.SearchBrands.DeletedStatus == DeletedStatus.OnlyDeleted;
-        //    brands = brands.Where(x => x.IsDeleted == isOnlyDeleted);
-        //}
-
-        #endregion
+        
 
         #region OrderBy
 
@@ -141,11 +108,38 @@ public class BrandService : GenericService<Brand>, IBrandService
         };
     }
 
+    public override async Task<DuplicateColumns> Update(Brand entity)
+    {
+        var category = _brands.Where(x => x.Id != x.Id);
+        var result = new List<string>();
+        if (await category.AnyAsync(x => x.TitleFa == entity.TitleFa))
+            result.Add(nameof(entity.TitleFa));
+        if (await category.AnyAsync(x => x.TitleEn == entity.TitleEn))
+            result.Add(nameof(entity.TitleEn));
+        
+        if (!result.Any())
+            await base.Update(entity);
+
+        return new DuplicateColumns(!result.Any())
+        {
+            Columns = result
+        };
+    }
+
     public async Task<List<string>> AutoCompleteSearch(string input)
     {
         return await _brands
             .Where(x => x.TitleFa.Contains(input) || x.TitleEn.Contains(input))
+            .Take(20)
             .Select(x => x.TitleFa + " " + x.TitleEn)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+    public async Task<List<long>> GetBrandIdsByList(List<string> brands)
+    {
+        return await _brands
+            .Where(x => brands.Contains(x.TitleFa + " " + x.TitleEn))
+            .Select(x => x.Id)
             .ToListAsync();
     }
 }
