@@ -649,7 +649,6 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
             showLoading();
         },
         success: function (data) {
-
             if (data.isSuccessful == false) {
                 showToastr('warning', data.message);
             }

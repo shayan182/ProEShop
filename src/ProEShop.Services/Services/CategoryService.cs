@@ -160,4 +160,20 @@ public class CategoryService : GenericService<Category>, ICategoryService
             .Select(x => x.Brand.TitleFa + " " + x.Brand.TitleEn)
             .ToListAsync();
     }
+
+    public async Task<Category?> GetCategoryWithItsBrands(long categoryId)
+    {
+        return await _categories
+            .Include(x => x.CategoryBrands)
+            .SingleOrDefaultAsync(x => x.Id == categoryId);
+    }
+
+    public async Task<Dictionary<long, string>> GetBrandsByCategoryId(long categoryId)
+    {
+        return await _categories
+            .SelectMany(x => x.CategoryBrands)
+            .Where(x => x.CategoryId == categoryId)
+            .Include(x => x.Brand)
+            .ToDictionaryAsync(x => x.BrandId ,x=>x.Brand.TitleFa + " " + x.Brand.TitleEn);
+    }
 }

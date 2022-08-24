@@ -9,4 +9,6 @@ public interface ICategoryService : IGenericService<Category>
     Task<EditCategoryViewModel?> GetForEdit(long id);
     Task<List<List<ShowCategoryForCreateProductViewModel>>> GetCategoriesForCreateProduct(long[] selectedCategoriesIds);
     Task<List<string>> GetCategoryBrands(long categoryId);
+    Task<Category?> GetCategoryWithItsBrands(long categoryId);
+    Task<Dictionary<long,string>> GetBrandsByCategoryId(long categoryId);
 }

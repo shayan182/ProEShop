@@ -70,3 +70,19 @@ function showCategories(data) {
         }
     });
 }
+
+
+$('#select-product-category-button').click(function () {
+    debugger 
+    var selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
+    getDataWithAjax('?handler=GetCategoryBrands', { categoryId: selectedCategoryId }, 'showCategoryBrands');
+});
+
+function showCategoryBrands(data,message) {
+    debugger 
+    $('#Product_BrandId option').remove();
+    for (brandId in data) {
+        $('#Product_BrandId').append(`<option value="${brandId}">${data[brandId]}</option>`);
+    }
+    $('#add-product-tab button[data-bs-target="#product-info"]').tab('show');
+}
