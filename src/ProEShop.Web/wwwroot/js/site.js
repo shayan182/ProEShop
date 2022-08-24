@@ -641,7 +641,6 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
         url: url,
         data: formData,
         type: 'GET',
-        enctype: 'multipart/form-data',
         dataType: 'json',
         processData: true,
         contentType: false,
@@ -649,6 +648,7 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
             showLoading();
         },
         success: function (data) {
+            debugger 
             if (data.isSuccessful == false) {
                 showToastr('warning', data.message);
             }
@@ -660,6 +660,7 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
             hideLoading();
         },
         error: function () {
+            debugger 
             showErrorMessage();
         }
     });

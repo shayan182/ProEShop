@@ -25,12 +25,14 @@ public class Category : EntityBase, IAuditableEntity
     public string Slug { get; set; }
 
     [MaxLength(50)]
-    [AllowNull]
     public string? Picture { get; set; }
 
     public long? ParentId { get; set; }
 
     public bool ShowInMenus { get; set; }
+
+
+    public bool CanAddFakeProduct { get; set; }
 
     #endregion
 

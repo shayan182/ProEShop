@@ -73,16 +73,27 @@ function showCategories(data) {
 
 
 $('#select-product-category-button').click(function () {
-    debugger 
     var selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
     getDataWithAjax('?handler=GetCategoryBrands', { categoryId: selectedCategoryId }, 'showCategoryBrands');
+    getDataWithAjax('?handler=GetAddFakeProduct', { categoryId: selectedCategoryId }, 'changeIfFakeStatus');
 });
 
-function showCategoryBrands(data,message) {
-    debugger 
+function showCategoryBrands(data, message) {
     $('#Product_BrandId option').remove();
     for (brandId in data) {
         $('#Product_BrandId').append(`<option value="${brandId}">${data[brandId]}</option>`);
     }
     $('#add-product-tab button[data-bs-target="#product-info"]').tab('show');
+}
+
+function changeIfFakeStatus(data, message) {
+    debugger 
+    console.log(data)
+    if (data === false) {
+        $('#Product_IsFake').attr('disabled', 'disabled');
+        $('#Product_IsFake').prop('checked', false); // turn off checkbox 
+    }
+    else {
+        $('#Product_IsFake').removeAttr('disabled');
+    }
 }

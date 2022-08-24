@@ -176,4 +176,15 @@ public class CategoryService : GenericService<Category>, ICategoryService
             .Include(x => x.Brand)
             .ToDictionaryAsync(x => x.BrandId ,x=>x.Brand.TitleFa + " " + x.Brand.TitleEn);
     }
+
+    public async Task<bool> CanAddFakeProduct(long categoryId)
+    {
+        var category = await _categories
+            .Select(x => new
+            {
+                x.Id,
+                x.CanAddFakeProduct
+            }).SingleOrDefaultAsync(x => x.Id == categoryId);
+        return category?.CanAddFakeProduct ?? false;
+    }
 }

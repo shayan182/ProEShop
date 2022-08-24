@@ -38,7 +38,7 @@ $(document).on('click', '.remove-selected-brand', function () {
 
 //جلوگیری از ارسال فرم در موقع زدن کلمه اینتر
 $(document).on('keydown', '#search-brand', function () {
-    if (event.key == 'Enter') {
+    if (event.key === 'Enter') {
         event.preventDefault();
     }
 });
