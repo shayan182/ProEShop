@@ -101,7 +101,7 @@ public class IndexModel : PageBase
         }
         else
         {
-            var categoryFeature = _categoryFeatureService.GetCategoryFeature(model.CategoryId, feature.Id);
+            var categoryFeature = await _categoryFeatureService.GetCategoryFeature(model.CategoryId, feature.Id);
             if (categoryFeature is null)
             {
                 feature.categoryFeatures.Add(new CategoryFeature()

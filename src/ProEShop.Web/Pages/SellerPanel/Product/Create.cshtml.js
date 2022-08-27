@@ -3,6 +3,7 @@
 }
 $(function () {
     getCategories();
+    activationModalForm();
 });
 
 var selectedCategoriesIds = [];
@@ -71,15 +72,18 @@ function showCategories(data) {
     });
 }
 
+var requestNewBrandUrl = $('#request-new-brand-url').attr('href');
 
 $('#select-product-category-button').click(function () {
     var selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
     getDataWithAjax('?handler=GetCategoryBrands', { categoryId: selectedCategoryId }, 'showCategoryBrands');
     getDataWithAjax('?handler=GetAddFakeProduct', { categoryId: selectedCategoryId }, 'changeIfFakeStatus');
+    $('#request-new-brand-url').attr('href', requestNewBrandUrl + '&categoryId=' + selectedCategoryId);
 });
 
 function showCategoryBrands(data, message) {
     $('#Product_BrandId option').remove();
+    $('#Product_BrandId').append('<option value="0">انتخاب کنید</option>');
     for (brandId in data) {
         $('#Product_BrandId').append(`<option value="${brandId}">${data[brandId]}</option>`);
     }
@@ -87,8 +91,6 @@ function showCategoryBrands(data, message) {
 }
 
 function changeIfFakeStatus(data, message) {
-    debugger 
-    console.log(data)
     if (data === false) {
         $('#Product_IsFake').attr('disabled', 'disabled');
         $('#Product_IsFake').prop('checked', false); // turn off checkbox 

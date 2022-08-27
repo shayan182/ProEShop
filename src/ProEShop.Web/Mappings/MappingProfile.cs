@@ -2,6 +2,7 @@
 using ProEShop.Entities;
 using ProEShop.Entities.Identity;
 using ProEShop.ViewModels.Brands;
+using ProEShop.ViewModels.Categories;
 using ProEShop.ViewModels.Sellers;
 
 namespace ProEShop.Web.Mappings;
@@ -12,31 +13,46 @@ public class MappingProfile : AutoMapper.Profile
     {
        
         //if you wanna trim all of the strings (read and create)
-        //this.CreateMap<string, string>()
+        //CreateMap<string, string>()
         //    .ConvertUsing(str => str != null ? str.Trim() : null);
 
-        this.CreateMap<User, CreateSellerViewModel>();
-        this.CreateMap<CreateSellerViewModel, Seller>()
+        CreateMap<User, CreateSellerViewModel>();
+        CreateMap<CreateSellerViewModel, Seller>()
             .AddTransform<string>(str => str != null ? str.Trim() : null); // if you wanna trim strings (create)
-        this.CreateMap<CreateSellerViewModel, User>()
+        CreateMap<CreateSellerViewModel, User>()
             .AddTransform<string>(str => str != null ? str.Trim() : null) // if you wanna trim strings (create)
             .ForMember(x => x.BirthDate,
                 opt => opt.Ignore());
-        this.CreateMap<Seller, ShowSellerViewModel>()
+        CreateMap<Seller, ShowSellerViewModel>()
             .ForMember(dest => dest.ProvinceAndCity,
                 options =>
                     options.MapFrom(src => $"{src.Province.Title} - {src.City.Title}"))
             .ForMember(dest => dest.CreatedDateTime,
                 options =>
                     options.MapFrom(src => src.CreatedDateTime.ToLongPersianDate()));
-        this.CreateMap<Seller, SellerDetailsViewModel>()
+        CreateMap<Seller, SellerDetailsViewModel>()
             .ForMember(dest => dest.CreatedDateTime,
                 options =>
                     options.MapFrom(src => src.CreatedDateTime.ToLongPersianDate()));
-        this.CreateMap<Brand, ShowBrandViewModel>();
-        this.CreateMap<AddBrandViewModel, Brand>();
-        this.CreateMap<Entities.Brand, EditBrandViewMode>().ReverseMap()
+        CreateMap<Brand, ShowBrandViewModel>();
+        CreateMap<AddBrandViewModel, Brand>();
+        CreateMap<Brand, EditBrandViewMode>().ReverseMap()
             .AddTransform<string>(str => str != null ? str.Trim() : null);
 
+        CreateMap<AddCategoryViewModel, Entities.Category>()
+            .AddTransform<string>(str => str != null ? str.Trim() : null);
+
+        CreateMap<Entities.Category, EditCategoryViewModel>()
+            .ForMember(x => x.Picture, // in the both class we have picture ,so mapper map these properties 
+                opt => opt.Ignore()) 
+            .ForMember(dest => dest.SelectedPicture,
+                options =>
+                    options.MapFrom(src => src.Picture));
+
+        CreateMap<EditCategoryViewModel, Entities.Category>()
+            .AddTransform<string>(str => str != null ? str.Trim() : null);
+
+        CreateMap<AddBrandBySellerViewModel, Entities.Brand>()
+            .AddTransform<string>(str => str != null ? str.Trim() : null);
     }
 }
