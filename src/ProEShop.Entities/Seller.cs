@@ -107,6 +107,9 @@ public class Seller : EntityBase, IAuditableEntity
     public DateTime CreatedDateTime { get; set; }
     public long? ProvinceId { get; set; }
     public long? CityId { get; set; }
+    [Display(Name = "دلایل رد مدارک فروشنده")]
+    [Column(TypeName = "ntext")]
+    public string? RejectReason { get; set; }
 
     #endregion
 
@@ -117,9 +120,7 @@ public class Seller : EntityBase, IAuditableEntity
 
     public ProvinceAndCity? City { get; set; }
 
-    [Display(Name = "دلایل رد مدارک فروشنده")]
-    [Column(TypeName = "ntext")]
-    public string? RejectReason { get; set; }
+    public ICollection<Brand>? Brands { get; set; }
     #endregion
 }
 

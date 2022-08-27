@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
@@ -19,14 +20,16 @@ public class IndexModel : PageBase
     private readonly IUnitOfWork _uow;
     private readonly IUploadFileService _uploadFileService;
     private readonly IBrandService _brandServices;
+    private readonly IMapper _mapper;
 
     public IndexModel(ICategoryService categoryService,
         IUnitOfWork uow, IUploadFileService uploadFileService,
-        IBrandService brandServices)
+        IBrandService brandServices, IMapper mapper)
     {
         _categoryService = categoryService;
         _uploadFileService = uploadFileService;
         _brandServices = brandServices;
+        _mapper = mapper;
         _uow = uow;
     }
 
@@ -77,22 +80,19 @@ public class IndexModel : PageBase
             {
                 Data = ModelState.GetModelStateErrors()
             });
-        }
+        }   
         string pictureFileName = null;
         if (model.Picture.IsFileUploaded())
-        {
+        { 
             pictureFileName = model.Picture.GenerateFileName();
         }
-        var category = new Entities.Category
-        {
-            Description = model.Description,
-            ShowInMenus = model.ShowInMenus,
-            Title = model.Title,
-            Slug = model.Slug,
-            ParentId = model.ParentId == 0 ? null : model.ParentId,
-            Picture = pictureFileName
-        };
-        var result = await _categoryService.AddAsync(category);
+         
+        var category = _mapper.Map<Entities .Category>(model);
+        if (model.ParentId is 0)   
+            category.ParentId = null;
+        category.Picture = pictureFileName;    
+
+            var result = await _categoryService.AddAsync(category);
         if (!result.Ok)
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
@@ -151,6 +151,7 @@ public class IndexModel : PageBase
         category.Slug = model.Slug;
         category.ParentId = model.ParentId == 0 ? null : model.ParentId;
         category.Picture = pictureFileName == null ? oldFileName : pictureFileName;
+        category.CanAddFakeProduct = model.CanAddFakeProduct;
 
         var result = await _categoryService.Update(category);
         if (!result.Ok)

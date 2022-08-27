@@ -52,7 +52,7 @@ public static class AuditableShadowProperties
         }
     }
 
-    public static AppShadowProperties GetShadowProperties(this IHttpContextAccessor httpContextAccessor)
+    public static AppShadowProperties? GetShadowProperties(this IHttpContextAccessor? httpContextAccessor)
     {
         if (httpContextAccessor == null) return null;
 

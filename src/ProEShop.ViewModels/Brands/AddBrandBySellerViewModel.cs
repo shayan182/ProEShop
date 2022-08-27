@@ -5,9 +5,13 @@ using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
 namespace ProEShop.ViewModels.Brands;
 
-public class AddBrandViewModel
+public class AddBrandBySellerViewModel
 {
-    [PageRemote(PageName = "Index", PageHandler = "CheckForTitleFa"
+    [HiddenInput]
+    [Range(1, long.MaxValue, ErrorMessage = AttributesErrorMessages.RequiredMessage)]
+    public long CategoryId { get; set; }
+
+    [PageRemote(PageName = "Create", PageHandler = "CheckForTitleFa"
         , ErrorMessage = AttributesErrorMessages.RemoteMessage,
         HttpMethod = "POST",
         AdditionalFields = ViewModelConstants.AntiForgeryToken)]
@@ -16,7 +20,7 @@ public class AddBrandViewModel
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string TitleFa { get; set; }
 
-    [PageRemote(PageName = "index", PageHandler = "CheckForTitleEn"
+    [PageRemote(PageName = "Create", PageHandler = "CheckForTitleEn"
         , ErrorMessage = AttributesErrorMessages.RemoteMessage,
         HttpMethod = "POST",
         AdditionalFields = ViewModelConstants.AntiForgeryToken)]

@@ -157,4 +157,14 @@ public class SellerService : GenericService<Seller>, ISellerService
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id);
     }
+
+    public async Task<long?> GetSelerId(long userId)
+    {
+        var seller = await _sellers.Select(x => new
+        {
+            x.Id,
+            x.UserId
+        }).SingleAsync(x => x.UserId == userId);
+        return seller.Id;
+    }
 }

@@ -374,7 +374,7 @@ function initializingAutocomplete() {
 }
 function activationModalForm() {
     $('.show-modal-form-button').click(function (e) {
-         
+         debugger 
         e.preventDefault();
         var urlToLoadTheForm = $(this).attr('href');
 
@@ -382,6 +382,7 @@ function activationModalForm() {
         if (customTitle == undefined) {
             customTitle = $(this).text().trim();
         }
+        appendFormModalPlaceToBody();
         $('#form-modal-place .modal-header h5').html(customTitle);
         showLoading();
         $.get(urlToLoadTheForm, function (data, status) {
@@ -648,7 +649,6 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
             showLoading();
         },
         success: function (data) {
-            debugger 
             if (data.isSuccessful == false) {
                 showToastr('warning', data.message);
             }

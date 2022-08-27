@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Entities.AuditableEntity;
 
@@ -45,11 +46,21 @@ public class Brand : EntityBase, IAuditableEntity
 
     [Display(Name = "لینک سایت معتبر خارجی")]
     [MaxLength(200)]
-    public string BrandLinkEn { get; set; }
+    [AllowNull]
+    public string? BrandLinkEn { get; set; }
+
+    public bool IsConfirmed { get; set; }
+    /// <summary>
+    /// فروشنده پیشنهاد دهنده برند
+    /// </summary>
+    public long? SellerId { get; set; }
 
     #endregion
 
     #region Relations
+
     public ICollection<CategoryBrand> CategoryBrands { get; set; }
+        = new List<CategoryBrand>();
+    public Seller Seller { get; set; }
     #endregion
 }
