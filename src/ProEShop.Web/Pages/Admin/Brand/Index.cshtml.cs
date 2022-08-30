@@ -41,6 +41,7 @@ public class IndexModel : PageBase
     public void OnGet()
     {
     }
+
     public async Task<IActionResult> OnGetGetDataTable()
     {
         if (!ModelState.IsValid)
@@ -50,6 +51,7 @@ public class IndexModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
+
         return Partial("List", await _brandService.GetBrands(Brands));
     }
 
@@ -67,6 +69,7 @@ public class IndexModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
+
         var brand = _mapper.Map<Entities.Brand>(model);
         brand.IsConfirmed = true;
         brand.LogoPicture = model.LogoPicture.GenerateFileName();
@@ -80,12 +83,14 @@ public class IndexModel : PageBase
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
             {
-               Data = result.Columns.SetDuplicateColumnsErrors<AddBrandViewModel>()
+                Data = result.Columns.SetDuplicateColumnsErrors<AddBrandViewModel>()
             });
         }
+
         await _uow.SaveChangesAsync();
         await _uploadFileService.SaveFile(model.LogoPicture, brand.LogoPicture, null, "images", "brands");
-        await _uploadFileService.SaveFile(model.BrandRegistrationPicture, brandRegistrationFileName, null, "images", "brandregistrationpictures");
+        await _uploadFileService.SaveFile(model.BrandRegistrationPicture, brandRegistrationFileName, null, "images",
+            "brandregistrationpictures");
         return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت اضافه شد"));
     }
 
@@ -96,8 +101,10 @@ public class IndexModel : PageBase
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
         }
+
         return Partial("Edit", model);
     }
+
     public async Task<IActionResult> OnPostEditAsync(EditBrandViewMode model)
     {
         if (!ModelState.IsValid)
@@ -107,6 +114,7 @@ public class IndexModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
+
         var brandToUpdate = await _brandService.FindByIdAsync(model.Id);
         if (brandToUpdate is null)
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
@@ -124,7 +132,9 @@ public class IndexModel : PageBase
         string brandRegistrationFileName = null;
         if (model.NewBrandRegistrationPicture.IsFileUploaded())
             brandRegistrationFileName = model.NewBrandRegistrationPicture.GenerateFileName();
-        brandToUpdate.BrandRegistrationPicture = brandRegistrationFileName == null ? oldBrandRegistrationFileName : brandRegistrationFileName;
+        brandToUpdate.BrandRegistrationPicture = brandRegistrationFileName == null
+            ? oldBrandRegistrationFileName
+            : brandRegistrationFileName;
 
 
         var result = await _brandService.Update(brandToUpdate);
@@ -135,11 +145,48 @@ public class IndexModel : PageBase
                 Data = result.Columns.SetDuplicateColumnsErrors<EditBrandViewMode>()
             });
         }
+
         await _uow.SaveChangesAsync();
-        await _uploadFileService.SaveFile(model.NewLogoPicture, brandToUpdate.LogoPicture, oldLogoPictureFileName, "images", "brands");
-        await _uploadFileService.SaveFile(model.NewBrandRegistrationPicture, brandToUpdate.BrandRegistrationPicture, oldBrandRegistrationFileName, "images", "brandregistrationpictures");
+        await _uploadFileService.SaveFile(model.NewLogoPicture, brandToUpdate.LogoPicture, oldLogoPictureFileName,
+            "images", "brands");
+        await _uploadFileService.SaveFile(model.NewBrandRegistrationPicture, brandToUpdate.BrandRegistrationPicture,
+            oldBrandRegistrationFileName, "images", "brandregistrationpictures");
         return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت ویرایش شد"));
     }
+
+    public async Task<IActionResult> OnGetGetBrandDetailsAsync(long brandId)
+    {
+        var model = await _brandService.GetBrandDetails(brandId);
+        if (model is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        return Partial("BrandDetails", model);
+    }
+
+    public async Task<IActionResult> OnPostRejectBrand(BrandDetailsViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, "لطفا دلیل رد برند را وارد نمایید"));
+        }
+
+        var brand = await _brandService.GetInActiveBrand(model.Id);
+        if (brand is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        _brandService.Remove(brand);
+        await _uow.SaveChangesAsync();
+        //todo: send reject reasons to seller Email
+        return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت حذف شد"));
+    }
+    public async Task<IActionResult> OnPostConfirmBrand(long id)
+    {
+        var brand = await _brandService.GetInActiveBrand(id);
+        if (brand is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        brand.IsConfirmed = true;
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت شد"));
+    }
+
     public async Task<IActionResult> OnPostCheckForTitleFa(string titleFa)
     {
         return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleFa), titleFa));
@@ -148,9 +195,9 @@ public class IndexModel : PageBase
     {
         return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleEn), titleEn));
     }
-    public async Task<IActionResult> OnPostCheckForTitleFaOnEdit(string titleFa,long id)
+    public async Task<IActionResult> OnPostCheckForTitleFaOnEdit(string titleFa, long id)
     {
-        return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleFa), titleFa,id));
+        return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleFa), titleFa, id));
     }
     public async Task<IActionResult> OnPostCheckForTitleEnOnEdit(string titleEn, long id)
     {

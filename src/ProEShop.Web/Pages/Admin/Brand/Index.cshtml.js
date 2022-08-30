@@ -7,3 +7,8 @@ function actionsAfterLoadModalForm() {
         $(this).parents('.form-switch').find('label').html(textToReplace);
     });
 }
+function confirmAndRejectBrand(message,data) {
+    showToastr('success', message);
+    $('#form-modal-place').modal('hide');
+    fillDataTable();
+}

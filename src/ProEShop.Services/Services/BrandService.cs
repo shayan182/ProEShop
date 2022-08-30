@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
@@ -141,5 +142,17 @@ public class BrandService : GenericService<Brand>, IBrandService
             .Where(x => brands.Contains(x.TitleFa + " " + x.TitleEn))
             .Select(x => x.Id)
             .ToListAsync();
+    }
+
+    public async Task<BrandDetailsViewModel?> GetBrandDetails(long brandId)
+    {
+        return await _mapper.ProjectTo<BrandDetailsViewModel>(_brands)
+            .SingleOrDefaultAsync(x => x.Id == brandId);
+    }
+
+    public async Task<Brand?> GetInActiveBrand(long brandId)
+    {
+        return await _brands.Where(x => !x.IsConfirmed)
+            .SingleOrDefaultAsync(x => x.Id == brandId);
     }
 }

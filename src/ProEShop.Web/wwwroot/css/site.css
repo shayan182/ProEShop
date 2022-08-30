@@ -71,3 +71,6 @@ a{
 .pointer-cursor {
     cursor: pointer;
 }
+.details h5 {
+    display: inline-block;
+}

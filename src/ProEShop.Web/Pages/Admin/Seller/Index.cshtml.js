@@ -24,6 +24,7 @@ function getSellerDetails(e) {
 }
 
 function showSellerDetailsInModal(result, clickedButton) {
+    appendHtmlModalPlaceToBody();
     var currnetModal = $('#html-modal-place');
     currnetModal.find('.modal-body').html(result);
     currnetModal.modal('show');
