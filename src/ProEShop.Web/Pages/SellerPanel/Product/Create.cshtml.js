@@ -4,7 +4,22 @@
 $(function () {
     getCategories();
     activationModalForm();
+
+    var specialtyCheckTinyMce = tinymce.get('Product_SpecialtyCheck');
+    specialtyCheckTinyMce.settings.images_upload_handler = uploadSpecialtyCheckImages;
+    specialtyCheckTinyMce.settings.max_height = 1000;
+
+    var shortDescriptionTinyMce = tinymce.get('Product_ShortDescription');
+    shortDescriptionTinyMce.settings.images_upload_handler = uploadShortDescriptionImages;
 });
+
+function uploadSpecialtyCheckImages(blobInfo, success, failure, progress) {
+    sendTinyMceImagesToServer(blobInfo, success, failure, progress, 'UploadSpecialtyCheckImages');
+}
+
+function uploadShortDescriptionImages(blobInfo, success, failure, progress) {
+    sendTinyMceImagesToServer(blobInfo, success, failure, progress, 'UploadShortDescriptionImages');
+}
 
 var selectedCategoriesIds = [];
 
@@ -99,3 +114,10 @@ function changeIfFakeStatus(data, message) {
         $('#Product_IsFake').removeAttr('disabled');
     }
 }
+
+$(document).on('change',
+    '#IsIranianBrand',
+    function() {
+        var textToReplace = this.checked ? 'ایرانی' : 'خارجی';
+        $(this).parents('.form-switch').find('label').html(textToReplace);
+    });

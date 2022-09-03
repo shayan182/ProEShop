@@ -19,8 +19,6 @@ public class IndexModel : PageBase
     private readonly ICategoryService _categoryService;
     private readonly IUnitOfWork _uow;
 
-
-
     #endregion
 
     public IndexModel(ICategoryFeatureService categoryFeatureService, IFeatureService featureService, ICategoryService categoryService, IUnitOfWork uow)

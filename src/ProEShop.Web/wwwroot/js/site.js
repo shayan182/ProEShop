@@ -101,8 +101,6 @@ function enablingTooltips() {
 }
 
 
-enablingTooltips();
-
 function showErrorMessage(message) {
     showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
 }
@@ -120,27 +118,54 @@ function showErrorMessage(message) {
 //    });
 //}
 
+// Send `TinyMCE` images to server with specific url
+function sendTinyMceImagesToServer(blobInfo, success, failure, progress, url) {
+    var formData = new FormData();
+    formData.append('file', blobInfo.blob(), blobInfo.filename());
+    formData.append(rvt, $('textarea.custom-tinymce:first').parents('form').find('input[name="' + rvt + '"]').val());
+    $.ajax({
+        url: `${location.pathname}?handler=${url}`,
+        data: formData,
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            if (data === false) {
+                failure('خطایی به وجود آمد');
+            } else {
+                success(data.location);
+            }
+        },
+        error: function () {
+            failure('خطایی به وجود آمد');
+        }
+    });
+};
 
 
 function initializeTinyMCE() {
-    if (typeof (tinyMCE) != "undefined") {
-
-        tinymce.remove('textarea.custom-tinymce');
+    $("textarea.custom-tinymce").each(function () {
+        var textareaId = `#${$(this).attr('id')}`;
+        tinymce.remove(textareaId);
         tinymce.init({
-            selector: 'textarea.custom-tinymce',
+            selector: textareaId,
             setup: function (editor) {
                 editor.on('blur', function (e) {
                     var elementId = $(e.target.targetElm).attr('id');
                     $(e.target.formElement).validate().element(`#${elementId}`);
                 });
             },
-            height: 300,
+            min_height: 300,
             max_height: 500,
             language: 'fa_IR',
             language_url: '/js/fa_IR.js',
             content_style: 'body {font-family: Vazir}',
+            //images_upload_handler: uploadTinyMceImage, //Enable image with function to call handler
+            image_title: true, // field alt for picture
             //plugins: ["link", "table", "preview", "wordcount", "media", "codesample", "emoticons", "insertdatetime", "a_tinymce_plugin", "advlist", "image", "textpattern", "template", "lists", "anchor", "print", "autolink", "noneditable", "pagebreak", "autosave", "code", "nonbreaking", "charmap"],
-            plugins: ["image", "code", "table", "link", "media", "codesample"],
+            plugins: ["image", "code", "table", "link", "media", "codesample", "autoresize"],
             //toolbar: 'link bold italic table preview ltr rtl a11ycheck addcommentContext showcommentContexts casechange  wordcount checklist  image export bullist formatpainter pagebreak charmap pageembed nonbreaking permanentpen table restoredraft numlist  table'
             toolbar: [
                 {
@@ -164,8 +189,7 @@ function initializeTinyMCE() {
             ],
             branding: false
         });
-    }
-
+    });
     // for tool bar :  tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol
 }
 
@@ -176,11 +200,9 @@ document.addEventListener('focusin', function (e) {
     }
 });
 
-initializeTinyMCE();
-
 function initializeSelect2() {
-    if ($('.custom-select2').length > 0) {
-        $('.custom-select2').select2({
+    if ($('.modal .custom-select2').length > 0) {
+        $('.modal .custom-select2').select2({
             theme: 'bootstrap-5',
             dropdownParent: $('#form-modal-place') // For Search  
         });
@@ -194,8 +216,6 @@ function initializeSelect2WithoutModal() {
         });
     }
 }
-
-initializeSelect2WithoutModal();
 
 // Validation
 
@@ -374,7 +394,7 @@ function initializingAutocomplete() {
 }
 function activationModalForm() {
     $('.show-modal-form-button').click(function (e) {
-         debugger 
+        debugger
         e.preventDefault();
         var urlToLoadTheForm = $(this).attr('href');
 
@@ -660,7 +680,7 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
             hideLoading();
         },
         error: function () {
-            debugger 
+            debugger
             showErrorMessage();
         }
     });
@@ -699,7 +719,6 @@ function activatingInputAttributes() {
     $('input[data-val-isimage]').attr('accept', 'image/*');
 }
 
-activatingInputAttributes();
 //show preview in under the input (Create Seller Page)
 $('.image-preivew-input').change(function () {
     var selectedFile = this.files[0];
@@ -714,3 +733,18 @@ $('.image-preivew-input').change(function () {
     }
 });
 
+$(function () {
+    activatingInputAttributes();
+    initializeSelect2WithoutModal();
+    initializeTinyMCE();
+    enablingTooltips();
+
+    // Enable img for tinymce 
+    $('textarea[add-image-plugin="true"]').each(function () {
+        var elementId = $(this).attr('id');
+        var currentTinyMce = tinymce.get(elementId);
+        currentTinyMce.settings.plugins += ' image'; // enable image
+        currentTinyMce.settings.toolbar[4].items.push('image'); // show in toolbar
+        currentTinyMce.settings.image_title = true; // enable title input for picture
+    });
+})

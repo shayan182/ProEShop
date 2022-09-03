@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
@@ -109,6 +110,33 @@ public class CreateModel : SellerPanelBase
         await _uploadFileService.SaveFile(model.LogoPicture, brand.LogoPicture, null, "images", "brands");
         await _uploadFileService.SaveFile(model.BrandRegistrationPicture, brandRegistrationFileName, null, "images", "brandregistrationpictures");
         return Json(new JsonResultOperation(true, "برند ثبت شد و پس از تایید کارشناسان قابل دسترسی است، مراتب از طریق ایمیل به شما اطلاع رسانی خواهد شد"));
+    }
+
+    public IActionResult OnPostUploadSpecialtyCheckImages([IsImage] IFormFile file)
+    {
+        if (ModelState.IsValid && file.IsFileUploaded())
+        {
+            var imageFileName = file.GenerateFileName();
+            _uploadFileService.SaveFile(file, imageFileName, null, "images", "products", "specialty-check-images");
+            return Json(new
+            {
+                location = $"/images/products/specialty-check-images/{imageFileName}"
+            });
+        }
+        return Json(false);
+    }
+    public IActionResult OnPostUploadShortDescriptionImages([IsImage] IFormFile file)
+    {
+        if (ModelState.IsValid && file.IsFileUploaded())
+        {
+            var imageFileName = file.GenerateFileName();
+            _uploadFileService.SaveFile(file, imageFileName, null, "images", "products", "short-description-images");
+            return Json(new
+            {
+                location = $"/images/products/short-description-images/{imageFileName}"
+            });
+        }
+        return Json(false);
     }
     public async Task<IActionResult> OnPostCheckForTitleFa(string titleFa)
     {
