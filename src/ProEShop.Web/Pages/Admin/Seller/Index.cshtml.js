@@ -1,5 +1,7 @@
-﻿fillDataTable();
-appendHtmlModalPlaceToBody();
+﻿$(function () {
+    fillDataTable();
+    appendHtmlModalPlaceToBody();
+});
 
 $('#Sellers_SearchSellers_ProvinceId').change(function () {
     var formData = {

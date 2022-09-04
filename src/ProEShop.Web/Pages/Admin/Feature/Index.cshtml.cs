@@ -47,7 +47,6 @@ public class IndexModel : PageBase
             });
         }
 
-        var x = await _featureService.GetCategoryFeatures(features);
         return Partial("List", await _featureService.GetCategoryFeatures(features));
     }
 
@@ -61,7 +60,7 @@ public class IndexModel : PageBase
         }
         return Json(new JsonResultOperation(true, "ویژگی دسته بندی مورد نظر با موفقیت حذف شد!"));
     }
-    public async Task<IActionResult> OnGetAdd()
+    public async Task<IActionResult> OnGetAdd(long categoryId)
     {
         var categories = await _categoryService.GetCategoriesToShowInSelectBoxAsync();
         var model = new AddFeatureViewModel()
@@ -83,14 +82,15 @@ public class IndexModel : PageBase
 
         var searchedTitle = model.Title.Trim();
         var feature = await _featureService.FindByTitleAsync(searchedTitle);
+        var category = await _categoryService.FindByIdAsync(model.CategoryId);
         if (feature is null)
         {
             await _featureService.AddAsync(new Entities.Feature()
             {
                 Title = searchedTitle,
-                categoryFeatures = new List<CategoryFeature>()
+                CategoryFeatures = new List<CategoryFeature>()
                 {
-                    new CategoryFeature()
+                    new()
                     {
                         CategoryId = model.CategoryId,
                     }
@@ -99,18 +99,26 @@ public class IndexModel : PageBase
         }
         else
         {
-            var categoryFeature = await _categoryFeatureService.GetCategoryFeature(model.CategoryId, feature.Id);
+            var categoryFeature = await _categoryFeatureService
+                .GetCategoryFeature(model.CategoryId, feature.Id);
             if (categoryFeature is null)
-            {
-                feature.categoryFeatures.Add(new CategoryFeature()
+            { 
+
+                //feature.CategoryFeatures.Add(new CategoryFeature()
+                //{
+                //    CategoryId = model.CategoryId
+                //});
+
+                // کد بالایی برای من کار نکرد پس از طریق دسته بندی اضافه کردم
+                category?.CategoryFeatures.Add(new CategoryFeature()
                 {
-                    CategoryId = model.CategoryId
+                     CategoryId = model.CategoryId,
+                     FeatureId = feature.Id
                 });
             }
         }
-
         await _uow.SaveChangesAsync();
-        return Json(new JsonResultOperation(true, "ویژگی دسته بندی مورد نظر با موفقیت اضافه شد!"));
+        return Json(new JsonResultOperation(true, "ویژگی دسته بندی مورد نظر با موفقیت اضافه شد"));
     }
 
     public async Task<IActionResult> OnGetAutocompleteSearch(string term)

@@ -23,7 +23,7 @@ public class FeatureService : GenericService<Feature>, IFeatureService
         if (!string.IsNullOrWhiteSpace(model.SearchFeatures.Title))
             features = features.Where(x => x.Title.Contains(model.SearchFeatures.Title));
 
-        features = _features.SelectMany(x => x.categoryFeatures)
+        features = _features.SelectMany(x => x.CategoryFeatures)
             .Where(x => x.CategoryId == model.SearchFeatures.CategoryId)
             .Select(x => x.Feature);
 

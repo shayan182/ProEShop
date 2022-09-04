@@ -901,13 +901,13 @@ namespace ProEShop.DataLayer.Migrations
             modelBuilder.Entity("ProEShop.Entities.CategoryFeature", b =>
                 {
                     b.HasOne("ProEShop.Entities.Category", "Category")
-                        .WithMany("categoryFeatures")
+                        .WithMany("CategoryFeatures")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProEShop.Entities.Feature", "Feature")
-                        .WithMany("categoryFeatures")
+                        .WithMany("CategoryFeatures")
                         .HasForeignKey("FeatureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1030,12 +1030,12 @@ namespace ProEShop.DataLayer.Migrations
 
                     b.Navigation("Products");
 
-                    b.Navigation("categoryFeatures");
+                    b.Navigation("CategoryFeatures");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.Feature", b =>
                 {
-                    b.Navigation("categoryFeatures");
+                    b.Navigation("CategoryFeatures");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.Identity.Role", b =>

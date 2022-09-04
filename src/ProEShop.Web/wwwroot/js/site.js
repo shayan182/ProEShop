@@ -394,7 +394,6 @@ function initializingAutocomplete() {
 }
 function activationModalForm() {
     $('.show-modal-form-button').click(function (e) {
-        debugger
         e.preventDefault();
         var urlToLoadTheForm = $(this).attr('href');
 
@@ -492,6 +491,7 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
     e.preventDefault();
     var currentForm = $(this);
     var formAction = currentForm.attr('action');
+    var closeWhenDone = $(this).attr('close-when-done');
     var formData = new FormData(this);
     $.ajax({
         url: formAction,
@@ -506,14 +506,16 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
             currentForm.find('.submit-custom-ajax-button').attr('disabled', 'disabled');
         },
         success: function (data) {
-            if (data.isSuccessful == false) {
+            if (data.isSuccessful === false) {
                 var finalData = data.data != null ? data.data : [data.message];
                 fillValidationForm(finalData, currentForm);
                 showToastr('warning', data.message);
             }
             else {
                 fillDataTable();
-                $('#form-modal-place').modal('hide');
+                if (closeWhenDone !== 'false') {
+                    $('#form-modal-place').modal('hide');
+                }
                 showToastr('success', data.message);
             }
         },
@@ -609,7 +611,7 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
     //show loading disabled button
     currentForm.find('.search-form-submit-button').attr('disabled', 'disabled')
     currentForm.find('.search-form-submit-button span').removeClass('d-none');
-
+    debugger 
     $('.data-table-loading').removeClass('d-none');
     $('.data-table-body').html(''); // not working :(
 
@@ -746,5 +748,15 @@ $(function () {
         currentTinyMce.settings.plugins += ' image'; // enable image
         currentTinyMce.settings.toolbar[4].items.push('image'); // show in toolbar
         currentTinyMce.settings.image_title = true; // enable title input for picture
+    });
+
+    // Initialize TinyMCE upload image plugin
+    $('textarea.custom-tinymce').each(function () {
+        var elementId = $(this).attr('id');
+        var uploadImageUrl = $(this).attr('upload-image-url');
+        var tinyMceInstance = tinymce.get(elementId);
+        tinyMceInstance.settings.images_upload_handler = function (blobInfo, success, failure, progress) {
+            sendTinyMceImagesToServer(blobInfo, success, failure, progress, uploadImageUrl);
+        };
     });
 })

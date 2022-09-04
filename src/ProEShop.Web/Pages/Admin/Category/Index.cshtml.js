@@ -1,4 +1,6 @@
-﻿fillDataTable();
+﻿$(function () {
+    fillDataTable();
+});
 
 var brandBox = `<div class="btn-group m-1">
                 <button type="button" class="btn btn-outline-dark">
@@ -19,10 +21,10 @@ function onAutocompleteSelect(event, ui) {
         $('#selected-brands-box').append(brandBoxToAppend);
         var inputToAppend = `<input type="hidden" name="SelectedBrands" value="${enteredBrand}" />`;
         $('#add-brand-to-category-form').prepend(inputToAppend);
-        showToastr('success', 'برند مورد نظر با موفقیت اضافه شد')
+        showToastr('success', 'برند مورد نظر با موفقیت اضافه شد');
     }
     else {
-        showToastr('warning', 'این برند از قبل اضافه شده است')
+        showToastr('warning', 'این برند از قبل اضافه شده است');
     }
 }
 $(document).on('click', '.remove-selected-brand', function () {

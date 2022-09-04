@@ -17,7 +17,7 @@ public class Feature : EntityBase, IAuditableEntity
     #endregion
     #region Relations
 
-    public ICollection<CategoryFeature> categoryFeatures { get; set; }
+    public ICollection<CategoryFeature> CategoryFeatures { get; set; }
         = new List<CategoryFeature>();
 
     #endregion
