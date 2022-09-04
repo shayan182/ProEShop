@@ -23,10 +23,11 @@ public class CreateModel : SellerPanelBase
     private readonly IUnitOfWork _uow;
     private readonly IUploadFileService _uploadFileService;
     private readonly ISellerService _sellerService;
+    private readonly ICategoryFeatureService _categoryFeatureService;
 
     public CreateModel(
         ICategoryService categoryService,
-        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService)
+        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService, ICategoryFeatureService categoryFeatureService)
     {
         _categoryService = categoryService;
         _mapper = mapper;
@@ -34,6 +35,7 @@ public class CreateModel : SellerPanelBase
         _uow = uow;
         _uploadFileService = uploadFileService;
         _sellerService = sellerService;
+        _categoryFeatureService = categoryFeatureService;
     }
 
     #endregion
@@ -137,6 +139,11 @@ public class CreateModel : SellerPanelBase
             });
         }
         return Json(false);
+    }
+    public async Task<IActionResult> OnGetShowCategoryFeatures(long categoryId)
+    {
+        var result = await _categoryFeatureService.GetCategoryFeatures(categoryId);
+        return Partial("_ShowCategoryFeaturesPartial",result);
     }
     public async Task<IActionResult> OnPostCheckForTitleFa(string titleFa)
     {

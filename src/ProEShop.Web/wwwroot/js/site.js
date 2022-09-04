@@ -102,6 +102,7 @@ function enablingTooltips() {
 
 
 function showErrorMessage(message) {
+    debugger 
     showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
 }
 
@@ -611,11 +612,11 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
     //show loading disabled button
     currentForm.find('.search-form-submit-button').attr('disabled', 'disabled')
     currentForm.find('.search-form-submit-button span').removeClass('d-none');
-    debugger 
+     
     $('.data-table-loading').removeClass('d-none');
     $('.data-table-body').html(''); // not working :(
 
-
+     
     $('[data-bs-toggle="tooltip"], .tooltip').tooltip("hide");
     $('#record-not-found-box').remove();
 
@@ -682,7 +683,6 @@ function getDataWithAjax(url, formData, functionNameToCallInTheEnd) {
             hideLoading();
         },
         error: function () {
-            debugger
             showErrorMessage();
         }
     });
@@ -711,6 +711,7 @@ function getHtmlWithAJAX(url, formData, functionNameToCallInTheEnd, clickedButto
             hideLoading();
         },
         error: function () {
+            debugger 
             showErrorMessage();
         }
     });

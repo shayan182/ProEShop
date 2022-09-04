@@ -3,6 +3,7 @@ using ProEShop.Entities;
 using ProEShop.Entities.Identity;
 using ProEShop.ViewModels.Brands;
 using ProEShop.ViewModels.Categories;
+using ProEShop.ViewModels.CategoryFeatures;
 using ProEShop.ViewModels.Sellers;
 
 namespace ProEShop.Web.Mappings;
@@ -55,6 +56,6 @@ public class MappingProfile : AutoMapper.Profile
         CreateMap<AddBrandBySellerViewModel, Entities.Brand>()
             .AddTransform<string>(str => str != null ? str.Trim() : null);
         CreateMap<Brand, BrandDetailsViewModel>();
-
+        this.CreateMap<Entities.CategoryFeature, CategoryFeatureForCreateProductViewModel>();
     }
 }

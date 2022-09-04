@@ -5,7 +5,7 @@ $(function () {
     getCategories();
     activationModalForm();
 
-    
+
     var specialtyCheckTinyMce = tinymce.get('Product_SpecialtyCheck');
     specialtyCheckTinyMce.settings.max_height = 1000;
 });
@@ -83,9 +83,13 @@ $('#select-product-category-button').click(function () {
     var selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
     getDataWithAjax('?handler=GetCategoryBrands', { categoryId: selectedCategoryId }, 'showCategoryBrands');
     getDataWithAjax('?handler=GetAddFakeProduct', { categoryId: selectedCategoryId }, 'changeIfFakeStatus');
+    getHtmlWithAJAX('?handler=ShowCategoryFeatures', { categoryId: selectedCategoryId }, 'showCategoryFeatures');
     $('#request-new-brand-url').attr('href', requestNewBrandUrl + '&categoryId=' + selectedCategoryId);
 });
 
+function showCategoryFeatures(data) {
+    $('#product-features .card-body.row').html(data);
+}
 function showCategoryBrands(data, message) {
     $('#Product_BrandId option').remove();
     $('#Product_BrandId').append('<option value="0">انتخاب کنید</option>');
@@ -107,7 +111,7 @@ function changeIfFakeStatus(data, message) {
 
 $(document).on('change',
     '#IsIranianBrand',
-    function() {
+    function () {
         var textToReplace = this.checked ? 'ایرانی' : 'خارجی';
         $(this).parents('.form-switch').find('label').html(textToReplace);
     });
