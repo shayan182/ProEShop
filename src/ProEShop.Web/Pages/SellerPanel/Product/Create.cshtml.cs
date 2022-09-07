@@ -44,8 +44,12 @@ public class CreateModel : SellerPanelBase
     public void OnGet()
     {
     }
-    public void OnPost()
+    public IActionResult OnPost(AddProductViewModel model)
     {
+        return Json(new JsonResultOperation(true, "message")
+        {
+            Data = "nothing"
+        });
     }
     public async Task<IActionResult> OnGetGetCategories(long[] selectedCategoriesIds)
     {

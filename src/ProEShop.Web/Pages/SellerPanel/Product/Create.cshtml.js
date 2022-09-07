@@ -10,6 +10,9 @@ $(function () {
     specialtyCheckTinyMce.settings.max_height = 1000;
 });
 
+function createProductFunction(message, data) {
+    console.log(data);
+}
 
 var selectedCategoriesIds = [];
 
