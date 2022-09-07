@@ -44,7 +44,9 @@ public class CreateModel : SellerPanelBase
     public void OnGet()
     {
     }
-
+    public void OnPost()
+    {
+    }
     public async Task<IActionResult> OnGetGetCategories(long[] selectedCategoriesIds)
     {
         var result = await _categoryService.GetCategoriesForCreateProduct(selectedCategoriesIds);

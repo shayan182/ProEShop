@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
 
 namespace ProEShop.ViewModels.Product;
@@ -38,4 +40,8 @@ public class AddProductViewModel
 
     [Display(Name = "بررسی تخصصی")]
     public string? SpecialtyCheck { get; set; }
+
+    [Display(Name = "تصاویر محصول")]
+    [IsImage(multiplePictures:true)] 
+    public List<IFormFile>? Pictures { get; set; }
 }

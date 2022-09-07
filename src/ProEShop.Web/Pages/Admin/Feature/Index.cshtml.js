@@ -18,3 +18,9 @@
     });
 });
 
+function customAjaxFormFunction()
+{
+    $('#Title').val('');
+    $('#Title').focus();
+}
+

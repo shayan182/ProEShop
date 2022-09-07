@@ -102,7 +102,6 @@ function enablingTooltips() {
 
 
 function showErrorMessage(message) {
-    debugger 
     showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
 }
 
@@ -253,8 +252,15 @@ if (jQuery.validator) {
 
     // fileRequired
     jQuery.validator.addMethod("fileRequired", function (value, element, param) {
-        if (element.files[0] != null)
-            return element.files[0].size > 0;
+        var filesLength = element.files.length;
+        if (filesLength > 0) {
+            for (var i = 0; i < filesLength; i++) {
+                if (element.files[0].size === 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
         return false;
     });
     jQuery.validator.unobtrusive.adapters.addBool("fileRequired");
@@ -271,13 +277,15 @@ if (jQuery.validator) {
 
     // isImage
     jQuery.validator.addMethod('isImage', function (value, element, param) {
-        var selectedFile = element.files[0];
-        if (selectedFile === undefined) {
+        var selectedFiles = element.files;
+        if (selectedFiles[0] === undefined) {
             return true;
         }
         var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
-        if (!whiteListExtensions.includes(selectedFile.type)) {
-            return false;
+        for (var counter = 0; counter < selectedFiles.length; counter++) {
+            if (!whiteListExtensions.includes(selectedFiles[counter].type)) {
+                return false;
+            }
         }
         var currentElementId = $(element).attr('id');
         var currentForm = $(element).parents('form');
@@ -286,17 +294,21 @@ if (jQuery.validator) {
             removeItemInArray(imageInputsWithProblems, currentElementId);
             return false;
         }
-
-        if ($('#image-preview-box-temp').length === 0) {
-            $('body').append('<img class="d-none" id="image-preview-box-temp" />');
+        
+        $('[id^="image-preview-box-temp"]').remove();
+        for (var i = 0; i < selectedFiles.length; i++) {
+            $('body').append(`<img class="d-none" id="image-preview-box-temp-${i}" />`);
         }
-        $('#image-preview-box-temp').attr('src', URL.createObjectURL(selectedFile));
-        $('#image-preview-box-temp').off('error');
-        $('#image-preview-box-temp').on('error',
-            function () {
-                imageInputsWithProblems.push(currentElementId);
-                currentForm.validate().element(`#${currentElementId}`);
-            });
+
+        for (var j = 0; j < selectedFiles.length; j++) {
+            $(`#image-preview-box-temp-${j}`).attr('src', URL.createObjectURL(selectedFiles[j]));
+            $(`#image-preview-box-temp-${j}`).off('error');
+            $(`#image-preview-box-temp-${j}`).on('error',
+                function () {
+                    imageInputsWithProblems.push(currentElementId);
+                    currentForm.validate().element(`#${currentElementId}`);
+                });
+        }
         return true;
     });
     jQuery.validator.unobtrusive.adapters.addBool('isImage');
@@ -493,6 +505,7 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
     var currentForm = $(this);
     var formAction = currentForm.attr('action');
     var closeWhenDone = $(this).attr('close-when-done');
+    var callFunctionInTheEnd = $(this).attr('call-function-in-the-end');
     var formData = new FormData(this);
     $.ajax({
         url: formAction,
@@ -514,6 +527,9 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
             }
             else {
                 fillDataTable();
+                if (callFunctionInTheEnd) {
+                    customAjaxFormFunction(data);
+                }
                 if (closeWhenDone !== 'false') {
                     $('#form-modal-place').modal('hide');
                 }
@@ -530,25 +546,33 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
     });
 });
 
-$('form input').blur(function () {
+//$('form input').blur(function () {
+//    $(this).parents('form').valid();
+//});
+
+//$('form select').change(function () {
+//    $(this).parents('form').valid();
+//});
+//$('form input.custom-md-persian-datepicker').change(function () {
+//    $(this).parents('form').valid();
+//});
+//$('form input[type="file"]').change(function () {
+
+//    $(this).parents('form').valid();
+//});
+//$('form input[type="checkbox"] ').change(function () {
+
+//    $(this).parents('form').valid();
+//});
+
+// کد های پایین را جایگزین با بالایی ها کردیم
+$(document).on('blur', 'form input', function () {
     $(this).parents('form').valid();
 });
 
-$('form select').change(function () {
+$(document).on('change', 'form input.custom-md-persian-datepicker, form select, form input[type="checkbox"], form input[type="file"]', function () {
     $(this).parents('form').valid();
 });
-$('form input.custom-md-persian-datepicker').change(function () {
-    $(this).parents('form').valid();
-});
-$('form input[type="file"]').change(function () {
-
-    $(this).parents('form').valid();
-});
-$('form input[type="checkbox"] ').change(function () {
-
-    $(this).parents('form').valid();
-});
-
 
 $(document).on('submit', 'form.public-ajax-form', function (e) {
     e.preventDefault();
@@ -612,11 +636,11 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
     //show loading disabled button
     currentForm.find('.search-form-submit-button').attr('disabled', 'disabled')
     currentForm.find('.search-form-submit-button span').removeClass('d-none');
-     
+
     $('.data-table-loading').removeClass('d-none');
     $('.data-table-body').html(''); // not working :(
 
-     
+
     $('[data-bs-toggle="tooltip"], .tooltip').tooltip("hide");
     $('#record-not-found-box').remove();
 
@@ -711,7 +735,6 @@ function getHtmlWithAJAX(url, formData, functionNameToCallInTheEnd, clickedButto
             hideLoading();
         },
         error: function () {
-            debugger 
             showErrorMessage();
         }
     });
@@ -723,7 +746,7 @@ function activatingInputAttributes() {
 }
 
 //show preview in under the input (Create Seller Page)
-$('.image-preivew-input').change(function () {
+$('.image-preview-input').change(function () {
     var selectedFile = this.files[0];
     var imgPreviewBox = $(this).attr('image-preview-box');
     if (selectedFile && selectedFile.size > 0) {
@@ -736,6 +759,21 @@ $('.image-preivew-input').change(function () {
     }
 });
 
+// نمایش پیش نمایش عکس برای حالت چند عکسی
+$('.multiple-images-preview-input').change(function () {
+    var selectedFiles = this.files;
+    var imagesPreviewBox = $(this).attr('images-preview-box');
+    if (selectedFiles && selectedFiles.length > 0) {
+        $(`#${imagesPreviewBox}`).html('');
+        $(`#${imagesPreviewBox}`).removeClass('d-none');
+        for (var i = 0; i < selectedFiles.length; i++) {
+            $(`#${imagesPreviewBox}`).append('<div class="my-2"><img width="100" src="" /></div>');
+            $(`#${imagesPreviewBox} img:last`).attr('src', URL.createObjectURL(selectedFiles[i]));
+        }
+    } else {
+        $(`#${imagesPreviewBox}`).addClass('d-none');
+    }
+});
 $(function () {
     activatingInputAttributes();
     initializeSelect2WithoutModal();

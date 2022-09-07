@@ -7,6 +7,7 @@ namespace ProEShop.Common.Attributes;
 
 public class IsImageAttribute : BaseValidationAttribute, IClientModelValidator
 {
+    private readonly bool _multiplePictures;
     private readonly string[] _allowExtensions = new[]
     {
             "image/png",
@@ -15,9 +16,11 @@ public class IsImageAttribute : BaseValidationAttribute, IClientModelValidator
             "image/gif"
         };
 
-    public IsImageAttribute()
+    public IsImageAttribute(bool multiplePictures = false)
     {
         ErrorMessage = "{0} حتما باید عکس باشد";
+        _multiplePictures = multiplePictures;
+        _multiplePictures = multiplePictures;
     }
 
     protected override ValidationResult IsValid(
@@ -26,22 +29,41 @@ public class IsImageAttribute : BaseValidationAttribute, IClientModelValidator
         var displayName = validationContext.DisplayName;
         ErrorMessage = ErrorMessage.Replace("{0}", displayName);
 
-        var file = value as IFormFile;
-        if (file != null && file.Length > 0)
+        //می توان با این کد بفهمیم آیا چند تایی هست یا خیر
+        //if it has a list (IsGenericType) use plural verb
+        //if (validationContext.ObjectType.GetProperty(validationContext.MemberName).PropertyType.IsGenericType)
+        //{
+        //    ErrorMessage = ErrorMessage.Replace("باشد", "باشند");
+        //}
+
+        if (_multiplePictures)
         {
-            if (!_allowExtensions.Contains(file.ContentType))
+            ErrorMessage = ErrorMessage.Replace("باشد", "باشند");
+        }
+
+        var files = value as List<IFormFile>;
+        if (files != null && files.Count > 0)
+        {
+            foreach (var file in files)
             {
-                return new ValidationResult(ErrorMessage);
-            }
-            try
-            {
-                var img = Image.FromStream(file.OpenReadStream());
-                if (img.Width <= 0)
+                if (file == null || file.Length == 0)
+                {
                     return new ValidationResult(ErrorMessage);
-            }
-            catch
-            {
-                return new ValidationResult(ErrorMessage);
+                }
+                if (!_allowExtensions.Contains(file.ContentType))
+                {
+                    return new ValidationResult(ErrorMessage);
+                }
+                try
+                {
+                    var img = Image.FromStream(file.OpenReadStream());
+                    if (img.Width <= 0)
+                        return new ValidationResult(ErrorMessage);
+                }
+                catch
+                {
+                    return new ValidationResult(ErrorMessage);
+                } 
             }
         }
         return ValidationResult.Success;
@@ -56,6 +78,17 @@ public class IsImageAttribute : BaseValidationAttribute, IClientModelValidator
             .FirstOrDefault()?.Name;
         ErrorMessage = ErrorMessage.Replace("{0}", displayName);
 
+        //if it has a list (IsGenericType) use plural verb
+        //if (context.ModelMetadata.ContainerMetadata
+        //    .ModelType.GetProperty(context.ModelMetadata.PropertyName).PropertyType.IsGenericType)
+        //{
+        //    ErrorMessage = ErrorMessage.Replace("باشد", "باشند");
+        //}
+
+        if (_multiplePictures)
+        {
+            ErrorMessage = ErrorMessage.Replace("باشد", "باشند");
+        }
         MergeAttribute(context.Attributes, "data-val", "true");
         MergeAttribute(context.Attributes, "data-val-isImage", ErrorMessage);
         MergeAttribute(context.Attributes, "data-val-whitelistextensions",
