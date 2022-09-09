@@ -23,4 +23,5 @@ function customAjaxFormFunction()
     $('#Title').val('');
     $('#Title').focus();
 }
+function onAutocompleteSelect(event, ui) {}
 

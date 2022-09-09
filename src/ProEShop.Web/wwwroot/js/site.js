@@ -634,11 +634,12 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
     }
     const formData = currentForm.serializeArray();
     //show loading disabled button
-    currentForm.find('.search-form-submit-button').attr('disabled', 'disabled')
+    currentForm.find('.search-form-submit-button').attr('disabled', 'disabled');
     currentForm.find('.search-form-submit-button span').removeClass('d-none');
 
     $('.data-table-loading').removeClass('d-none');
-    $('.data-table-body').html(''); // not working :(
+    $('.data-table-body').html(''); 
+    $('#RecordNotFound').html(''); // my code
 
 
     $('[data-bs-toggle="tooltip"], .tooltip').tooltip("hide");
