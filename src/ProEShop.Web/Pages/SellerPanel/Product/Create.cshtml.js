@@ -84,32 +84,44 @@ var requestNewBrandUrl = $('#request-new-brand-url').attr('href');
 
 $('#select-product-category-button').click(function () {
     var selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
-    getDataWithAjax('?handler=GetCategoryBrands', { categoryId: selectedCategoryId }, 'showCategoryBrands');
-    getDataWithAjax('?handler=GetAddFakeProduct', { categoryId: selectedCategoryId }, 'changeIfFakeStatus');
-    getHtmlWithAJAX('?handler=ShowCategoryFeatures', { categoryId: selectedCategoryId }, 'showCategoryFeatures');
+    // we use one request for multiple query
+    getDataWithAjax('?handler=GetCategoryInfo', { categoryId: selectedCategoryId }, 'categoryInfo');
+
+    //getDataWithAjax('?handler=GetCategoryBrands', { categoryId: selectedCategoryId }, 'showCategoryBrands');
+    //getDataWithAjax('?handler=GetAddFakeProduct', { categoryId: selectedCategoryId }, 'changeIfFakeStatus');
+    //getHtmlWithAJAX('?handler=ShowCategoryFeatures', { categoryId: selectedCategoryId }, 'showCategoryFeatures');
     $('#request-new-brand-url').attr('href', requestNewBrandUrl + '&categoryId=' + selectedCategoryId);
 });
 
-function showCategoryFeatures(data) {
-    $('#product-features .card-body.row').html(data);
-}
-function showCategoryBrands(data, message) {
+function categoryInfo(data, message) {
+    // showCategoryBrands
     $('#Product_BrandId option').remove();
     $('#Product_BrandId').append('<option value="0">انتخاب کنید</option>');
-    for (brandId in data) {
-        $('#Product_BrandId').append(`<option value="${brandId}">${data[brandId]}</option>`);
+    for (brandId in data.brands) {
+        $('#Product_BrandId').append(`<option value="${brandId}">${data.brands[brandId]}</option>`);
     }
     $('#add-product-tab button[data-bs-target="#product-info"]').tab('show');
-}
 
-function changeIfFakeStatus(data, message) {
-    if (data === false) {
+    // End showCategoryBrands
+
+    // changeIsFakeStatus
+
+    if (data.canAddFakeProduct === false) {
         $('#Product_IsFake').attr('disabled', 'disabled');
-        $('#Product_IsFake').prop('checked', false); // turn off checkbox 
+        $('#Product_IsFake').prop('checked', false);
     }
     else {
         $('#Product_IsFake').removeAttr('disabled');
     }
+
+    // End changeIsFakeStatus
+
+    // showCategoryFeatures
+
+    $('#product-features .card-body.row').html(data.categoryFeatures);
+
+    // End showCategoryFeatures
+
 }
 
 $(document).on('change',

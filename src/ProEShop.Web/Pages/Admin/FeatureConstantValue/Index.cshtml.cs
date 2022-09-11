@@ -113,4 +113,6 @@ public class IndexModel : PageBase
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "مقدار ثابت ویژگی با موفقیت اضافه شد"));
     }
+
+   
 }
