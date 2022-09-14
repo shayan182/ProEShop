@@ -267,9 +267,17 @@ if (jQuery.validator) {
 
     // allowExtensions
     jQuery.validator.addMethod('allowExtensions', function (value, element, param) {
-        if (element.files[0] != null) {
-            var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
-            return whiteListExtensions.includes(element.files[0].type);
+        var selectedFiles = element.files;
+        if (selectedFiles[0] === undefined) {
+            return true;
+        }
+        var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
+        for (var counter = 0; counter < selectedFiles.length; counter++) {
+            var currentFile = selectedFiles[counter];
+            if (currentFile != null) {
+                if (!whiteListExtensions.includes(currentFile.type))
+                    return false;
+            }
         }
         return true;
     });
@@ -315,11 +323,20 @@ if (jQuery.validator) {
 
     // maxFileSize
     jQuery.validator.addMethod('maxFileSize', function (value, element, param) {
-        if (element.files[0] != null) {
-            var maxFileSize = $(element).data('val-maxsize');
-            var selectedFileSize = element.files[0].size;
-            return maxFileSize >= selectedFileSize;
+        var selectedFiles = element.files;
+        if (selectedFiles[0] === undefined) {
+            return true;
         }
+        var maxFileSize = $(element).data('val-maxsize');
+        for (var counter = 0; counter < selectedFiles.length; counter++) {
+            var currentFile = selectedFiles[counter];
+            if (currentFile != null) {
+                var currentFileSize = currentFile.size;
+                if (currentFileSize > maxFileSize)
+                    return false;
+            }
+        }
+        
         return true;
     });
     jQuery.validator.unobtrusive.adapters.addBool('maxFileSize');
@@ -411,6 +428,7 @@ function activationModalForm() {
         var urlToLoadTheForm = $(this).attr('href');
 
         var customTitle = $(this).attr('custom-Title');
+        var functionNameToCallInTheEnd = $(this).attr('functionNameToCallInTheEnd');
         if (customTitle == undefined) {
             customTitle = $(this).text().trim();
         }
@@ -427,12 +445,12 @@ function activationModalForm() {
                 initializeSelect2();
                 initializingAutocomplete();
                 activatingInputAttributes();
-                if (typeof actionsAfterLoadModalForm === 'function') {
-                    actionsAfterLoadModalForm();
+                $.validator.unobtrusive.parse($('#form-modal-place form'));
+                if (typeof window[functionNameToCallInTheEnd] === 'function') {
+                    window[functionNameToCallInTheEnd](data);
                     //این یک فانکشن هست برای کد های اختصاصی و این فقط وقتی اجرا میشه که
                     //این رو خودتون بنویسید داخل فایل جاوااسکریپت اون صفحه
                 }
-                $.validator.unobtrusive.parse($('#form-modal-place form'));
                 $('#form-modal-place').modal('show');
             }
         }).fail(function () {
