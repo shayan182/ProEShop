@@ -2,9 +2,18 @@
     getHtmlWithAJAX(`${location.pathname}?handler=GetCategories`, null, 'showCategories', null);
 }
 $(function () {
+    // Disable all tabs except first
+    $('#add-product-tab button:not(:first)').attr('disabled', 'disabled');
+    $('#add-product-tab button:not(:first)').addClass('not-allowed-cursor');
+
+    //go-to-next-tab button
+    $(document).on('click', '.go-to-next-tab', function () {
+        var nextTabId = $(this).parents('.tab-pane').next().attr('id');
+        $(`#add-product-tab button[data-bs-target="#${nextTabId}"]`).tab('show');
+    });
+
     getCategories();
     activationModalForm();
-
 
     var specialtyCheckTinyMce = tinymce.get('Product_SpecialtyCheck');
     specialtyCheckTinyMce.settings.max_height = 1000;
@@ -82,16 +91,30 @@ function showCategories(data) {
 
 var requestNewBrandUrl = $('#request-new-brand-url').attr('href');
 
+var isCategoryAlreadySelected = false;
+var selectedCategoryId;
 $('#select-product-category-button').click(function () {
-    var selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
-    // we use one request for multiple query
-    getDataWithAjax('?handler=GetCategoryInfo', { categoryId: selectedCategoryId }, 'categoryInfo');
-
-    //getDataWithAjax('?handler=GetCategoryBrands', { categoryId: selectedCategoryId }, 'showCategoryBrands');
-    //getDataWithAjax('?handler=GetAddFakeProduct', { categoryId: selectedCategoryId }, 'changeIfFakeStatus');
-    //getHtmlWithAJAX('?handler=ShowCategoryFeatures', { categoryId: selectedCategoryId }, 'showCategoryFeatures');
-    $('#request-new-brand-url').attr('href', requestNewBrandUrl + '&categoryId=' + selectedCategoryId);
+    if (isCategoryAlreadySelected) {
+        showSweetAlert2('تغییر دسته بندی منجر به از بین رفتن تمامی اطلاعات وارد شده شما میشود، آیا مطمئن به انجام این کار هستید ؟', 'emptyAllInputsAndShowOtherTabs', 'undoSelectedCategoryButton')
+    }
+    else {
+        // first time that page loaded
+        emptyAllInputsAndShowOtherTabs();
+    }
+    isCategoryAlreadySelected = true;
 });
+
+function emptyAllInputsAndShowOtherTabs() {
+    selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
+    getDataWithAjax('?handler=GetCategoryInfo', { categoryId: selectedCategoryId }, 'categoryInfo');
+    $('#request-new-brand-url').attr('href', requestNewBrandUrl + '&categoryId=' + selectedCategoryId);
+}
+
+function undoSelectedCategoryButton() {
+    $('#product-category button').removeClass('active');
+    $(`#product-category button[category-id="${selectedCategoryId}"]`).addClass('active');
+}
+
 
 function categoryInfo(data, message) {
     // showCategoryBrands
@@ -122,6 +145,18 @@ function categoryInfo(data, message) {
 
     // End showCategoryFeatures
 
+    //we use getDataWithAjax so in this function we dont use any initialize (FeatureConstant)
+    initializeSelect2WithoutModal();
+
+    // Active all tabs and remove not-allowed-cursor
+    $('#add-product-tab button:not(:first)').removeAttr('disabled');
+    $('#add-product-tab button:not(:first)').removeClass('not-allowed-cursor');
+
+    // Clear all inputs
+    $('#create-product-form input').val('');
+    tinyMCE.get('Product_ShortDescription').setContent('');
+    tinyMCE.get('Product_SpecialtyCheck').setContent('');
+    $('#product-images-preview-box').html('');
 }
 
 $(document).on('change',

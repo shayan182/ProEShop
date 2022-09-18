@@ -63,6 +63,28 @@ function showLoading() {
 function hideLoading() {
     $('#loading-modal').modal('hide');
 }
+// Show sweet alert
+
+function showSweetAlert2(text, functionToCallAfterConfirm, functionToCallAfterReject) {
+    Swal.fire({
+        title: 'اعلان',
+        text: text,
+        icon: 'warning',
+        confirmButtonText: 'بله',
+        showDenyButton: true,
+        denyButtonText: 'خیر',
+        confirmButtonColor: '#067719',
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window[functionToCallAfterConfirm]();
+        } else {
+            window[functionToCallAfterReject]();
+        }
+    });
+}
+
+// End show sweet alert
 
 // Toastr
 

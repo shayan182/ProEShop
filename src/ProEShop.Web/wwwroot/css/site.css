@@ -71,6 +71,9 @@ a{
 .pointer-cursor {
     cursor: pointer;
 }
+.not-allowed-cursor {
+    cursor: not-allowed;
+}
 .details h5 {
     display: inline-block;
 }

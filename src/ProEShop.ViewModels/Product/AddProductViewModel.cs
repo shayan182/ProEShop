@@ -43,16 +43,22 @@ public class AddProductViewModel
 
     [Display(Name = "تصاویر محصول")]
     [FileRequired]
+    [MaxFileSize(2,multiplePictures:true)]
     [IsImage(multiplePictures:true)]
     public List<IFormFile>? Pictures { get; set; }
+
+    [Display(Name = "ویدیو محصول")]
+    [MaxFileSize(10, multiplePictures: true)]
+    [AllowExtensions(new[]{"mp4"},new[]{ "video/mp4" })]
+    public List<IFormFile>? Videos { get; set; }
 
     [Display(Name = "عنوان فارسی")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
-    public string PersianTitle { get; set; }
+    public string? PersianTitle { get; set; }
 
     [Display(Name = "عنوان انگلیسی")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
-    public string EnglishTitle { get; set; }
+    public string? EnglishTitle { get; set; }
 }

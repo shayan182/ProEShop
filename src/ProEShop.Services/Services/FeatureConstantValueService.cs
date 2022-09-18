@@ -75,6 +75,6 @@ public class FeatureConstantValueService : GenericService<FeatureConstantValue>,
     {
         return _mapper.ProjectTo<ShowCategoryFeatureConstantValueViewModel>(
             _featureConstantValues.Where(x => x.CategoryId == categoryId)
-        ).ToListAsync();
+        ).AsNoTracking().ToListAsync();
     }
 }

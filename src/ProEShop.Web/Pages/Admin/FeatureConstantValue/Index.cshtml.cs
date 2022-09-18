@@ -114,5 +114,40 @@ public class IndexModel : PageBase
         return Json(new JsonResultOperation(true, "مقدار ثابت ویژگی با موفقیت اضافه شد"));
     }
 
-   
+    public async Task<IActionResult> OnGetEdit(long id)
+    {
+        var featureConstantValue = await _featureConstantValueService.FindByIdAsync(id);
+        if (featureConstantValue == null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+
+        var categories = await _categoryService.GetCategoriesToShowInSelectBoxAsync();
+        var features = await _categoryFeatureService.GetCategoryFeatures(featureConstantValue.CategoryId);
+        var model = _mapper.Map<EditFeatureConstantValueViewModel>(featureConstantValue);
+        model.Categories = categories.CreateSelectListItem();
+        model.Features = features.CreateSelectListItem(idPropertyName: "FeatureId", titlePropertyName: "FeatureTitle");
+        return Partial("Edit", model);
+    }
+
+    public async Task<IActionResult> OnPostEdit(EditFeatureConstantValueViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = ModelState.GetModelStateErrors()
+            });
+        }
+        if (!await _categoryFeatureService.CheckCategoryFeature(model.CategoryId, model.FeatureId))
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        var featureConstantValue = await _featureConstantValueService.FindByIdAsync(model.Id);
+        if (featureConstantValue is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+        featureConstantValue = _mapper.Map(model,featureConstantValue);
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "مقدار ثابت ویژگی با موفقیت ویرایش شد"));
+
+    }
 }
