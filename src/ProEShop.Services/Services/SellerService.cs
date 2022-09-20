@@ -158,7 +158,7 @@ public class SellerService : GenericService<Seller>, ISellerService
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<long?> GetSelerId(long userId)
+    public async Task<long> GetSelerId(long userId)
     {
         var seller = await _sellers.Select(x => new
         {

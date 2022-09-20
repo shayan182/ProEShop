@@ -33,6 +33,7 @@ public class Product : EntityBase, IAuditableEntity
     public string? SpecialtyCheck { get; set; }
 
     public long BrandId { get; set; }
+    public long SellerId { get; set; }
     #endregion
     #region Relations
 
@@ -46,5 +47,6 @@ public class Product : EntityBase, IAuditableEntity
         = new List<ProductFeature>();
 
     public Brand Brand { get; set; }
+    public Seller Seller { get; set; }
     #endregion
 }

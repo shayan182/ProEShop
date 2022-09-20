@@ -8,10 +8,10 @@ using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
-using ProEShop.Services.Services;
 using ProEShop.ViewModels.Brands;
 using ProEShop.ViewModels.CategoryFeatures;
 using ProEShop.ViewModels.Product;
+using System.Text;
 
 namespace ProEShop.Web.Pages.SellerPanel.Product;
 
@@ -57,6 +57,8 @@ public class CreateModel : SellerPanelBase
     }
     public async Task<IActionResult> OnPost()
     {
+        const string NonConstantInputName = "ProductFeatureValue";
+        const string ConstantInputName = "ProductFeatureConstantValue";
         if (!ModelState.IsValid)
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
@@ -66,7 +68,7 @@ public class CreateModel : SellerPanelBase
         }
 
         var productToAdd = _mapper.Map<Entities.Product>(Product);
-
+        productToAdd.SellerId = await _sellerService.GetSelerId(User.Identity.GetLoggedInUserId());
         productToAdd.ShortDescription = _htmlSanitizer.Sanitize(Product.ShortDescription);
         productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(Product.SpecialtyCheck);
 
@@ -110,11 +112,14 @@ public class CreateModel : SellerPanelBase
             }
         }
 
+        #region NonConstantFeature
+
         var featureIds = new List<long>();
-        foreach (var item in Request.Form
-                     .Where(x => x.Key.StartsWith("ProductFeatureValue")).ToList())
+        var productFeatureValueInputs = Request.Form
+            .Where(x => x.Key.StartsWith(NonConstantInputName)).ToList();
+        foreach (var item in productFeatureValueInputs)
         {
-            if (long.TryParse(item.Key.Replace("ProductFeatureValue", String.Empty), out var featureId))
+            if (long.TryParse(item.Key.Replace(NonConstantInputName, String.Empty), out var featureId))
             {
                 featureIds.Add(featureId);
             }
@@ -124,15 +129,14 @@ public class CreateModel : SellerPanelBase
             }
         }
 
-        if (!await _categoryFeatureService.CheckCategoryFeatureCount(Product.CategoryId, featureIds))
+        if (await _featureConstantValueService.CheckNonConstantValue(Product.CategoryId, featureIds))
         {
             return Json(new JsonResultOperation(false));
         }
-        foreach (var item in Request.Form
-                     .Where(x => x.Key.StartsWith("ProductFeatureValue")).ToList())
+        foreach (var item in productFeatureValueInputs)
         {
-            
-            if (long.TryParse(item.Key.Replace("ProductFeatureValue", String.Empty), out var featureId))
+
+            if (long.TryParse(item.Key.Replace(NonConstantInputName, String.Empty), out var featureId))
             {
                 var trimmedValue = item.Value.ToString().Trim();
                 if (productToAdd.ProductFeatures.All(x => x.FeatureId != featureId))
@@ -153,6 +157,73 @@ public class CreateModel : SellerPanelBase
                 return Json(new JsonResultOperation(false));
             }
         }
+        #endregion
+
+        #region ConstantFeature
+
+        var featureConstantValueIds = new List<long>();
+        var productFeatureConstantValueInputs = Request.Form
+            .Where(x => x.Key.StartsWith(ConstantInputName)).ToList();
+        foreach (var item in productFeatureConstantValueInputs)
+        {
+            var x = item.Key.Replace(ConstantInputName, String.Empty);
+            if (long.TryParse(item.Key.Replace(ConstantInputName, String.Empty), out var featureId))
+            {
+                featureConstantValueIds.Add(featureId);
+            }
+            else
+            {
+                return Json(new JsonResultOperation(false));
+            }
+        }
+
+        //ckeck for both of the lists(nonConstant and Constant)
+        featureIds = featureIds.Concat(featureConstantValueIds).ToList();
+        if (!await _categoryFeatureService.CheckCategoryFeatureCount(Product.CategoryId, featureIds))
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        if (!await _featureConstantValueService.CheckConstantValue(Product.CategoryId, featureConstantValueIds))
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        foreach (var item in productFeatureConstantValueInputs)
+        {
+            if (long.TryParse(item.Key.Replace(ConstantInputName, string.Empty), out var featureId))
+            {
+                if (item.Value.Count > 0)
+                {
+                    var valueToAdd = new StringBuilder();
+                    foreach (var value in item.Value)
+                    {
+                        var trimmedValue = value.Trim();
+                        if (trimmedValue.Length > 0)
+                        {
+                            valueToAdd.Append(trimmedValue + "|||");
+                        }
+                    }
+                    if (productToAdd.ProductFeatures.All(x => x.FeatureId != featureId))
+                    {
+                        if (valueToAdd.ToString().Length > 0)
+                        {
+                            productToAdd.ProductFeatures.Add(new ProductFeature()
+                            {
+                                FeatureId = featureId,
+                                Value = valueToAdd.ToString().Substring(0, valueToAdd.Length - 3)
+                            });
+                            featureConstantValueIds.Add(featureId);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return Json(new JsonResultOperation(false));
+            }
+        }
+        #endregion
         await _productService.AddAsync(productToAdd);
         await _uow.SaveChangesAsync();
 
@@ -165,7 +236,7 @@ public class CreateModel : SellerPanelBase
             if (currentPicture.IsFileUploaded())
             {
                 await _uploadFileService.SaveFile(currentPicture, productPictures[counter].FileName, null,
-                    "images", "product", "images");
+                    "images", "product");
             }
         }
 
@@ -178,7 +249,7 @@ public class CreateModel : SellerPanelBase
             if (currentVideo.IsFileUploaded())
             {
                 await _uploadFileService.SaveFile(currentVideo, productVideos[counter].FileName, null,
-                    "images", "product", "videos");
+                    "videos", "product");
             }
         }
         return Json(new JsonResultOperation(true, "message")

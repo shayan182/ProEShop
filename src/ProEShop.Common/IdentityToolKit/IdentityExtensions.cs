@@ -86,4 +86,15 @@ public static class IdentityExtensions
         }
         return null;
     }
+    /// <summary>
+    /// for logged in user 
+    /// </summary>
+    /// <param name="identity"></param>
+    /// <returns></returns>
+    public static long GetLoggedInUserId(this IIdentity identity)
+    {
+        var userIdValue = identity.GetUserClaimValue(ClaimTypes.NameIdentifier);
+
+        return long.Parse(userIdValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+    }
 }

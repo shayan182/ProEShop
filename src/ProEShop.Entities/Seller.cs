@@ -120,7 +120,7 @@ public class Seller : EntityBase, IAuditableEntity
 
     public ProvinceAndCity? City { get; set; }
 
-    public ICollection<Brand>? Brands { get; set; }
+    public ICollection<Product> Products { get; set; }
     #endregion
 }
 

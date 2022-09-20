@@ -888,6 +888,9 @@ namespace ProEShop.DataLayer.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<long>("SellerId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ShortDescription")
                         .HasColumnType("ntext");
 
@@ -897,6 +900,8 @@ namespace ProEShop.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("SellerId");
 
                     b.ToTable("Products");
                 });
@@ -1271,7 +1276,7 @@ namespace ProEShop.DataLayer.Migrations
             modelBuilder.Entity("ProEShop.Entities.Brand", b =>
                 {
                     b.HasOne("ProEShop.Entities.Seller", "Seller")
-                        .WithMany("Brands")
+                        .WithMany()
                         .HasForeignKey("SellerId");
 
                     b.Navigation("Seller");
@@ -1414,7 +1419,15 @@ namespace ProEShop.DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProEShop.Entities.Seller", "Seller")
+                        .WithMany("Products")
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Brand");
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.ProductCategory", b =>
@@ -1563,7 +1576,7 @@ namespace ProEShop.DataLayer.Migrations
 
             modelBuilder.Entity("ProEShop.Entities.Seller", b =>
                 {
-                    b.Navigation("Brands");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
