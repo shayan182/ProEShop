@@ -41,7 +41,6 @@ public class Category : EntityBase, IAuditableEntity
     public Category Parent { get; set; }
 
     public ICollection<Category> Categories { get; set; }
-    public ICollection<Product> Products { get; set; }
     public ICollection<FeatureConstantValue> FeatureConstantValues { get; set; }
 
     public ICollection<CategoryFeature> CategoryFeatures { get; set; }

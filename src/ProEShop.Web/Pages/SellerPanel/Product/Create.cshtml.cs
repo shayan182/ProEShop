@@ -92,10 +92,11 @@ public class CreateModel : SellerPanelBase
                 productToAdd.ProductMedia.Add(new ProductMedia()
                 {
                     FileName = filename,
-                    IsDeleted = false
+                    IsVideo = false
                 });
             }
         }
+
         foreach (var video in Product.Videos)
         {
             if (video.IsFileUploaded())
@@ -104,8 +105,52 @@ public class CreateModel : SellerPanelBase
                 productToAdd.ProductMedia.Add(new ProductMedia()
                 {
                     FileName = filename,
-                    IsDeleted = true
+                    IsVideo = true
                 });
+            }
+        }
+
+        var featureIds = new List<long>();
+        foreach (var item in Request.Form
+                     .Where(x => x.Key.StartsWith("ProductFeatureValue")).ToList())
+        {
+            if (long.TryParse(item.Key.Replace("ProductFeatureValue", String.Empty), out var featureId))
+            {
+                featureIds.Add(featureId);
+            }
+            else
+            {
+                return Json(new JsonResultOperation(false));
+            }
+        }
+
+        if (!await _categoryFeatureService.CheckCategoryFeatureCount(Product.CategoryId, featureIds))
+        {
+            return Json(new JsonResultOperation(false));
+        }
+        foreach (var item in Request.Form
+                     .Where(x => x.Key.StartsWith("ProductFeatureValue")).ToList())
+        {
+            
+            if (long.TryParse(item.Key.Replace("ProductFeatureValue", String.Empty), out var featureId))
+            {
+                var trimmedValue = item.Value.ToString().Trim();
+                if (productToAdd.ProductFeatures.All(x => x.FeatureId != featureId))
+                {
+                    if (trimmedValue.Length > 0)
+                    {
+                        productToAdd.ProductFeatures.Add(new ProductFeature()
+                        {
+                            FeatureId = featureId,
+                            Value = trimmedValue
+                        });
+                        featureIds.Add(featureId);
+                    }
+                }
+            }
+            else
+            {
+                return Json(new JsonResultOperation(false));
             }
         }
         await _productService.AddAsync(productToAdd);

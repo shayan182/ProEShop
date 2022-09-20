@@ -41,7 +41,9 @@ public class Product : EntityBase, IAuditableEntity
 
     public ICollection<ProductCategory> ProductCategories { get; set; }
         = new List<ProductCategory>();
+
     public ICollection<ProductFeature> ProductFeatures { get; set; }
+        = new List<ProductFeature>();
 
     public Brand Brand { get; set; }
     #endregion

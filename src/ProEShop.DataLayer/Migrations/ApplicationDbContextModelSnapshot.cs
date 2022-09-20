@@ -833,9 +833,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.Property<long>("BrandId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CategoryId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("CreatedByBrowserName")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -900,8 +897,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -1419,10 +1414,6 @@ namespace ProEShop.DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProEShop.Entities.Category", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId");
-
                     b.Navigation("Brand");
                 });
 
@@ -1524,8 +1515,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.Navigation("FeatureConstantValues");
 
                     b.Navigation("ProductCategories");
-
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.Feature", b =>

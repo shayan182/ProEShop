@@ -57,7 +57,7 @@ public class AddProductViewModel
     [MaxFileSize(10, multiplePictures: true)]
     [AllowExtensions(new[] { "mp4" }, new[] { "video/mp4" })]
     public List<IFormFile>? Videos { get; set; }
-    = new List<IFormFile>();
+    = new();
 
     [Display(Name = "عنوان فارسی")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
