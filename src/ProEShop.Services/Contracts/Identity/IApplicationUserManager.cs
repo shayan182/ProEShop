@@ -120,8 +120,8 @@ public interface IApplicationUserManager : IDisposable
 
     Task<DateTime?> GetSendSmsLastTimeAsync(string phoneNumber);
     Task<bool> CheckForUserIsSeller(string phoneNumber);
-    Task<CreateSellerViewModel> GetUserInfoForCreateSeller(string phoneNumber);
-    public Task<User> GetUserForCreateSeller(string userName);
+    Task<CreateSellerViewModel?> GetUserInfoForCreateSeller(string phoneNumber);
+    public Task<User?> GetUserForCreateSeller(string userName);
 
 
     #endregion

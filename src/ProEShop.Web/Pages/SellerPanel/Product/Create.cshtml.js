@@ -106,6 +106,7 @@ $('#select-product-category-button').click(function () {
 
 function emptyAllInputsAndShowOtherTabs() {
     selectedCategoryId = $('#product-category div.list-group.col-4:last button.active').attr('category-id');
+    $('#Product_CategoryId').val(selectedCategoryId);
     getDataWithAjax('?handler=GetCategoryInfo', { categoryId: selectedCategoryId }, 'categoryInfo');
     $('#request-new-brand-url').attr('href', requestNewBrandUrl + '&categoryId=' + selectedCategoryId);
 }
@@ -153,10 +154,24 @@ function categoryInfo(data, message) {
     $('#add-product-tab button:not(:first)').removeClass('not-allowed-cursor');
 
     // Clear all inputs
-    $('#create-product-form input').val('');
+    $('#create-product-form input').not(`[name="${rvt}"], #Product_CategoryId, #Product_IsFake , [name="Product.IsFake"]`).val('');
     tinyMCE.get('Product_ShortDescription').setContent('');
     tinyMCE.get('Product_SpecialtyCheck').setContent('');
     $('#product-images-preview-box').html('');
+
+    // Test data
+    $('#Product_PackWeight').val('1');
+    $('#Product_PackLength').val('1');
+    $('#Product_PackWidth').val('1');
+    $('#Product_PackHeight').val('1');
+    $('#Product_PersianTitle').val('Product_EnglishTitle');
+    $('#Product_EnglishTitle').val('Product_EnglishTitle');
+
+    tinyMCE.get('Product_ShortDescription').setContent('Product_ShortDescription');
+    tinyMCE.get('Product_SpecialtyCheck').setContent('Product_SpecialtyCheck');
+
+    var a = $('#Product_BrandId option:last').val();
+    $('#Product_BrandId').select2('val', a);
 }
 
 $(document).on('change',

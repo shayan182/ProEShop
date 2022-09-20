@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
 
@@ -7,6 +10,9 @@ namespace ProEShop.ViewModels.Product;
 
 public class AddProductViewModel
 {
+    [HiddenInput]
+    public long CategoryId { get; set; }
+
     [Display(Name = "برند محصول")]
     [Range(1,long.MaxValue,ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     public long BrandId { get; set; }
@@ -49,8 +55,9 @@ public class AddProductViewModel
 
     [Display(Name = "ویدیو محصول")]
     [MaxFileSize(10, multiplePictures: true)]
-    [AllowExtensions(new[]{"mp4"},new[]{ "video/mp4" })]
+    [AllowExtensions(new[] { "mp4" }, new[] { "video/mp4" })]
     public List<IFormFile>? Videos { get; set; }
+    = new List<IFormFile>();
 
     [Display(Name = "عنوان فارسی")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
@@ -58,7 +65,6 @@ public class AddProductViewModel
     public string? PersianTitle { get; set; }
 
     [Display(Name = "عنوان انگلیسی")]
-    [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
     public string? EnglishTitle { get; set; }
 }

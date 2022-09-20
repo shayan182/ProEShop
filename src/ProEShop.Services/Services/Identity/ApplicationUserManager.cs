@@ -54,7 +54,7 @@ public class ApplicationUserManager :
             .AnyAsync(x => x.IsSeller == true);
     }
 
-    public async Task<CreateSellerViewModel> GetUserInfoForCreateSeller(string phoneNumber)
+    public async Task<CreateSellerViewModel?> GetUserInfoForCreateSeller(string phoneNumber)
     {
         var result = await _mapper.ProjectTo<CreateSellerViewModel>(_users)
             .SingleOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
@@ -66,7 +66,7 @@ public class ApplicationUserManager :
         }
         return result;
     }
-    public async Task<User> GetUserForCreateSeller(string userName)
+    public async Task<User?> GetUserForCreateSeller(string userName)
     {
         return await _users.Where(x => x.IsSeller == true )
             .Where(x => x.UserRoles.All(r => r.Role.Name != ConstantRoles.Seller))

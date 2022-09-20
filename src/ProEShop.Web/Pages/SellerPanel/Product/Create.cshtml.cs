@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
@@ -27,10 +28,12 @@ public class CreateModel : SellerPanelBase
     private readonly ICategoryFeatureService _categoryFeatureService;
     private readonly IViewRendererService _viewRendererService;
     private readonly IFeatureConstantValueService _featureConstantValueService;
+    private readonly IHtmlSanitizer _htmlSanitizer;
+    private readonly IProductService _productService;
 
     public CreateModel(
         ICategoryService categoryService,
-        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService, ICategoryFeatureService categoryFeatureService, IFeatureConstantValueService featureConstantValueService, IViewRendererService viewRendererService)
+        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService, ICategoryFeatureService categoryFeatureService, IFeatureConstantValueService featureConstantValueService, IViewRendererService viewRendererService, IHtmlSanitizer htmlSanitizer, IProductService productService)
     {
         _categoryService = categoryService;
         _mapper = mapper;
@@ -41,16 +44,98 @@ public class CreateModel : SellerPanelBase
         _categoryFeatureService = categoryFeatureService;
         _featureConstantValueService = featureConstantValueService;
         _viewRendererService = viewRendererService;
+        _htmlSanitizer = htmlSanitizer;
+        _productService = productService;
     }
 
     #endregion
 
+    [BindProperty]
     public AddProductViewModel Product { get; set; }
     public void OnGet()
     {
     }
-    public IActionResult OnPost(AddProductViewModel model)
+    public async Task<IActionResult> OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
+            {
+                Data = ModelState.GetModelStateErrors()
+            });
+        }
+
+        var productToAdd = _mapper.Map<Entities.Product>(Product);
+
+        productToAdd.ShortDescription = _htmlSanitizer.Sanitize(Product.ShortDescription);
+        productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(Product.SpecialtyCheck);
+
+        var CategoriesToAdd = await _categoryService.GetCategoryParentIds(Product.CategoryId);
+        if (!CategoriesToAdd.IsSuccessful)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        foreach (var categoryId in CategoriesToAdd.categoryIds)
+        {
+            productToAdd.ProductCategories.Add(new ProductCategory()
+            {
+                CategoryId = categoryId
+            });
+        }
+
+        foreach (var picture in Product.Pictures)
+        {
+            if (picture.IsFileUploaded())
+            {
+                var filename = picture.GenerateFileName();
+                productToAdd.ProductMedia.Add(new ProductMedia()
+                {
+                    FileName = filename,
+                    IsDeleted = false
+                });
+            }
+        }
+        foreach (var video in Product.Videos)
+        {
+            if (video.IsFileUploaded())
+            {
+                var filename = video.GenerateFileName();
+                productToAdd.ProductMedia.Add(new ProductMedia()
+                {
+                    FileName = filename,
+                    IsDeleted = true
+                });
+            }
+        }
+        await _productService.AddAsync(productToAdd);
+        await _uow.SaveChangesAsync();
+
+        var productPictures = productToAdd.ProductMedia
+            .Where(x => !x.IsVideo)
+            .ToList();
+        for (var counter = 0; counter < productPictures.Count; counter++)
+        {
+            var currentPicture = Product.Pictures[counter];
+            if (currentPicture.IsFileUploaded())
+            {
+                await _uploadFileService.SaveFile(currentPicture, productPictures[counter].FileName, null,
+                    "images", "product", "images");
+            }
+        }
+
+        var productVideos = productToAdd.ProductMedia
+            .Where(x => x.IsVideo)
+            .ToList();
+        for (var counter = 0; counter < productVideos.Count; counter++)
+        {
+            var currentVideo = Product.Videos[counter];
+            if (currentVideo.IsFileUploaded())
+            {
+                await _uploadFileService.SaveFile(currentVideo, productVideos[counter].FileName, null,
+                    "images", "product", "videos");
+            }
+        }
         return Json(new JsonResultOperation(true, "message")
         {
             Data = "nothing"

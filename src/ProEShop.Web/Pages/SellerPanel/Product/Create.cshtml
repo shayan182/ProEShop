@@ -12,6 +12,7 @@
     </div>
     <div class="card-body">
         <form method="post" id="create-product-form" class="public-ajax-form" functionNameToCallInTheEnd="createProductFunction">
+            <input asp-for="Product.CategoryId"/>
             <div asp-validation-summary="All" class="text-danger"></div>
             <nav>
                 <div class="nav nav-tabs nav-fill" id="add-product-tab">
@@ -60,7 +61,7 @@
                             <div class="card-body row">
                                 <div class="my-2 col-md-6 col-lg-4">
                                     <br />
-                                    <input class="form-check-input" asp-for="Product.IsFake">
+                                    <input class="form-check-input" asp-for="Product.IsFake" type="checkbox">
                                     <label class="form-check-label" asp-for="Product.IsFake">
                                         نشان کالای غیر اصل
                                         (
@@ -183,12 +184,12 @@
                                     <input asp-for="Product.EnglishTitle" class="form-control" />
                                     <span asp-validation-for="Product.EnglishTitle" class="span-error-message"></span>
                                 </div>
+                                <button class="btn btn-primary" >ایجاد محصول</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </nav>
-
         </form>
     </div>
 </div>

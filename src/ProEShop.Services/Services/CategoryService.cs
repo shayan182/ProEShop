@@ -184,4 +184,37 @@ public class CategoryService : GenericService<Category>, ICategoryService
             }).SingleOrDefaultAsync(x => x.Id == categoryId);
         return category?.CanAddFakeProduct ?? false;
     }
+
+    public async Task<(bool IsSuccessful, List<long> categoryIds)> GetCategoryParentIds(long categoryId)
+    {
+        if (!await IsExistsBy(nameof(Category.Id), categoryId))
+        {
+            return (false, new List<long>());
+        }
+
+        if (await _categories.AnyAsync(x => x.ParentId == categoryId))
+        {
+            return (false, new List<long>());
+        }
+
+        var result = new List<long>() { categoryId};
+        var currentCategoryId = categoryId;
+        while (true)
+        {
+            var categoryToAdd = await _categories
+                .Select(x => new
+                {
+                    x.Id,
+                    x.ParentId
+                }).SingleOrDefaultAsync(x => x.Id == currentCategoryId);
+            if (categoryToAdd.ParentId == null)
+            {
+                break;
+            }
+
+            currentCategoryId = categoryToAdd.ParentId.Value;
+            result.Add(categoryToAdd.ParentId.Value);
+        }
+        return (true, result);
+    }
 }

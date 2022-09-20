@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common;
 using ProEShop.Common.Constants;
@@ -21,16 +22,20 @@ public class IndexModel : PageBase
     private readonly IUploadFileService _uploadFileService;
     private readonly IBrandService _brandServices;
     private readonly IMapper _mapper;
+    private readonly IHtmlSanitizer _htmlSanitizer;
 
     public IndexModel(ICategoryService categoryService,
         IUnitOfWork uow, IUploadFileService uploadFileService,
-        IBrandService brandServices, IMapper mapper)
+        IBrandService brandServices,
+        IMapper mapper,
+        IHtmlSanitizer htmlSanitizer)
     {
         _categoryService = categoryService;
         _uploadFileService = uploadFileService;
         _brandServices = brandServices;
         _mapper = mapper;
         _uow = uow;
+        _htmlSanitizer = htmlSanitizer;
     }
 
     #endregion
@@ -88,11 +93,12 @@ public class IndexModel : PageBase
         }
          
         var category = _mapper.Map<Entities .Category>(model);
+        category.Description  = _htmlSanitizer.Sanitize(model.Description);
         if (model.ParentId is 0)   
             category.ParentId = null;
         category.Picture = pictureFileName;    
 
-            var result = await _categoryService.AddAsync(category);
+        var result = await _categoryService.AddAsync(category);
         if (!result.Ok)
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
