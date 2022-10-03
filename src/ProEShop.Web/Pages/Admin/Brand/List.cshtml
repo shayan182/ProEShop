@@ -1,7 +1,7 @@
 ﻿@using ProEShop.Common.Helpers
 @using ProEShop.Entities
 @model ProEShop.ViewModels.Brands.ShowBrandsViewModel
-@if (Model.Brands.Any())
+@if (Model.Brands.Count > 0)
 {
     <div class="table-responsive data-table-body">
         <table class="table table-bordered table-striped table-hover">

@@ -29,6 +29,8 @@
     <None Include="Pages\Admin\Brand\List.cshtml" />
     <None Include="Pages\Admin\FeatureConstantValue\Index.cshtml" />
     <None Include="Pages\Admin\FeatureConstantValue\List.cshtml" />
+    <None Include="Pages\Admin\Product\Index.cshtml" />
+    <None Include="Pages\Admin\Product\List.cshtml" />
     <None Include="Pages\Admin\Seller\Index.cshtml" />
     <None Include="Pages\Admin\Seller\List.cshtml" />
     <None Include="Pages\SellerPanel\Product\Create.cshtml" />

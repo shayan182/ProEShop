@@ -68,6 +68,7 @@ public class CreateModel : SellerPanelBase
         }
 
         var productToAdd = _mapper.Map<Entities.Product>(Product);
+        productToAdd.Slug = Product.EnglishTitle.Replace(" ", "-");
         productToAdd.SellerId = await _sellerService.GetSelerId(User.Identity.GetLoggedInUserId());
         productToAdd.ShortDescription = _htmlSanitizer.Sanitize(Product.ShortDescription);
         productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(Product.SpecialtyCheck);
@@ -148,7 +149,6 @@ public class CreateModel : SellerPanelBase
                             FeatureId = featureId,
                             Value = trimmedValue
                         });
-                        featureIds.Add(featureId);
                     }
                 }
             }
@@ -189,6 +189,8 @@ public class CreateModel : SellerPanelBase
             return Json(new JsonResultOperation(false));
         }
 
+        var featureConstantValues =
+            await _featureConstantValueService.GetFeatureConstantValuesForCreateProduct(Product.CategoryId);
         foreach (var item in productFeatureConstantValueInputs)
         {
             if (long.TryParse(item.Key.Replace(ConstantInputName, string.Empty), out var featureId))
@@ -199,7 +201,9 @@ public class CreateModel : SellerPanelBase
                     foreach (var value in item.Value)
                     {
                         var trimmedValue = value.Trim();
-                        if (trimmedValue.Length > 0)
+                        if (featureConstantValues
+                            .Where(x=>x.FeatureId==featureId)
+                            .Any(x=>x.Value == trimmedValue))
                         {
                             valueToAdd.Append(trimmedValue + "|||");
                         }
@@ -208,12 +212,14 @@ public class CreateModel : SellerPanelBase
                     {
                         if (valueToAdd.ToString().Length > 0)
                         {
-                            productToAdd.ProductFeatures.Add(new ProductFeature()
+                            // both of these code is same 
+                            //var a = valueToAdd.ToString()[..(valueToAdd.Length - 3)];
+                            //var b = valueToAdd.ToString().Substring(0, valueToAdd.Length - 3);
+                            productToAdd.ProductFeatures.Add(new()
                             {
                                 FeatureId = featureId,
-                                Value = valueToAdd.ToString().Substring(0, valueToAdd.Length - 3)
+                                Value = valueToAdd.ToString()[..(valueToAdd.Length - 3)]
                             });
-                            featureConstantValueIds.Add(featureId);
                         }
                     }
                 }
@@ -252,10 +258,15 @@ public class CreateModel : SellerPanelBase
                     "videos", "product");
             }
         }
-        return Json(new JsonResultOperation(true, "message")
+        return Json(new JsonResultOperation(true, "محصول مورد نظر با موفقیت ایجاد شد.")
         {
-            Data = "nothing"
+            Data = Url.Page(nameof(Successful))
         });
+    }
+
+    public void Successful()
+    {
+
     }
     public async Task<IActionResult> OnGetGetCategories(long[] selectedCategoriesIds)
     {

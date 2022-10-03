@@ -94,4 +94,11 @@ public class FeatureConstantValueService : GenericService<FeatureConstantValue>,
             .CountAsync(x => featureConstantValueIds.Contains(x.Key));
         return featuresCount == featureConstantValueIds.Count;
     }
+
+    public Task<List<FeatureConstantValueForCreateProductViewModel>> GetFeatureConstantValuesForCreateProduct(long categoryId)
+    {
+        return _mapper.ProjectTo<FeatureConstantValueForCreateProductViewModel>(
+                _featureConstantValues.Where(x => x.CategoryId == categoryId))
+            .ToListAsync();
+    }
 }
