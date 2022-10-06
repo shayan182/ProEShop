@@ -10,4 +10,5 @@ public interface ISellerService : IGenericService<Seller>
     Task<SellerDetailsViewModel?> GetSellerDetails(long id);
     Task<Seller?> GetSellerToRemoveInManagingSeller(long id);
     Task<long> GetSelerId(long userId);
+    Task<List<string?>> GetShopNamesForAutocomplete(string input);
 }

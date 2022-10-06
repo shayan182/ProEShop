@@ -1,6 +1,6 @@
 ﻿//__RequestVerificationToken
-var rvt = '__RequestVerificationToken';
-var htmlModalPlace = `<div class="modal fade" id="html-modal-place" data-bs-backdrop="static">
+let rvt = '__RequestVerificationToken';
+let htmlModalPlace = `<div class="modal fade" id="html-modal-place" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -21,7 +21,7 @@ function appendHtmlModalPlaceToBody() {
     }
 }
 
-var formModalPlace = `<div class="modal fade" id="form-modal-place" data-bs-backdrop="static">
+let formModalPlace = `<div class="modal fade" id="form-modal-place" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -42,7 +42,7 @@ function appendFormModalPlaceToBody() {
     }
 }
 
-var loadingModalHtml = `<div class="modal" id="loading-modal" data-bs-backdrop="static">
+let loadingModalHtml = `<div class="modal" id="loading-modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -113,11 +113,11 @@ function showToastr(status, message) {
 
 // Enable tooltips
 function enablingTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     //$('[data-toggle="tooltip"]').tooltip({
     //    trigger: 'hover'
     //});
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
@@ -142,7 +142,7 @@ function showErrorMessage(message) {
 
 // Send `TinyMCE` images to server with specific url
 function sendTinyMceImagesToServer(blobInfo, success, failure, progress, url) {
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append('file', blobInfo.blob(), blobInfo.filename());
     formData.append(rvt, $('textarea.custom-tinymce:first').parents('form').find('input[name="' + rvt + '"]').val());
     $.ajax({
@@ -169,13 +169,13 @@ function sendTinyMceImagesToServer(blobInfo, success, failure, progress, url) {
 
 function initializeTinyMCE() {
     $("textarea.custom-tinymce").each(function () {
-        var textareaId = `#${$(this).attr('id')}`;
+        let textareaId = `#${$(this).attr('id')}`;
         tinymce.remove(textareaId);
         tinymce.init({
             selector: textareaId,
             setup: function (editor) {
                 editor.on('blur', function (e) {
-                    var elementId = $(e.target.targetElm).attr('id');
+                    let elementId = $(e.target.targetElm).attr('id');
                     $(e.target.formElement).validate().element(`#${elementId}`);
                 });
             },
@@ -242,11 +242,11 @@ function initializeSelect2WithoutModal() {
 // Validation
 
 // this is for IsImage
-var imageInputsWithProblems = [];
+let imageInputsWithProblems = [];
 
 
 function removeItemInArray(arr, item) {
-    var found = arr.indexOf(item);
+    let found = arr.indexOf(item);
 
     while (found !== -1) {
         arr.splice(found, 1);
@@ -262,7 +262,7 @@ if (jQuery.validator) {
         ignore: []
     });
 
-    var defaultRangeValidator = $.validator.methods.range;
+    let defaultRangeValidator = $.validator.methods.range;
 
     $.validator.methods.range = function (value, element, param) {
         if (element.type === 'checkbox') {
@@ -274,9 +274,9 @@ if (jQuery.validator) {
 
     // fileRequired
     jQuery.validator.addMethod("fileRequired", function (value, element, param) {
-        var filesLength = element.files.length;
+        let filesLength = element.files.length;
         if (filesLength > 0) {
-            for (var i = 0; i < filesLength; i++) {
+            for (let i = 0; i < filesLength; i++) {
                 if (element.files[0].size === 0) {
                     return false;
                 }
@@ -289,13 +289,13 @@ if (jQuery.validator) {
 
     // allowExtensions
     jQuery.validator.addMethod('allowExtensions', function (value, element, param) {
-        var selectedFiles = element.files;
+        let selectedFiles = element.files;
         if (selectedFiles[0] === undefined) {
             return true;
         }
-        var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
-        for (var counter = 0; counter < selectedFiles.length; counter++) {
-            var currentFile = selectedFiles[counter];
+        let whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
+        for (let counter = 0; counter < selectedFiles.length; counter++) {
+            let currentFile = selectedFiles[counter];
             if (currentFile != null) {
                 if (!whiteListExtensions.includes(currentFile.type))
                     return false;
@@ -307,18 +307,18 @@ if (jQuery.validator) {
 
     // isImage
     jQuery.validator.addMethod('isImage', function (value, element, param) {
-        var selectedFiles = element.files;
+        let selectedFiles = element.files;
         if (selectedFiles[0] === undefined) {
             return true;
         }
-        var whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
-        for (var counter = 0; counter < selectedFiles.length; counter++) {
+        let whiteListExtensions = $(element).data('val-whitelistextensions').split(',');
+        for (let counter = 0; counter < selectedFiles.length; counter++) {
             if (!whiteListExtensions.includes(selectedFiles[counter].type)) {
                 return false;
             }
         }
-        var currentElementId = $(element).attr('id');
-        var currentForm = $(element).parents('form');
+        let currentElementId = $(element).attr('id');
+        let currentForm = $(element).parents('form');
 
         if (imageInputsWithProblems.includes(currentElementId)) {
             removeItemInArray(imageInputsWithProblems, currentElementId);
@@ -326,11 +326,11 @@ if (jQuery.validator) {
         }
         
         $('[id^="image-preview-box-temp"]').remove();
-        for (var i = 0; i < selectedFiles.length; i++) {
+        for (let i = 0; i < selectedFiles.length; i++) {
             $('body').append(`<img class="d-none" id="image-preview-box-temp-${i}" />`);
         }
 
-        for (var j = 0; j < selectedFiles.length; j++) {
+        for (let j = 0; j < selectedFiles.length; j++) {
             $(`#image-preview-box-temp-${j}`).attr('src', URL.createObjectURL(selectedFiles[j]));
             $(`#image-preview-box-temp-${j}`).off('error');
             $(`#image-preview-box-temp-${j}`).on('error',
@@ -345,15 +345,15 @@ if (jQuery.validator) {
 
     // maxFileSize
     jQuery.validator.addMethod('maxFileSize', function (value, element, param) {
-        var selectedFiles = element.files;
+        let selectedFiles = element.files;
         if (selectedFiles[0] === undefined) {
             return true;
         }
-        var maxFileSize = $(element).data('val-maxsize');
-        for (var counter = 0; counter < selectedFiles.length; counter++) {
-            var currentFile = selectedFiles[counter];
+        let maxFileSize = $(element).data('val-maxsize');
+        for (let counter = 0; counter < selectedFiles.length; counter++) {
+            let currentFile = selectedFiles[counter];
             if (currentFile != null) {
-                var currentFileSize = currentFile.size;
+                let currentFileSize = currentFile.size;
                 if (currentFileSize > maxFileSize)
                     return false;
             }
@@ -365,10 +365,10 @@ if (jQuery.validator) {
 
     // makeTinyMceRequired
     jQuery.validator.addMethod('makeTinyMceRequired', function (value, element, param) {
-        var editorId = $(element).attr('id');
-        var editorContent = tinyMCE.get(editorId).getContent();
+        let editorId = $(element).attr('id');
+        let editorContent = tinyMCE.get(editorId).getContent();
         $('body').append(`<div id="test-makeTinyMceRequired">${editorContent}</div>`);
-        var result = isNullOrWhitespace($('#test-makeTinyMceRequired').text());
+        let result = isNullOrWhitespace($('#test-makeTinyMceRequired').text());
         $('#test-makeTinyMceRequired').remove();
         return !result;
     });
@@ -389,8 +389,8 @@ function isNullOrWhitespace(input) {
 
 function activatingDeleteButtons(isModalMode) {
     $('.delete-row-button').click(function () {
-        var currentForm = $(this).parent();
-        var customMessage = $(this).attr('custom-message');
+        let currentForm = $(this).parent();
+        let customMessage = $(this).attr('custom-message');
         const formData = currentForm.serializeArray();
         Swal.fire({
             title: 'اعلان',
@@ -432,25 +432,26 @@ $('#modalOne').on('hide.bs.modal', function () {
 });
 
 function initializingAutocomplete() {
-    if ($('.autocomplete').length > 0) {
-        $('.autocomplete').autocomplete({
-            source: `${location.pathname}?handler=AutocompleteSearch`,
+    $('.autocomplete').each(function () {
+        let currentSearchUrl = $(this).attr('autocomplete-search-url');
+        let currentId = $(this).attr('id');
+        $(`#${currentId}`).autocomplete({
+            source: currentSearchUrl == null ? `${location.pathname}?handler=AutocompleteSearch`:currentSearchUrl,
             minLength: 2,
             delay: 500,
             select: function (event, ui) {
                 window['onAutocompleteSelect'](event, ui);
             }
         });
-
-    }
+    });
 }
 function activationModalForm() {
     $('.show-modal-form-button').click(function (e) {
         e.preventDefault();
-        var urlToLoadTheForm = $(this).attr('href');
+        let urlToLoadTheForm = $(this).attr('href');
 
-        var customTitle = $(this).attr('custom-Title');
-        var functionNameToCallInTheEnd = $(this).attr('functionNameToCallInTheEnd');
+        let customTitle = $(this).attr('custom-Title');
+        let functionNameToCallInTheEnd = $(this).attr('functionNameToCallInTheEnd');
         if (customTitle == undefined) {
             customTitle = $(this).text().trim();
         }
@@ -488,7 +489,7 @@ function activationModalForm() {
 function activatingPagination() {
     $('#main-pagianation button').click(function () {
         isMainPaginationClicked = true;
-        var currentPageSelected = $(this).val();
+        let currentPageSelected = $(this).val();
         $('.search-form-via-ajax input[name$="Pagination.CurrentPage"]').val(currentPageSelected);
         $('.search-form-via-ajax').submit();
     });
@@ -506,8 +507,8 @@ function fillDataTable() {
     $('.data-table-loading').removeClass('d-none');
     $('#RecordNotFound').remove();
 
-    var currentForm = $('form.search-form-via-ajax');
-    var formData = currentForm.serializeArray();
+    let currentForm = $('form.search-form-via-ajax');
+    let formData = currentForm.serializeArray();
 
     $.get(`${location.pathname}?handler=GetDataTable`, formData,
         function (data) {
@@ -535,18 +536,18 @@ function fillDataTable() {
 }
 function activatingGetHtmlWithAjax() {
     $('.get-html-with-ajax').click(function () {
-        var funcToCall = $(this).attr('functionNameToCallOnClick');
+        let funcToCall = $(this).attr('functionNameToCallOnClick');
         window[funcToCall](this);
     });
 }
 
 $(document).on('submit', 'form.custom-ajax-form', function (e) {
     e.preventDefault();
-    var currentForm = $(this);
-    var formAction = currentForm.attr('action');
-    var closeWhenDone = $(this).attr('close-when-done');
-    var callFunctionInTheEnd = $(this).attr('call-function-in-the-end');
-    var formData = new FormData(this);
+    let currentForm = $(this);
+    let formAction = currentForm.attr('action');
+    let closeWhenDone = $(this).attr('close-when-done');
+    let callFunctionInTheEnd = $(this).attr('call-function-in-the-end');
+    let formData = new FormData(this);
     $.ajax({
         url: formAction,
         data: formData,
@@ -561,7 +562,7 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
         },
         success: function (data) {
             if (data.isSuccessful === false) {
-                var finalData = data.data != null ? data.data : [data.message];
+                let finalData = data.data != null ? data.data : [data.message];
                 fillValidationForm(finalData, currentForm);
                 showToastr('warning', data.message);
             }
@@ -616,10 +617,10 @@ $(document).on('change', 'form input.custom-md-persian-datepicker, form select, 
 
 $(document).on('submit', 'form.public-ajax-form', function (e) {
     e.preventDefault();
-    var currentForm = $(this);
-    var formAction = currentForm.attr('action');
-    var functionName = currentForm.attr('functionNameToCallInTheEnd');
-    var formData = new FormData(this);
+    let currentForm = $(this);
+    let formAction = currentForm.attr('action');
+    let functionName = currentForm.attr('functionNameToCallInTheEnd');
+    let formData = new FormData(this);
     $.ajax({
         url: formAction,
         data: formData,
@@ -633,7 +634,7 @@ $(document).on('submit', 'form.public-ajax-form', function (e) {
         },
         success: function (data) {
             if (data.isSuccessful === false) {
-                var finalData = data.data != null ? data.data : [data.message];
+                let finalData = data.data != null ? data.data : [data.message];
                 fillValidationForm(finalData, currentForm);
                 showToastr('warning', data.message);
             }
@@ -651,12 +652,12 @@ $(document).on('submit', 'form.public-ajax-form', function (e) {
 });
 
 
-var isMainPaginationClicked = false;
-var isGotoPageClicked = false;
+let isMainPaginationClicked = false;
+let isGotoPageClicked = false;
 
 function activatingPageCount() {
     $('#page-count-selectbox').change(function () {
-        var pageCountValue = this.value;
+        let pageCountValue = this.value;
         $('form.search-form-via-ajax input[name$="Pagination.PageCount"]').val(pageCountValue);
         $('form.search-form-via-ajax').submit();
     })
@@ -665,8 +666,8 @@ function activatingPageCount() {
 $(document).on('submit', 'form.search-form-via-ajax', function (e) {
     e.preventDefault();
 
-    var currentForm = $(this);
-    var pageNumberInput = $('#page-number-input').val();
+    let currentForm = $(this);
+    let pageNumberInput = $('#page-number-input').val();
     if (isGotoPageClicked || $('#page-number-input').is(':focus')) {
         currentForm.find('input[name$="Pagination.CurrentPage"').val(pageNumberInput);
     } else if (!isMainPaginationClicked) {
@@ -694,7 +695,7 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
         $('.data-table-loading').addClass('d-none');
 
         if (data.isSuccessful == false) {
-            var finalData = data.data != null ? data.data : [data.message];
+            let finalData = data.data != null ? data.data : [data.message];
             fillValidationForm(finalData, currentForm);
             showToastr('warning', data.message);
         }
@@ -715,7 +716,7 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
 
 function fillValidationForm(errors, currentForm) {
 
-    var result = '<ul>';
+    let result = '<ul>';
     errors.forEach(function (e) {
         result += `<li>${e}</li>`;
     });
@@ -788,8 +789,8 @@ function activatingInputAttributes() {
 
 //show preview in under the input (Create Seller Page)
 $('.image-preview-input').change(function () {
-    var selectedFile = this.files[0];
-    var imgPreviewBox = $(this).attr('image-preview-box');
+    let selectedFile = this.files[0];
+    let imgPreviewBox = $(this).attr('image-preview-box');
     if (selectedFile && selectedFile.size > 0) {
         $(`#${imgPreviewBox}`).removeClass('d-none');
         $(`#${imgPreviewBox} img`).attr('src', URL.createObjectURL(selectedFile));
@@ -802,12 +803,12 @@ $('.image-preview-input').change(function () {
 
 // نمایش پیش نمایش عکس برای حالت چند عکسی
 $('.multiple-images-preview-input').change(function () {
-    var selectedFiles = this.files;
-    var imagesPreviewBox = $(this).attr('images-preview-box');
+    let selectedFiles = this.files;
+    let imagesPreviewBox = $(this).attr('images-preview-box');
     if (selectedFiles && selectedFiles.length > 0) {
         $(`#${imagesPreviewBox}`).html('');
         $(`#${imagesPreviewBox}`).removeClass('d-none');
-        for (var i = 0; i < selectedFiles.length; i++) {
+        for (let i = 0; i < selectedFiles.length; i++) {
             $(`#${imagesPreviewBox}`).append('<div class="my-2"><img width="100" src="" /></div>');
             $(`#${imagesPreviewBox} img:last`).attr('src', URL.createObjectURL(selectedFiles[i]));
         }
@@ -823,8 +824,8 @@ $(function () {
 
     // Enable img for tinymce 
     $('textarea[add-image-plugin="true"]').each(function () {
-        var elementId = $(this).attr('id');
-        var currentTinyMce = tinymce.get(elementId);
+        let elementId = $(this).attr('id');
+        let currentTinyMce = tinymce.get(elementId);
         currentTinyMce.settings.plugins += ' image'; // enable image
         currentTinyMce.settings.toolbar[4].items.push('image'); // show in toolbar
         currentTinyMce.settings.image_title = true; // enable title input for picture
@@ -832,9 +833,9 @@ $(function () {
 
     // Initialize TinyMCE upload image plugin
     $('textarea.custom-tinymce').each(function () {
-        var elementId = $(this).attr('id');
-        var uploadImageUrl = $(this).attr('upload-image-url');
-        var tinyMceInstance = tinymce.get(elementId);
+        let elementId = $(this).attr('id');
+        let uploadImageUrl = $(this).attr('upload-image-url');
+        let tinyMceInstance = tinymce.get(elementId);
         tinyMceInstance.settings.images_upload_handler = function (blobInfo, success, failure, progress) {
             sendTinyMceImagesToServer(blobInfo, success, failure, progress, uploadImageUrl);
         };

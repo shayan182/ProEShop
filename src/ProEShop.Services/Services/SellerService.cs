@@ -167,4 +167,13 @@ public class SellerService : GenericService<Seller>, ISellerService
         }).SingleAsync(x => x.UserId == userId);
         return seller.Id;
     }
+
+    public async Task<List<string?>> GetShopNamesForAutocomplete(string input)
+    {
+        return await _sellers.AsNoTracking()
+            .Where(x => x.ShopName.Contains(input))
+            .Take(20)
+            .Select(x => x.ShopName)
+            .ToListAsync();
+    }
 }
