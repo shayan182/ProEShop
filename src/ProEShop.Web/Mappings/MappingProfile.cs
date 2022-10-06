@@ -73,5 +73,9 @@ public class MappingProfile : AutoMapper.Profile
             .AddTransform<string>(str => str != null ? str.Trim() : null);
         CreateMap<Entities.FeatureConstantValue, FeatureConstantValueForCreateProductViewModel>();
         CreateMap<Entities.Product, ShowProductViewModel>();
+        this.CreateMap<Entities.Product, ShowProductViewModel>()
+            .ForMember(dest => dest.MainPicture,
+                options =>
+                    options.MapFrom(src => src.ProductMedia.First().FileName));
     }
 }

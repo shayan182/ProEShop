@@ -1,4 +1,7 @@
-﻿@model ProEShop.ViewModels.Products.ShowProductsViewModel
+﻿@using ProEShop.Entities
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ProEShop.Common.Helpers
+@model ProEShop.ViewModels.Products.ShowProductsViewModel
 @if (Model.Products.Count > 0)
 {
     <div class="table-responsive data-table-body">
@@ -7,6 +10,11 @@
                 <tr>
                     <th>@Html.DisplayNameFor(x => x.Products[0].Id)</th>
                     <th>@Html.DisplayNameFor(x => x.Products[0].PersianTitle)</th>
+                    <th>@Html.DisplayNameFor(x => x.Products[0].MainPicture)</th>
+                    <th>@Html.DisplayNameFor(x => x.Products[0].SellerShopName)</th>
+                    <th>@Html.DisplayNameFor(x => x.Products[0].CategoryTitle)</th>
+                    <th>@Html.DisplayNameFor(x => x.Products[0].BrandFullTitle)</th>
+                    <th>@Html.DisplayNameFor(x => x.Products[0].Status)</th>
                     <th>عملیات</th>
                 </tr>
             </thead>
@@ -16,6 +24,29 @@
                     <tr>
                         <td>@product.Id</td>
                         <td>@product.PersianTitle</td>
+                        <td>
+                            <img src="~/images/products/@product.MainPicture" 
+                            alt="@product.MainPicture" title="@product.MainPicture"width="100"/>
+
+                        </td>
+                        <td>@product.SellerShopName</td>
+                        <td>@product.CategoryTitle</td>
+                        <td>@product.BrandFullTitle</td>
+                        <td>
+                            @{
+                                string GetButtonClass(ProductStatus status) => status switch
+                                {
+                                    ProductStatus.Confirmed => "success",
+                                    ProductStatus.AwaitingInitialApproval => "warning",
+                                    _ => "danger"
+                                };
+                            }
+                            <div class="d-grid">
+                                <span class="badge bg-@GetButtonClass(product.Status)">
+                                    @product.Status.GetEnumDisplayName()
+                                </span>
+                            </div>
+                        </td>
                         <td>
                             <button seller-id="@product.Id" functionNameToCallOnClick="getSellerDetails" type="button" class="get-html-with-ajax btn btn-info">
                                 اطلاعات فروشنده

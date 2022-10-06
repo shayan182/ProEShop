@@ -231,7 +231,15 @@ public class CreateModel : SellerPanelBase
         }
         #endregion
         await _productService.AddAsync(productToAdd);
-        await _uow.SaveChangesAsync();
+        try
+        {
+            await _uow.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
 
         var productPictures = productToAdd.ProductMedia
             .Where(x => !x.IsVideo)

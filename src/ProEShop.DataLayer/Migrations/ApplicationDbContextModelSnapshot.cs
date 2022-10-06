@@ -857,6 +857,9 @@ namespace ProEShop.DataLayer.Migrations
                     b.Property<bool>("IsFake")
                         .HasColumnType("bit");
 
+                    b.Property<long>("MainCategoryId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ModifiedByBrowserName")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -908,6 +911,8 @@ namespace ProEShop.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("MainCategoryId");
 
                     b.HasIndex("SellerId");
 
@@ -1428,6 +1433,12 @@ namespace ProEShop.DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProEShop.Entities.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("MainCategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ProEShop.Entities.Seller", "Seller")
                         .WithMany("Products")
                         .HasForeignKey("SellerId")
@@ -1435,6 +1446,8 @@ namespace ProEShop.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Brand");
+
+                    b.Navigation("Category");
 
                     b.Navigation("Seller");
                 });
@@ -1537,6 +1550,8 @@ namespace ProEShop.DataLayer.Migrations
                     b.Navigation("FeatureConstantValues");
 
                     b.Navigation("ProductCategories");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.Feature", b =>

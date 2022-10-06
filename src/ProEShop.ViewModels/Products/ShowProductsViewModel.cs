@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ProEShop.Common.Helpers;
+using ProEShop.Entities;
 
 namespace ProEShop.ViewModels.Products;
 
@@ -20,6 +21,22 @@ public class ShowProductViewModel
 
     [Display(Name = "عنوان فارسی")]
     public string? PersianTitle { get; set; }
+
+    [Display(Name = "تصویر محصول")]
+    public string? MainPicture { get; set; }
+
+    [Display(Name = "نام فروشگاه ")]
+    public string? SellerShopName { get; set; }
+
+    [Display(Name = "دسته بندی اصلی")]
+    public string? CategoryTitle { get; set; }
+
+    [Display(Name = "برند محصول")]
+    public string? BrandFullTitle { get; set; }
+
+    [Display(Name = "وضعیت محصول")]
+    public ProductStatus Status { get; set; }
+
 }
 
 public class SearchProductsViewModel
@@ -28,6 +45,13 @@ public class SearchProductsViewModel
     [Display(Name = "عنوان فارسی")]
     [MaxLength(200)]
     public string? PersianTitle { get; set; }
+
+    [Display(Name = "نام فروشگاه")]
+    [MaxLength(200)]
+    public string? ShopName { get; set; }
+
+    [Display(Name = "وضعیت محصول")]
+    public ProductStatus? Status { get; set; }
 
     [Display(Name = "وضعیت حذف شده ها")]
     public DeletedStatus DeletedStatus { get; set; }
@@ -45,5 +69,14 @@ public enum SortingProducts
     Id,
 
     [Display(Name = "عنوان")]
-    PersianTitle
+    PersianTitle,
+
+    [Display(Name = "نام فروشگاه")]
+    ShopName,
+
+    [Display(Name = "برند فارسی")]
+    BrandFa,
+
+    [Display(Name = "برند انگلیسی")]
+    BrandEn
 }

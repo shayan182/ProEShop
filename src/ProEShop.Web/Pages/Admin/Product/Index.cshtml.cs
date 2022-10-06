@@ -8,6 +8,7 @@ using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
+using ProEShop.Services.Services;
 using ProEShop.ViewModels.Products;
 using ProEShop.ViewModels.Sellers;
 
@@ -18,11 +19,13 @@ public class IndexModel : PageBase
     #region Constructor
 
     private readonly IProductService _productService;
+    private readonly ISellerService _sellerService;
 
     public IndexModel(
-        IProductService productService)
+        IProductService productService, ISellerService sellerService)
     {
         _productService = productService;
+        _sellerService = sellerService;
     }
 
     #endregion
@@ -45,5 +48,14 @@ public class IndexModel : PageBase
             });
         }
         return Partial("List", await _productService.GetProducts(Products));
+    }
+    public async Task<IActionResult> OnGetAutocompleteSearchForPersianTitle(string term)
+    {
+        return Json(await _productService.GetPersianTitlesForAutocomplete(term));
+    }
+
+    public async Task<IActionResult> OnGetAutocompleteSearchForShopName(string term)
+    {
+        return Json(await _sellerService.GetShopNamesForAutocomplete(term));
     }
 }

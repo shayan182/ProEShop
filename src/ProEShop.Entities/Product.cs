@@ -40,6 +40,9 @@ public class Product : EntityBase, IAuditableEntity
 
     public long BrandId { get; set; }
     public long SellerId { get; set; }
+
+    [ForeignKey(nameof(Category))]
+    public long MainCategoryId { get; set; }
     #endregion
     #region Relations
 
@@ -54,6 +57,7 @@ public class Product : EntityBase, IAuditableEntity
 
     public Brand Brand { get; set; }
     public Seller Seller { get; set; }
+    public Category Category { get; set; }
     #endregion
 
 }
