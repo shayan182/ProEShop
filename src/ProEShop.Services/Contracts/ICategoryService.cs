@@ -6,6 +6,11 @@ public interface ICategoryService : IGenericService<Category>
 {
     Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model);
     Task<Dictionary<long, string>> GetCategoriesToShowInSelectBoxAsync(long? id = null);
+    /// <summary>
+    /// return main categories without parent 
+    /// </summary>
+    /// <returns></returns>
+    Task<Dictionary<long, string>> GetCategoriesWithNoChild();
     Task<EditCategoryViewModel?> GetForEdit(long id);
     Task<List<List<ShowCategoryForCreateProductViewModel>>> GetCategoriesForCreateProduct(long[] selectedCategoriesIds);
     Task<List<string>> GetCategoryBrands(long categoryId);

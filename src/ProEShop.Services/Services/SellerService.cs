@@ -155,6 +155,7 @@ public class SellerService : GenericService<Seller>, ISellerService
     {
         return await _sellers.Where(x => x.DocumentStatus == DocumentStatus.AwaitingInitialApproval)
             .AsNoTracking()
+            .Include(x => x.User)
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 

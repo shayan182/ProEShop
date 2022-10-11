@@ -11,7 +11,7 @@ namespace ProEShop.ViewModels.Product;
 public class AddProductViewModel
 {
     [HiddenInput]
-    public long CategoryId { get; set; }
+    public long MainCategoryId { get; set; }
 
     [Display(Name = "برند محصول")]
     [Range(1,long.MaxValue,ErrorMessage = AttributesErrorMessages.RequiredMessage)]

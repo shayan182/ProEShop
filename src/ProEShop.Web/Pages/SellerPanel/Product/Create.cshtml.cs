@@ -30,10 +30,11 @@ public class CreateModel : SellerPanelBase
     private readonly IFeatureConstantValueService _featureConstantValueService;
     private readonly IHtmlSanitizer _htmlSanitizer;
     private readonly IProductService _productService;
+    private readonly ICategoryBrandService _categoryBrandService;
 
     public CreateModel(
         ICategoryService categoryService,
-        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService, ICategoryFeatureService categoryFeatureService, IFeatureConstantValueService featureConstantValueService, IViewRendererService viewRendererService, IHtmlSanitizer htmlSanitizer, IProductService productService)
+        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService, ICategoryFeatureService categoryFeatureService, IFeatureConstantValueService featureConstantValueService, IViewRendererService viewRendererService, IHtmlSanitizer htmlSanitizer, IProductService productService, ICategoryBrandService categoryBrandService)
     {
         _categoryService = categoryService;
         _mapper = mapper;
@@ -46,6 +47,7 @@ public class CreateModel : SellerPanelBase
         _viewRendererService = viewRendererService;
         _htmlSanitizer = htmlSanitizer;
         _productService = productService;
+        _categoryBrandService = categoryBrandService;
     }
 
     #endregion
@@ -66,18 +68,22 @@ public class CreateModel : SellerPanelBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
+        var CategoriesToAdd = await _categoryService.GetCategoryParentIds(Product.MainCategoryId);
+        if (!CategoriesToAdd.IsSuccessful)
+            return Json(new JsonResultOperation(false));
+
+        if (!await _categoryBrandService.CheckCategoryBrand(Product.MainCategoryId, Product.BrandId))
+            return Json(new JsonResultOperation(false));
 
         var productToAdd = _mapper.Map<Entities.Product>(Product);
-        productToAdd.Slug = Product.EnglishTitle.Replace(" ", "-");
+
+
+        productToAdd.Slug = Product.PersianTitle.ToUrlSlug();
         productToAdd.SellerId = await _sellerService.GetSelerId(User.Identity.GetLoggedInUserId());
         productToAdd.ShortDescription = _htmlSanitizer.Sanitize(Product.ShortDescription);
         productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(Product.SpecialtyCheck);
-
-        var CategoriesToAdd = await _categoryService.GetCategoryParentIds(Product.CategoryId);
-        if (!CategoriesToAdd.IsSuccessful)
-        {
-            return Json(new JsonResultOperation(false));
-        }
+        if (!await _categoryService.CanAddFakeProduct(Product.MainCategoryId))
+            productToAdd.IsFake = false;
 
         foreach (var categoryId in CategoriesToAdd.categoryIds)
         {
@@ -130,7 +136,7 @@ public class CreateModel : SellerPanelBase
             }
         }
 
-        if (await _featureConstantValueService.CheckNonConstantValue(Product.CategoryId, featureIds))
+        if (await _featureConstantValueService.CheckNonConstantValue(Product.MainCategoryId, featureIds))
         {
             return Json(new JsonResultOperation(false));
         }
@@ -179,18 +185,18 @@ public class CreateModel : SellerPanelBase
 
         //ckeck for both of the lists(nonConstant and Constant)
         featureIds = featureIds.Concat(featureConstantValueIds).ToList();
-        if (!await _categoryFeatureService.CheckCategoryFeatureCount(Product.CategoryId, featureIds))
+        if (!await _categoryFeatureService.CheckCategoryFeatureCount(Product.MainCategoryId, featureIds))
         {
             return Json(new JsonResultOperation(false));
         }
 
-        if (!await _featureConstantValueService.CheckConstantValue(Product.CategoryId, featureConstantValueIds))
+        if (!await _featureConstantValueService.CheckConstantValue(Product.MainCategoryId, featureConstantValueIds))
         {
             return Json(new JsonResultOperation(false));
         }
 
         var featureConstantValues =
-            await _featureConstantValueService.GetFeatureConstantValuesForCreateProduct(Product.CategoryId);
+            await _featureConstantValueService.GetFeatureConstantValuesForCreateProduct(Product.MainCategoryId);
         foreach (var item in productFeatureConstantValueInputs)
         {
             if (long.TryParse(item.Key.Replace(ConstantInputName, string.Empty), out var featureId))
@@ -202,8 +208,8 @@ public class CreateModel : SellerPanelBase
                     {
                         var trimmedValue = value.Trim();
                         if (featureConstantValues
-                            .Where(x=>x.FeatureId==featureId)
-                            .Any(x=>x.Value == trimmedValue))
+                            .Where(x => x.FeatureId == featureId)
+                            .Any(x => x.Value == trimmedValue))
                         {
                             valueToAdd.Append(trimmedValue + "|||");
                         }
@@ -250,7 +256,7 @@ public class CreateModel : SellerPanelBase
             if (currentPicture.IsFileUploaded())
             {
                 await _uploadFileService.SaveFile(currentPicture, productPictures[counter].FileName, null,
-                    "images", "product");
+                    "images", "products");
             }
         }
 
@@ -263,7 +269,7 @@ public class CreateModel : SellerPanelBase
             if (currentVideo.IsFileUploaded())
             {
                 await _uploadFileService.SaveFile(currentVideo, productVideos[counter].FileName, null,
-                    "videos", "product");
+                    "videos", "products");
             }
         }
         return Json(new JsonResultOperation(true, "محصول مورد نظر با موفقیت ایجاد شد.")

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
@@ -35,7 +36,7 @@ public class SearchFeatureConstantValuesViewModel
 {
     [EqualSearch]
     [Display(Name = "دسته بندی")]
-    public long CategoryId { get; set; }
+    public long? CategoryId { get; set; }
 
     public List<SelectListItem>? Categories { get; set; }
 

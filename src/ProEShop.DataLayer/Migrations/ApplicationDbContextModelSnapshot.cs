@@ -891,6 +891,9 @@ namespace ProEShop.DataLayer.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("RejectReason")
+                        .HasColumnType("ntext");
+
                     b.Property<long>("SellerId")
                         .HasColumnType("bigint");
 

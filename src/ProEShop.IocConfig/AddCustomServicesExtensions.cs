@@ -54,6 +54,7 @@ public static class AddCustomServicesExtensions
         services.AddScoped<IBrandService, BrandService>();
         services.AddScoped<IFeatureConstantValueService, FeatureConstantValueService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryBrandService, CategoryBrandService>();
 
         #region Html sanitizer
         IHtmlSanitizer sanitizer = new HtmlSanitizer();

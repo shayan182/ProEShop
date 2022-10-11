@@ -38,6 +38,9 @@ public class Product : EntityBase, IAuditableEntity
 
     public ProductStatus Status { get; set; }
 
+    [Column(TypeName = "ntext")]
+    public string? RejectReason { get; set; }
+
     public long BrandId { get; set; }
     public long SellerId { get; set; }
 

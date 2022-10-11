@@ -121,7 +121,7 @@ public class IndexModel : PageBase
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "مدارک فروشنده مورد نظر با موفقیت تایید شد."));
     }
-    public async Task<IActionResult> OnPostRemoveUser(long id)
+    public async Task<IActionResult> OnPostRemoveSeller(long id)
     {
         if (id < 0)
             return Json(new JsonResultOperation(false));
@@ -130,6 +130,7 @@ public class IndexModel : PageBase
         if (seller is null)
             return Json(new JsonResultOperation(false, "فروشنده مورد نظر یافت نشد!"));
 
+        seller.User.IsSeller = false;
         _sellerService.Remove(seller);
         await _uow.SaveChangesAsync();
         _uploadFile.DeleteFile(seller.IdCartPicture, "images", "seller-id-cart-pictures");

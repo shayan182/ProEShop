@@ -324,7 +324,7 @@ if (jQuery.validator) {
             removeItemInArray(imageInputsWithProblems, currentElementId);
             return false;
         }
-        
+
         $('[id^="image-preview-box-temp"]').remove();
         for (let i = 0; i < selectedFiles.length; i++) {
             $('body').append(`<img class="d-none" id="image-preview-box-temp-${i}" />`);
@@ -358,7 +358,7 @@ if (jQuery.validator) {
                     return false;
             }
         }
-        
+
         return true;
     });
     jQuery.validator.unobtrusive.adapters.addBool('maxFileSize');
@@ -436,11 +436,13 @@ function initializingAutocomplete() {
         let currentSearchUrl = $(this).attr('autocomplete-search-url');
         let currentId = $(this).attr('id');
         $(`#${currentId}`).autocomplete({
-            source: currentSearchUrl == null ? `${location.pathname}?handler=AutocompleteSearch`:currentSearchUrl,
+            source: currentSearchUrl == null ? `${location.pathname}?handler=AutocompleteSearch` : currentSearchUrl,
             minLength: 2,
             delay: 500,
             select: function (event, ui) {
-                window['onAutocompleteSelect'](event, ui);
+                if (typeof window['onAutocompleteSelect'] === 'function') {
+                    window['onAutocompleteSelect'](event, ui);
+                }
             }
         });
     });
@@ -524,7 +526,6 @@ function fillDataTable() {
                 activatingDeleteButtons();
                 activatingPageCount();
                 enablingTooltips();
-                activatingGetHtmlWithAjax();
             }
 
         }).fail(function () {
@@ -534,12 +535,11 @@ function fillDataTable() {
             $('.data-table-loading').addClass('d-none');
         });
 }
-function activatingGetHtmlWithAjax() {
-    $('.get-html-with-ajax').click(function () {
-        let funcToCall = $(this).attr('functionNameToCallOnClick');
-        window[funcToCall](this);
-    });
-}
+
+$(document).on('click', '.get-html-with-ajax', function () {
+    var funcToCall = $(this).attr('functionNameToCallOnClick');
+    window[funcToCall](this);
+});
 
 $(document).on('submit', 'form.custom-ajax-form', function (e) {
     e.preventDefault();
@@ -679,7 +679,7 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
     currentForm.find('.search-form-submit-button span').removeClass('d-none');
 
     $('.data-table-loading').removeClass('d-none');
-    $('.data-table-body').html(''); 
+    $('.data-table-body').html('');
     $('#RecordNotFound').html(''); // my code
 
 
@@ -709,7 +709,6 @@ $(document).on('submit', 'form.search-form-via-ajax', function (e) {
             activatingDeleteButtons();
             activatingPageCount();
             enablingTooltips();
-            activatingGetHtmlWithAjax();
         }
     });
 });

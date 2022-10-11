@@ -8,4 +8,6 @@ public interface IProductService: IGenericService<Product>
 {
     Task<ShowProductsViewModel> GetProducts(ShowProductsViewModel model);
     Task<List<string?>> GetPersianTitlesForAutocomplete(string input);
+    Task<ProductDetailsViewModel?> GetProductDetails(long productId);
+    Task<Product?> GetProductToRemoveInManagingProduct(long id);
 }

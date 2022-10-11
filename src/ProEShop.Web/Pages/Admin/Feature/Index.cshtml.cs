@@ -28,7 +28,7 @@ public class IndexModel : PageBase
         _categoryService = categoryService;
         _uow = uow;
     }
-
+     
     public ShowFeaturesViewModel Features { get; set; }
         = new();
     public async Task OnGet()

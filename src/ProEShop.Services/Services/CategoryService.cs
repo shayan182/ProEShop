@@ -84,6 +84,16 @@ public class CategoryService : GenericService<Category>, ICategoryService
             .ToDictionaryAsync(x => x.Id, x => x.Title);
     }
 
+    public async Task<Dictionary<long, string>> GetCategoriesWithNoChild()
+    {
+        //return _categories.Where(x => !x.Categories.Any())
+        //   .ToDictionaryAsync(x => x.Id, x => x.Title);
+
+        //custom code
+        return await _categories.Where(x => x.ParentId == null)
+            .ToDictionaryAsync(x=>x.Id,x=>x.Title);
+    }
+
     public override async Task<DuplicateColumns> AddAsync(Category entity)
     {
         var result = new List<string>();
