@@ -98,8 +98,14 @@ public class ProductService : GenericService<Product>, IProductService
 
     public async Task<ProductDetailsViewModel?> GetProductDetails(long productId)
     {
-        return await _mapper.ProjectTo<ProductDetailsViewModel>(
-            _products).SingleOrDefaultAsync(x=>x.Id == productId);
+        return await _mapper
+            .ProjectTo<ProductDetailsViewModel>(
+                _products
+                .AsNoTracking()
+                .AsSplitQuery()
+                .Include(x => x.ProductFeatures)
+                .ThenInclude(x => x.Feature))
+            .SingleOrDefaultAsync(x=>x.Id == productId);
     }
     public async Task<Product?> GetProductToRemoveInManagingProduct(long id)
     {

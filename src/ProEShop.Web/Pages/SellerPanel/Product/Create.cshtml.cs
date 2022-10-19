@@ -52,12 +52,11 @@ public class CreateModel : SellerPanelBase
 
     #endregion
 
-    [BindProperty]
     public AddProductViewModel Product { get; set; }
     public void OnGet()
     {
     }
-    public async Task<IActionResult> OnPost()
+    public async Task<IActionResult> OnPost(AddProductViewModel product)
     {
         const string NonConstantInputName = "ProductFeatureValue";
         const string ConstantInputName = "ProductFeatureConstantValue";
@@ -68,21 +67,21 @@ public class CreateModel : SellerPanelBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
-        var CategoriesToAdd = await _categoryService.GetCategoryParentIds(Product.MainCategoryId);
+        var CategoriesToAdd = await _categoryService.GetCategoryParentIds(product.MainCategoryId);
         if (!CategoriesToAdd.IsSuccessful)
             return Json(new JsonResultOperation(false));
 
-        if (!await _categoryBrandService.CheckCategoryBrand(Product.MainCategoryId, Product.BrandId))
+        if (!await _categoryBrandService.CheckCategoryBrand(product.MainCategoryId, product.BrandId))
             return Json(new JsonResultOperation(false));
 
-        var productToAdd = _mapper.Map<Entities.Product>(Product);
+        var productToAdd = _mapper.Map<Entities.Product>(product);
 
 
-        productToAdd.Slug = Product.PersianTitle.ToUrlSlug();
+        productToAdd.Slug = product.PersianTitle.ToUrlSlug();
         productToAdd.SellerId = await _sellerService.GetSelerId(User.Identity.GetLoggedInUserId());
-        productToAdd.ShortDescription = _htmlSanitizer.Sanitize(Product.ShortDescription);
-        productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(Product.SpecialtyCheck);
-        if (!await _categoryService.CanAddFakeProduct(Product.MainCategoryId))
+        productToAdd.ShortDescription = _htmlSanitizer.Sanitize(product.ShortDescription);
+        productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(product.SpecialtyCheck);
+        if (!await _categoryService.CanAddFakeProduct(product.MainCategoryId))
             productToAdd.IsFake = false;
 
         foreach (var categoryId in CategoriesToAdd.categoryIds)
@@ -93,7 +92,7 @@ public class CreateModel : SellerPanelBase
             });
         }
 
-        foreach (var picture in Product.Pictures)
+        foreach (var picture in product.Pictures)
         {
             if (picture.IsFileUploaded())
             {
@@ -106,7 +105,7 @@ public class CreateModel : SellerPanelBase
             }
         }
 
-        foreach (var video in Product.Videos)
+        foreach (var video in product.Videos)
         {
             if (video.IsFileUploaded())
             {
@@ -136,7 +135,7 @@ public class CreateModel : SellerPanelBase
             }
         }
 
-        if (await _featureConstantValueService.CheckNonConstantValue(Product.MainCategoryId, featureIds))
+        if (await _featureConstantValueService.CheckNonConstantValue(product.MainCategoryId, featureIds))
         {
             return Json(new JsonResultOperation(false));
         }
@@ -185,18 +184,18 @@ public class CreateModel : SellerPanelBase
 
         //ckeck for both of the lists(nonConstant and Constant)
         featureIds = featureIds.Concat(featureConstantValueIds).ToList();
-        if (!await _categoryFeatureService.CheckCategoryFeatureCount(Product.MainCategoryId, featureIds))
+        if (!await _categoryFeatureService.CheckCategoryFeatureCount(product.MainCategoryId, featureIds))
         {
             return Json(new JsonResultOperation(false));
         }
 
-        if (!await _featureConstantValueService.CheckConstantValue(Product.MainCategoryId, featureConstantValueIds))
+        if (!await _featureConstantValueService.CheckConstantValue(product.MainCategoryId, featureConstantValueIds))
         {
             return Json(new JsonResultOperation(false));
         }
 
         var featureConstantValues =
-            await _featureConstantValueService.GetFeatureConstantValuesForCreateProduct(Product.MainCategoryId);
+            await _featureConstantValueService.GetFeatureConstantValuesForCreateProduct(product.MainCategoryId);
         foreach (var item in productFeatureConstantValueInputs)
         {
             if (long.TryParse(item.Key.Replace(ConstantInputName, string.Empty), out var featureId))
@@ -252,7 +251,7 @@ public class CreateModel : SellerPanelBase
             .ToList();
         for (var counter = 0; counter < productPictures.Count; counter++)
         {
-            var currentPicture = Product.Pictures[counter];
+            var currentPicture = product.Pictures[counter];
             if (currentPicture.IsFileUploaded())
             {
                 await _uploadFileService.SaveFile(currentPicture, productPictures[counter].FileName, null,
@@ -265,7 +264,7 @@ public class CreateModel : SellerPanelBase
             .ToList();
         for (var counter = 0; counter < productVideos.Count; counter++)
         {
-            var currentVideo = Product.Videos[counter];
+            var currentVideo = product.Videos[counter];
             if (currentVideo.IsFileUploaded())
             {
                 await _uploadFileService.SaveFile(currentVideo, productVideos[counter].FileName, null,

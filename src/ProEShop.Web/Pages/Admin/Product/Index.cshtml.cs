@@ -98,7 +98,8 @@ public class IndexModel : PageBase
         foreach (var media in product.ProductMedia)
         {
             //todo this not work for videos
-            _uploadFile.DeleteFile(media.FileName, "images", "products");
+            _uploadFile.DeleteFile(media.FileName, 
+                media.IsVideo ? "videos":"images", "products");
         }
         return Json(new JsonResultOperation(true, "محصول مورد نظر با موفقیت حذف شد."));
     }

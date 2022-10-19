@@ -79,9 +79,7 @@ public class MappingProfile : AutoMapper.Profile
                 options =>
                     options.MapFrom(src => src.ProductMedia.First().FileName));
 
-        CreateMap<Entities.Product, ProductDetailsViewModel>()
-            .ForMember(dest => dest.MainPicture,
-                options =>
-                    options.MapFrom(src => src.ProductMedia.First().FileName));
+        CreateMap<Entities.Product, ProductDetailsViewModel>();
+
     }
 }
