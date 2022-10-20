@@ -299,7 +299,7 @@ public class CreateModel : SellerPanelBase
 
         var model = new
         {
-            Brands = await _categoryService.GetBrandsByCategoryId(categoryId),
+            Brands = await _brandService.GetBrandsByCategoryId(categoryId),
             CanAddFakeProduct = await _categoryService.CanAddFakeProduct(categoryId),
             CategoryFeatures = await _viewRendererService.RenderViewToStringAsync(
                 "~/Pages/SellerPanel/Product/_ShowCategoryFeaturesPartial.cshtml", categoryFeatureModel)
@@ -394,5 +394,24 @@ public class CreateModel : SellerPanelBase
     public async Task<IActionResult> OnPostCheckForTitleEn(string titleEn)
     {
         return Json(!await _brandService.IsExistsBy(nameof(Entities.Brand.TitleEn), titleEn));
+    }
+
+    public async Task<IActionResult> OnGetGetCommissionPercentage(long brandId , long categoryId)
+    {
+        if (brandId < 1 || categoryId < 1)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        var commissionPercentageResult = await _categoryBrandService.GetCommissionPercentage(categoryId,brandId);
+        if (!commissionPercentageResult.IsSuccessfull)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        return Json(new JsonResultOperation(true,string.Empty)
+        {
+            Data = commissionPercentageResult.CommissionPercentage
+        });
     }
 }

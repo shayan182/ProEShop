@@ -3,7 +3,7 @@ using ProEShop.ViewModels.CategoryFeatures;
 
 namespace ProEShop.Services.Contracts;
 
-public interface ICategoryBrandService : ICustomGenericService<CategoryBrand>
+public interface ICategoryBrandService : IGenericService<CategoryBrand>
 {
     /// <summary>
     /// آیا برند وارد شده در دسته بندی مورد نظر قرار دارد یا خیر ؟
@@ -13,4 +13,5 @@ public interface ICategoryBrandService : ICustomGenericService<CategoryBrand>
     /// <param name="brandId"></param>
     /// <returns></returns>
     Task<bool> CheckCategoryBrand(long categoryId, long brandId);
+    Task<(bool IsSuccessfull,byte CommissionPercentage)> GetCommissionPercentage(long categoryId, long brandId);
 }

@@ -131,18 +131,30 @@ public class BrandService : GenericService<Brand>, IBrandService
     {
         return await _brands
             .Where(x => x.TitleFa.Contains(input) || x.TitleEn.Contains(input))
+            .OrderBy(x => x.Id)
+            .AsNoTracking()
             .Take(20)
             .Select(x => x.TitleFa + " " + x.TitleEn)
-            .AsNoTracking()
             .ToListAsync();
     }
-    public async Task<List<long>> GetBrandIdsByList(List<string> brands)
+
+    public Task<Dictionary<long, string>> GetBrandsByFullTitle(List<string> brandTitles)
     {
-        return await _brands
-            .Where(x => brands.Contains(x.TitleFa + " " + x.TitleEn))
-            .Select(x => x.Id)
-            .ToListAsync();
+        return _brands
+            .Where(x => brandTitles.Contains(x.TitleFa + " " + x.TitleEn))
+            .ToDictionaryAsync(x=>x.Id,x=>x.TitleFa+" "+x.TitleEn);
     }
+
+    public Task<Dictionary<long, string>> GetBrandsByCategoryId(long categoryId)
+    {
+        return _brands
+            .SelectMany(x => x.CategoryBrands)
+            .Where(x => x.CategoryId == categoryId)
+            .Include(x => x.Brand)
+            .ToDictionaryAsync(x => x.BrandId,
+                x => x.Brand.TitleFa + " " + x.Brand.TitleEn);
+    }
+    
 
     public async Task<BrandDetailsViewModel?> GetBrandDetails(long brandId)
     {

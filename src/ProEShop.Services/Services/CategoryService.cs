@@ -164,7 +164,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
         return await _categories
             .Where(x => x.Id == categoryId)
             .SelectMany(x => x.CategoryBrands)
-            .Select(x => x.Brand.TitleFa + " " + x.Brand.TitleEn)
+            .Select(x => x.Brand.TitleFa + " " + x.Brand.TitleEn + "|||" +x.CommissionPercentage)
             .ToListAsync();
     }
 
@@ -175,14 +175,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
             .SingleOrDefaultAsync(x => x.Id == categoryId);
     }
 
-    public async Task<Dictionary<long, string>> GetBrandsByCategoryId(long categoryId)
-    {
-        return await _categories
-            .SelectMany(x => x.CategoryBrands)
-            .Where(x => x.CategoryId == categoryId)
-            .Include(x => x.Brand)
-            .ToDictionaryAsync(x => x.BrandId ,x=>x.Brand.TitleFa + " " + x.Brand.TitleEn);
-    }
+    
 
     public async Task<bool> CanAddFakeProduct(long categoryId)
     {

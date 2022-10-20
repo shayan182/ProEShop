@@ -12,7 +12,7 @@
     </div>
     <div class="card-body">
         <form method="post" id="create-product-form" class="public-ajax-form" functionNameToCallInTheEnd="createProductFunction">
-            <input asp-for="Product.MainCategoryId"/>
+            <input asp-for="Product.MainCategoryId" />
             <div asp-validation-summary="All" class="text-danger"></div>
             <nav>
                 <div class="nav nav-tabs nav-fill" id="add-product-tab">
@@ -83,7 +83,10 @@
                                         <option value="0">انتخاب کنید</option>
                                     </select>
                                     <span asp-validation-for="Product.BrandId" class="span-error-message"></span>
-                                </div><div class="my-2 col-md-6 col-lg-4">
+                                </div>
+                                <div class="my-2 col-md-6 col-lg-4 alert alert-info invisible" id="commission-percentage-place-in-create-product">
+                                </div>
+                                <div class="my-2 col-md-6 col-lg-4">
                                     <label class=" form-label" asp-for="Product.PackWeight">
                                         وزن بسته بندی (گرم)
                                     </label>
@@ -184,7 +187,7 @@
                                     <input asp-for="Product.EnglishTitle" class="form-control" />
                                     <span asp-validation-for="Product.EnglishTitle" class="span-error-message"></span>
                                 </div>
-                                <button class="btn btn-primary" >ایجاد محصول</button>
+                                <button class="btn btn-primary">ایجاد محصول</button>
                             </div>
                         </div>
                     </div>
