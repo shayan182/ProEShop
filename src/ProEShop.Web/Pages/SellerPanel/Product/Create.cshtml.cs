@@ -81,6 +81,8 @@ public class CreateModel : SellerPanelBase
         productToAdd.SellerId = await _sellerService.GetSelerId(User.Identity.GetLoggedInUserId());
         productToAdd.ShortDescription = _htmlSanitizer.Sanitize(product.ShortDescription);
         productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(product.SpecialtyCheck);
+        productToAdd.ProductCode = await _productService.GetProductCodeForCreateProduct();
+
         if (!await _categoryService.CanAddFakeProduct(product.MainCategoryId))
             productToAdd.IsFake = false;
 

@@ -1,7 +1,7 @@
 ﻿@page
-@model ProEShop.Web.Pages.Admin.Product.IndexModel
+@model ProEShop.Web.Pages.SellerPanel.Product.IndexModel
 @{
-    ViewData["Title"] = "محصولات";
+    ViewData["Title"] = "محصولات من";
 }
 
 <div class="card text-dark bg-white border-0 shadow">
@@ -25,12 +25,8 @@
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Products.SearchProducts.MainCategoryId"></label>
-                    <select class="custom-select2 form-select" asp-for="Products.SearchProducts.MainCategoryId" asp-items="Model.Products.SearchProducts.Categories"></select>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 my-2">
-                    <label class="form-label" asp-for="Products.SearchProducts.ShopName"></label>
-                    <input autocomplete-search-url="@(Url.Page("./Index", "AutocompleteSearchForShopName"))" class="autocomplete form-control" asp-for="Products.SearchProducts.ShopName" />
-                    <span class="span-error-message" asp-validation-for="Products.SearchProducts.ShopName"></span>
+                    <select class="custom-select2 form-select" asp-for="Products.SearchProducts.MainCategoryId" asp-items="Model.Products.SearchProducts.Categories">
+                    </select>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Products.SearchProducts.ProductCode"></label>
@@ -38,14 +34,14 @@
                     <span class="span-error-message" asp-validation-for="Products.SearchProducts.ProductCode"></span>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
-                    <label class="form-label" asp-for="Products.SearchProducts.Sorting"></label>
-                    <select class="form-select" asp-for="Products.SearchProducts.Sorting" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.Products.SortingProducts>()"></select>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Products.SearchProducts.Status"></label>
                     <select class="form-select" asp-for="Products.SearchProducts.Status" asp-items="Html.GetEnumSelectList<ProEShop.Entities.ProductStatus>()">
                         <option value="">همه</option>
                     </select>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 my-2">
+                    <label class="form-label" asp-for="Products.SearchProducts.Sorting"></label>
+                    <select class="form-select" asp-for="Products.SearchProducts.Sorting" asp-items="Html.GetEnumSelectList<ProEShop.ViewModels.Products.SortingProducts>()"></select>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 my-2">
                     <label class="form-label" asp-for="Products.SearchProducts.SortingOrder"></label>
@@ -70,17 +66,18 @@
 </div>
 
 @section Scripts{
-    <partial name="_ValidationScriptsPartial" />
-    <script src="~/lib/select2/js/select2.js"></script>
-    <script src="~/lib/select2/js/i18n/fa.js"></script>
-    <script src="~/lib/tinymce/tinymce.min.js"></script>
-    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+<partial name="_ValidationScriptsPartial" />
+<script src="~/lib/tinymce/tinymce.min.js"></script>
+<script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+<script src="~/lib/select2/js/select2.min.js"></script>
+<script src="~/lib/select2/js/i18n/fa.min.js"></script>
 }
-    @section CustomScripts{
-    <script src="~/Pages/Admin/Product/Index.cshtml.js"></script>
+@section CustomScripts{
+<script src="~/Pages/SellerPanel/Product/Index.cshtml.js"></script>
 }
-    @section Styles{
-    <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
-    <link rel="stylesheet" href="~/lib/select2-bootstrap-5-theme/select2-bootstrap-5-theme.rtl.min.css" />
-    <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
+@section Styles
+{
+<link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
+<link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+<link rel="stylesheet" href="~/lib/select2-bootstrap-5-theme/select2-bootstrap-5-theme.rtl.min.css" />
 }

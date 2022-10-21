@@ -78,8 +78,12 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.MainPicture,
                 options =>
                     options.MapFrom(src => src.ProductMedia.First().FileName));
-
+        this.CreateMap<Entities.Product, ShowProductInSellerPanelViewModel>()
+            .ForMember(dest => dest.MainPicture,
+                options =>
+                    options.MapFrom(src => src.ProductMedia.First().FileName));
         CreateMap<Entities.Product, ProductDetailsViewModel>();
-
+        this.CreateMap<Entities.ProductMedia, ProductMediaForCreateProductViewModel>();
+        this.CreateMap<Entities.ProductFeature, ProductFeatureForCreateProductViewModel>();
     }
 }

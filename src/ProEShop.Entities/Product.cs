@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using ProEShop.Entities.AuditableEntity;
 
 namespace ProEShop.Entities;
 
 [Table("Products")]
+[Index(nameof(ProductCode), IsUnique = true)]
 public class Product : EntityBase, IAuditableEntity
 {
 
@@ -41,6 +43,7 @@ public class Product : EntityBase, IAuditableEntity
     [Column(TypeName = "ntext")]
     public string? RejectReason { get; set; }
 
+    public int ProductCode { get; set; }
     public long BrandId { get; set; }
     public long SellerId { get; set; }
 
