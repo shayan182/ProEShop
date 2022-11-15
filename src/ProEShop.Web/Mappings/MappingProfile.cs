@@ -8,6 +8,7 @@ using ProEShop.ViewModels.FeatureConstantValues;
 using ProEShop.ViewModels.Product;
 using ProEShop.ViewModels.Products;
 using ProEShop.ViewModels.Sellers;
+using ProEShop.ViewModels.Variants;
 
 namespace ProEShop.Web.Mappings;
 
@@ -82,8 +83,19 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.MainPicture,
                 options =>
                     options.MapFrom(src => src.ProductMedia.First().FileName));
+
+        this.CreateMap<Entities.Product, ShowAllProductInSellerPanelViewModel>()
+            .ForMember(dest => dest.MainPicture,
+                options =>
+                    options.MapFrom(src => src.ProductMedia.First().FileName));
         CreateMap<Entities.Product, ProductDetailsViewModel>();
-        this.CreateMap<Entities.ProductMedia, ProductMediaForCreateProductViewModel>();
-        this.CreateMap<Entities.ProductFeature, ProductFeatureForCreateProductViewModel>();
+        this.CreateMap<Entities.ProductMedia, ProductMediaForProductDetailsViewModel>();
+        this.CreateMap<Entities.ProductFeature, ProductFeatureForProductDetailsViewModel>();
+        this.CreateMap<Entities.Variant, ShowVariantViewModel>();
+        this.CreateMap<AddVariantViewModel, Entities.Variant>()
+            .AddTransform<string>(str => str != null ? str.Trim() : null);
+
+        this.CreateMap<EditVariantViewMode, Entities.Variant>().ReverseMap()
+            .AddTransform<string>(str => str != null ? str.Trim() : null);
     }
 }

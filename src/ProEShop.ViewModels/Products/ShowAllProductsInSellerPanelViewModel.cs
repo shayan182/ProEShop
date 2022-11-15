@@ -2,20 +2,21 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProEShop.Common.Helpers;
 using ProEShop.Entities;
+using ProEShop.ViewModels.Sellers;
 
 namespace ProEShop.ViewModels.Products;
 
-public class ShowProductsViewModel
+public class ShowAllProductsInSellerPanelViewModel
 {
-    public List<ShowProductViewModel>? Products { get; set; }
+    public List<ShowAllProductInSellerPanelViewModel>? Products { get; set; }
 
-    public SearchProductsViewModel SearchProducts { get; set; }
+    public SearchAllProductsInSellerPanelViewModel SearchProducts { get; set; }
         = new();
     public PaginationViewModel Pagination { get; set; }
         = new();
 }
 
-public class ShowProductViewModel
+public class ShowAllProductInSellerPanelViewModel
 {
     [Display(Name = "شناسه")]
     public long Id { get; set; }
@@ -26,24 +27,23 @@ public class ShowProductViewModel
     [Display(Name = "تصویر محصول")]
     public string? MainPicture { get; set; }
 
-    [Display(Name = "نام فروشگاه ")]
+    [Display(Name = "نام فروشگاه")]
     public string? SellerShopName { get; set; }
-
-    [Display(Name = "دسته بندی اصلی")]
-    public string? CategoryTitle { get; set; }
 
     [Display(Name = "برند محصول")]
     public string? BrandFullTitle { get; set; }
 
-    [Display(Name = "کد محصول")]
-    public int ProductCode { get; set; }
-
     [Display(Name = "وضعیت محصول")]
     public ProductStatus Status { get; set; }
 
+    [Display(Name = "دسته بندی اصلی")]
+    public string? CategoryTitle { get; set; }
+
+    [Display(Name = "کد محصول")]
+    public int ProductCode { get; set; }
 }
 
-public class SearchProductsViewModel
+public class SearchAllProductsInSellerPanelViewModel
 {
     [EqualSearch]
     [Display(Name = "دسته بندی اصلی")]
@@ -55,17 +55,14 @@ public class SearchProductsViewModel
 
     [EqualSearch]
     [Display(Name = "محصول اصل /غیر اصل")]
-    public bool? IsFake { get; set; } 
+    public bool? IsFake { get; set; }
 
     public List<SelectListItem>? Categories { get; set; }
+
     [ContainsSearch]
     [Display(Name = "عنوان فارسی")]
     [MaxLength(200)]
     public string? PersianTitle { get; set; }
-
-    [Display(Name = "نام فروشگاه")]
-    [MaxLength(200)]
-    public string? ShopName { get; set; }
 
     [Display(Name = "وضعیت محصول")]
     public ProductStatus? Status { get; set; }
@@ -74,22 +71,19 @@ public class SearchProductsViewModel
     public DeletedStatus DeletedStatus { get; set; }
 
     [Display(Name = "نمایش بر اساس")]
-    public SortingProducts Sorting { get; set; }
+    public SortingAllProductsInSellerPanel Sorting { get; set; }
 
     [Display(Name = "مرتب سازی بر اساس")]
     public SortingOrder SortingOrder { get; set; }
 }
 
-public enum SortingProducts
+public enum SortingAllProductsInSellerPanel
 {
     [Display(Name = "شناسه")]
     Id,
 
     [Display(Name = "عنوان")]
     PersianTitle,
-
-    [Display(Name = "نام فروشگاه")]
-    ShopName,
 
     [Display(Name = "برند فارسی")]
     BrandFa,

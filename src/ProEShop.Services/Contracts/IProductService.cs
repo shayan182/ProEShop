@@ -8,6 +8,7 @@ public interface IProductService: IGenericService<Product>
 {
     Task<ShowProductsViewModel> GetProducts(ShowProductsViewModel model);
     Task<ShowProductsInSellerPanelViewModel> GetProductsInSellerPanel(ShowProductsInSellerPanelViewModel model);
+    Task<ShowAllProductsInSellerPanelViewModel> GetAllProductsInSellerPanel(ShowAllProductsInSellerPanelViewModel model);
     Task<List<string?>> GetPersianTitlesForAutocomplete(string input);
     Task<ProductDetailsViewModel?> GetProductDetails(long productId);
     Task<Product?> GetProductToRemoveInManagingProducts(long id);
@@ -18,4 +19,6 @@ public interface IProductService: IGenericService<Product>
     /// </summary>
     /// <returns></returns>
     Task<int> GetProductCodeForCreateProduct();
+
+    Task<List<string?>> GetPersianTitlesForAutocompleteInSellerPanel(string input);
 }

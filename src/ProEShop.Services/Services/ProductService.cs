@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DNTCommon.Web.Core;
+using MailKit.Search;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
@@ -149,10 +150,67 @@ public class ProductService : GenericService<Product>, IProductService
         };
     }
 
+    public async Task<ShowAllProductsInSellerPanelViewModel> GetAllProductsInSellerPanel(ShowAllProductsInSellerPanelViewModel model)
+    {
+        
+        var products = _products
+            .Where(x=>x.Status == ProductStatus.Confirmed)
+            .AsNoTracking().AsQueryable();
+
+        #region Search
+
+        var searchedStatus = model.SearchProducts.Status;
+        if (searchedStatus is not null)
+        {
+            products = products.Where(x => x.Status == searchedStatus);
+        }
+
+        products = ExpressionHelpers.CreateSearchExpressions(products, model.SearchProducts);
+
+        #endregion
+
+        #region OrderBy
+
+        var sorting = model.SearchProducts.Sorting;
+        var isSortingAsc = model.SearchProducts.SortingOrder == SortingOrder.Asc;
+        if (sorting == SortingAllProductsInSellerPanel.BrandFa)
+        {
+            if (isSortingAsc)
+                products = products.OrderBy(x => x.Brand.TitleFa);
+            else
+                products = products.OrderByDescending(x => x.Brand.TitleFa);
+        }
+        else if (sorting == SortingAllProductsInSellerPanel.BrandEn)
+        {
+            if (isSortingAsc)
+                products = products.OrderBy(x => x.Brand.TitleEn);
+            else
+                products = products.OrderByDescending(x => x.Brand.TitleEn);
+        }
+        else
+        {
+            products = products.CreateOrderByExpression(model.SearchProducts.Sorting.ToString(),
+                model.SearchProducts.SortingOrder.ToString());
+        }
+
+        #endregion
+
+        var paginationResult = await GenericPaginationAsync(products, model.Pagination);
+
+        return new()
+        {
+            Products = await _mapper.ProjectTo<ShowAllProductInSellerPanelViewModel>(
+                    paginationResult.Query)
+                .ToListAsync(),
+            Pagination = paginationResult.Pagination
+        };
+    }
+
     public async Task<List<string?>> GetPersianTitlesForAutocomplete(string input)
     {
         return await _products.AsNoTracking()
             .Where(x => x.PersianTitle.Contains(input))
+            .OrderBy(x=>x.Id)
             .Take(20)
             .Select(x => x.PersianTitle)
             .ToListAsync();
@@ -185,5 +243,17 @@ public class ProductService : GenericService<Product>, IProductService
             .Select(x=>x.ProductCode)
             .FirstOrDefaultAsync();
         return lastProductCode + 1;
+    }
+
+    public async Task<List<string?>> GetPersianTitlesForAutocompleteInSellerPanel(string input)
+    {
+        var userId = _httpContextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
+        var sellerId = await _sellerService.GetSelerId(userId);
+        return await _products.AsNoTracking()
+            .Where(x => x.SellerId == sellerId)
+            .Where(x => x.PersianTitle.Contains(input))
+            .Take(20)
+            .Select(x => x.PersianTitle)
+            .ToListAsync();
     }
 }

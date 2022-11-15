@@ -77,3 +77,6 @@ a{
 .details h5 {
     display: inline-block;
 }
+.font-size-1em {
+    font-size: 1em;
+}

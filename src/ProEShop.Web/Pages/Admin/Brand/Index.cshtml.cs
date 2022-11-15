@@ -5,11 +5,8 @@ using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
-using ProEShop.Entities;
 using ProEShop.Services.Contracts;
-using ProEShop.Services.Services;
 using ProEShop.ViewModels.Brands;
-using ProEShop.ViewModels.Categories;
 
 namespace ProEShop.Web.Pages.Admin.Brand;
 

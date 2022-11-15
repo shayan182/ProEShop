@@ -14,7 +14,7 @@ public class HttpClientService : IHttpClientService
         _httpClient = new HttpClient();
     }
     public async Task<HttpResponseMessage> SendAsync(string url, HttpMethod method,
-        Dictionary<string, string> headers = default, string content = "", string mediaType = MediaTypeNames.Application.Json)
+        Dictionary<string, string>? headers = default, string content = "", string mediaType = MediaTypeNames.Application.Json)
     {
         var request = new HttpRequestMessage
         {

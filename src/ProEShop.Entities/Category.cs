@@ -50,6 +50,7 @@ public class Category : EntityBase, IAuditableEntity
     public ICollection<CategoryBrand> CategoryBrands { get; set; }
         = new List<CategoryBrand>();
     public ICollection<Product> Products { get; set; }
+    public ICollection<CategoryVariant> CategoryVariants { get; set; }
 
     #endregion
 }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
+using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
@@ -11,14 +13,20 @@ namespace ProEShop.Services.Services;
 public class CategoryService : GenericService<Category>, ICategoryService
 {
     private readonly DbSet<Category> _categories;
+    private readonly DbSet<Product> _products;
     private readonly IMapper _mapper;
+    private readonly ISellerService _sellerService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public CategoryService(IUnitOfWork uow,
-        IMapper mapper)
+        IMapper mapper, ISellerService sellerService, IHttpContextAccessor httpContextAccessor)
         : base(uow)
     {
         _mapper = mapper;
+        _sellerService = sellerService;
+        _httpContextAccessor = httpContextAccessor;
         _categories = uow.Set<Category>();
+        _products = uow.Set<Product>();
     }
     public async Task<ShowCategoriesViewModel> GetCategories(ShowCategoriesViewModel model)
     {
@@ -219,5 +227,18 @@ public class CategoryService : GenericService<Category>, ICategoryService
             result.Add(categoryToAdd.ParentId.Value);
         }
         return (true, result);
+    }
+
+    public async Task<Dictionary<long, string>> GetSellerCategories()
+    {
+        var userId = _httpContextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
+        var sellerId = await _sellerService.GetSelerId(userId);
+        return await _products.Where(x => x.SellerId == sellerId)
+            .GroupBy(x => x.MainCategoryId)
+            .Select(x => new
+            {
+                x.Key,
+                x.First().Category.Title
+            }).ToDictionaryAsync(x => x.Key, x => x.Title);
     }
 }

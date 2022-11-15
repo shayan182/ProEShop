@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Admin\Variant\Index.cshtml" />
+    <None Include="Pages\Admin\Variant\List.cshtml" />
     <None Include="Pages\Admin\Brand\Index.cshtml" />
     <None Include="Pages\Admin\Brand\List.cshtml" />
     <None Include="Pages\Admin\FeatureConstantValue\Index.cshtml" />
