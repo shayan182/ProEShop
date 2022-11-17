@@ -542,6 +542,7 @@ $(document).on('click', '.get-html-with-ajax', function () {
 });
 
 $(document).on('submit', 'form.custom-ajax-form', function (e) {
+    debugger 
     e.preventDefault();
     let currentForm = $(this);
     let formAction = currentForm.attr('action');

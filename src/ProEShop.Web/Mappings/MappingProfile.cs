@@ -5,6 +5,7 @@ using ProEShop.ViewModels.Brands;
 using ProEShop.ViewModels.Categories;
 using ProEShop.ViewModels.CategoryFeatures;
 using ProEShop.ViewModels.FeatureConstantValues;
+using ProEShop.ViewModels.Guarantees;
 using ProEShop.ViewModels.Product;
 using ProEShop.ViewModels.Products;
 using ProEShop.ViewModels.Sellers;
@@ -97,5 +98,9 @@ public class MappingProfile : AutoMapper.Profile
 
         this.CreateMap<EditVariantViewMode, Entities.Variant>().ReverseMap()
             .AddTransform<string>(str => str != null ? str.Trim() : null);
+        this.CreateMap<Entities.Guarantee, ShowGuaranteeViewModel>();
+        this.CreateMap<Entities.Guarantee, AddGuaranteeViewModel>().ReverseMap();
+        this.CreateMap<Entities.Guarantee, EditGuaranteeViewMode>();
+
     }
 }

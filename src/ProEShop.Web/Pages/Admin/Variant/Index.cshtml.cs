@@ -64,7 +64,7 @@ public class IndexModel : PageBase
         }
 
         var variant = _mapper.Map<Entities.Variant>(model);
-        variant.IsConfirmed = false;
+        variant.IsConfirmed = true;
         if (!variant.IsColor)
             variant.ColorCode = null;
 

@@ -1,0 +1,41 @@
+﻿@model ProEShop.ViewModels.Guarantees.EditGuaranteeViewMode
+<form class="alert alert-secondary custom-ajax-form" asp-page-handler="Edit" method="post">
+    <input asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-12 col-sm-4 col-lg-3 my-2">
+            <label class="form-label" asp-for="Title"></label>
+            <input class="form-control" asp-for="Title" />
+            <span class="span-error-message" asp-validation-for="Title"></span>
+        </div>
+        <div class="col-12 col-sm-4 col-lg-3 my-2">
+            <label class="form-label" asp-for="MonthsCount"></label>
+            <input class="form-control" asp-for="MonthsCount" />
+            <span class="span-error-message" asp-validation-for="MonthsCount" ></span>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 my-2">
+            <label class="form-label" asp-for="NewPicture"></label>
+            <input class="form-control" asp-for="NewPicture" />
+            <span class="span-error-message" asp-validation-for="NewPicture"></span>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 my-2 form-check form-switch px-3">
+            <label class="form-check-label" asp-for="Picture"></label>
+            @if (Model.Picture is null)
+            {
+                <div class="badge bg-danger">عکسی بارگذاری نشده است</div>
+            }
+            else
+            {
+                <img class="rounded" src="~/images/guarantees/@Model.Picture" width="100" />
+            }
+        </div>
+        <div class="col-12 my-2">
+            <div class="d-grid d-lg-block">
+                <button type="submit" class="btn btn-primary d-inline-flex align-items-center submit-custom-ajax-button">
+                    ویرایش
+                    <span class="spinner-border spinner-border-sm d-none ms-2"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
