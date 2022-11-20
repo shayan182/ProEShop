@@ -64,6 +64,7 @@ public class Product : EntityBase, IAuditableEntity
     public Brand Brand { get; set; }
     public Seller Seller { get; set; }
     public Category Category { get; set; }
+    public ICollection<ProductVariant> ProductVariants { get; set; }
     #endregion
 
 }

@@ -1,6 +1,7 @@
 ﻿using ProEShop.Entities;
 using ProEShop.ViewModels.Products;
 using ProEShop.ViewModels.Sellers;
+using ProEShop.ViewModels.Variants;
 
 namespace ProEShop.Services.Contracts;
 
@@ -21,4 +22,5 @@ public interface IProductService: IGenericService<Product>
     Task<int> GetProductCodeForCreateProduct();
 
     Task<List<string?>> GetPersianTitlesForAutocompleteInSellerPanel(string input);
+    Task<AddVariantForSellerPanelViewModel> GetProductInfoForAddVariant(long productId);
 }

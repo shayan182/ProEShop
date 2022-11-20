@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ProEShop.DataLayer.Context;
 namespace ProEShop.DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221117083344_V2022_11_17_1202")]
+    partial class V2022_11_17_1202
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1217,74 +1219,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.ToTable("ProductMedia");
                 });
 
-            modelBuilder.Entity("ProEShop.Entities.ProductVariant", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("CreatedByBrowserName")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("CreatedByIp")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long?>("CreatedByUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("GuaranteeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedByBrowserName")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("ModifiedByIp")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long?>("ModifiedByUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("SellerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("VariantId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GuaranteeId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("VariantId");
-
-                    b.HasIndex("SellerId", "ProductId", "VariantId")
-                        .IsUnique();
-
-                    b.ToTable("ProductVariants");
-                });
-
             modelBuilder.Entity("ProEShop.Entities.ProvinceAndCity", b =>
                 {
                     b.Property<long>("Id")
@@ -1801,41 +1735,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ProEShop.Entities.ProductVariant", b =>
-                {
-                    b.HasOne("ProEShop.Entities.Guarantee", "Guarantee")
-                        .WithMany()
-                        .HasForeignKey("GuaranteeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProEShop.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProEShop.Entities.Seller", "Seller")
-                        .WithMany("ProductVariants")
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("ProEShop.Entities.Variant", "Variant")
-                        .WithMany()
-                        .HasForeignKey("VariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Guarantee");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Seller");
-
-                    b.Navigation("Variant");
-                });
-
             modelBuilder.Entity("ProEShop.Entities.ProvinceAndCity", b =>
                 {
                     b.HasOne("ProEShop.Entities.ProvinceAndCity", "Parent")
@@ -1937,8 +1836,6 @@ namespace ProEShop.DataLayer.Migrations
 
             modelBuilder.Entity("ProEShop.Entities.Seller", b =>
                 {
-                    b.Navigation("ProductVariants");
-
                     b.Navigation("Products");
                 });
 

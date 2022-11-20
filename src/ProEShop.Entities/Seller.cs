@@ -121,6 +121,7 @@ public class Seller : EntityBase, IAuditableEntity
     public ProvinceAndCity? City { get; set; }
 
     public ICollection<Product> Products { get; set; }
+    public ICollection<ProductVariant>? ProductVariants { get; set; }
     #endregion
 }
 

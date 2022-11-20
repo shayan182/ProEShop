@@ -231,8 +231,7 @@ public class CategoryService : GenericService<Category>, ICategoryService
 
     public async Task<Dictionary<long, string>> GetSellerCategories()
     {
-        var userId = _httpContextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
-        var sellerId = await _sellerService.GetSelerId(userId);
+        var sellerId = await _sellerService.GetSellerId();
         return await _products.Where(x => x.SellerId == sellerId)
             .GroupBy(x => x.MainCategoryId)
             .Select(x => new

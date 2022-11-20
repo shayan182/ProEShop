@@ -78,7 +78,7 @@ public class CreateModel : SellerPanelBase
 
 
         productToAdd.Slug = product.PersianTitle.ToUrlSlug();
-        productToAdd.SellerId = await _sellerService.GetSelerId(User.Identity.GetLoggedInUserId());
+        productToAdd.SellerId = await _sellerService.GetSellerId();
         productToAdd.ShortDescription = _htmlSanitizer.Sanitize(product.ShortDescription);
         productToAdd.SpecialtyCheck = _htmlSanitizer.Sanitize(product.SpecialtyCheck);
         productToAdd.ProductCode = await _productService.GetProductCodeForCreateProduct();
@@ -333,7 +333,7 @@ public class CreateModel : SellerPanelBase
         });
 
         var userId = User.Identity?.GetUserId();
-        brand.SellerId = await _sellerService.GetSelerId(userId.Value);
+        brand.SellerId = await _sellerService.GetSellerId(userId.Value);
         brand.LogoPicture = model.LogoPicture.GenerateFileName();
         string brandRegistrationFileName = null;
         if (model.BrandRegistrationPicture.IsFileUploaded())

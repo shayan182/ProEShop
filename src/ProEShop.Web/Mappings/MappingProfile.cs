@@ -17,7 +17,7 @@ public class MappingProfile : AutoMapper.Profile
 {
     public MappingProfile()
     {
-       
+
         //if you wanna trim all of the strings (read and create)
         //CreateMap<string, string>()
         //    .ConvertUsing(str => str != null ? str.Trim() : null);
@@ -50,7 +50,7 @@ public class MappingProfile : AutoMapper.Profile
 
         CreateMap<Entities.Category, EditCategoryViewModel>()
             .ForMember(x => x.Picture, // in the both class we have picture ,so mapper map these properties 
-                opt => opt.Ignore()) 
+                opt => opt.Ignore())
             .ForMember(dest => dest.SelectedPicture,
                 options =>
                     options.MapFrom(src => src.Picture));
@@ -101,6 +101,35 @@ public class MappingProfile : AutoMapper.Profile
         this.CreateMap<Entities.Guarantee, ShowGuaranteeViewModel>();
         this.CreateMap<Entities.Guarantee, AddGuaranteeViewModel>().ReverseMap();
         this.CreateMap<Entities.Guarantee, EditGuaranteeViewMode>();
+        this.CreateMap<Entities.Product, AddVariantForSellerPanelViewModel>()
+            .ForMember(dest => dest.ProductId,
+                options =>
+                    options.MapFrom(src => src.Id))
+            .ForMember(dest => dest.ProductTitle,
+                options =>
+                    options.MapFrom(src => src.PersianTitle))
+        //.ForMember(x => x.CommissionPercentage,
+        //    opt => opt.Ignore());
 
+        .ForMember(dest => dest.CommissionPercentage,
+            options =>
+                options.MapFrom(
+                    src => src.Category.CategoryBrands
+                        .Select(x => new
+                        {
+                            x.BrandId,
+                            x.CommissionPercentage
+                        })
+                        .Single(x => x.BrandId == src.BrandId)
+                        .CommissionPercentage
+                ))
+            .ForMember(dest => dest.MainPicture,
+                options =>
+                    options.MapFrom(src => src.ProductMedia.First().FileName))
+            .ForMember(dest => dest.Variants,
+                options =>
+                    options.MapFrom(src => src.Category.CategoryVariants));
+        this.CreateMap<Entities.CategoryVariant, ShowCategoryVariantInAddVariantViewModel>();
+        this.CreateMap<AddVariantForSellerPanelViewModel, ProductVariant>();
     }
 }

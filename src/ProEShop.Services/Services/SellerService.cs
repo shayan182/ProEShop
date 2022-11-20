@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
+using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
@@ -13,11 +15,13 @@ public class SellerService : GenericService<Seller>, ISellerService
 {
     private readonly DbSet<Seller> _sellers;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public SellerService(IUnitOfWork uow,IMapper mapper) : base(uow)
+    public SellerService(IUnitOfWork uow,IMapper mapper, IHttpContextAccessor contextAccessor) : base(uow)
     {
         _sellers = uow.Set<Seller>();
         _mapper = mapper;
+        _contextAccessor = contextAccessor;
     }
 
     public override async Task<DuplicateColumns> AddAsync(Seller entity)
@@ -159,8 +163,18 @@ public class SellerService : GenericService<Seller>, ISellerService
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<long> GetSelerId(long userId)
+    public async Task<long> GetSellerId(long userId)
     {
+        var seller = await _sellers.Select(x => new
+        {
+            x.Id,
+            x.UserId
+        }).SingleAsync(x => x.UserId == userId);
+        return seller.Id;
+    }
+    public async Task<long> GetSellerId()
+    {
+        var userId = _contextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
         var seller = await _sellers.Select(x => new
         {
             x.Id,

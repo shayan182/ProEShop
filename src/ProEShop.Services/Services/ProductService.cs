@@ -11,6 +11,7 @@ using ProEShop.Services.Contracts;
 using ProEShop.ViewModels;
 using ProEShop.ViewModels.Products;
 using ProEShop.ViewModels.Sellers;
+using ProEShop.ViewModels.Variants;
 
 
 namespace ProEShop.Services.Services;
@@ -95,10 +96,10 @@ public class ProductService : GenericService<Product>, IProductService
 
     public async Task<ShowProductsInSellerPanelViewModel> GetProductsInSellerPanel(ShowProductsInSellerPanelViewModel model)
     {
-        var userId = _httpContextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
-        var sellerId = await _sellerService.GetSelerId(userId);
+        var sellerId = await _sellerService.GetSellerId();
         var products = _products.AsNoTracking()
-            .Where(x => x.SellerId == sellerId)
+            .Where(x => x.SellerId == sellerId ||
+                        x.ProductVariants.Any(pv=>pv.SellerId == sellerId))
             .AsQueryable();
 
         #region Search
@@ -247,13 +248,19 @@ public class ProductService : GenericService<Product>, IProductService
 
     public async Task<List<string?>> GetPersianTitlesForAutocompleteInSellerPanel(string input)
     {
-        var userId = _httpContextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
-        var sellerId = await _sellerService.GetSelerId(userId);
+        var sellerId = await _sellerService.GetSellerId();
         return await _products.AsNoTracking()
             .Where(x => x.SellerId == sellerId)
             .Where(x => x.PersianTitle.Contains(input))
             .Take(20)
             .Select(x => x.PersianTitle)
             .ToListAsync();
+    }
+
+    public async Task<AddVariantForSellerPanelViewModel> GetProductInfoForAddVariant(long productId)
+    {
+        return await _mapper.ProjectTo<AddVariantForSellerPanelViewModel>(
+            _products
+        ).SingleOrDefaultAsync(x => x.ProductId == productId);
     }
 }
