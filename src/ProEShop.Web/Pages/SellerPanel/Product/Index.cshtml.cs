@@ -24,6 +24,7 @@ public class IndexModel : PageBase
     private readonly IUploadFileService _uploadFile;
     private readonly IUnitOfWork _uow;
     private readonly IHtmlSanitizer _htmlSanitizer;
+    private readonly IProductVariantService _productVariantService;
 
     public IndexModel(
         IProductService productService,
@@ -31,7 +32,7 @@ public class IndexModel : PageBase
         ICategoryService categoryService,
         IUploadFileService uploadFile,
         IUnitOfWork uow,
-        IHtmlSanitizer htmlSanitizer)
+        IHtmlSanitizer htmlSanitizer, IProductVariantService productVariantService)
     {
         _productService = productService;
         _sellerService = sellerService;
@@ -39,6 +40,7 @@ public class IndexModel : PageBase
         _uploadFile = uploadFile;
         _uow = uow;
         _htmlSanitizer = htmlSanitizer;
+        _productVariantService = productVariantService;
     }
 
     #endregion
@@ -81,5 +83,12 @@ public class IndexModel : PageBase
     {
         return Json(await _productService.GetPersianTitlesForAutocompleteInSellerPanel(term));
     }
-
+    public async Task<IActionResult> OnGetShowProductVariants(long productId)
+    {
+        if (productId<1)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+        return Partial("ProductVariants", await _productVariantService.GetProductVariants(productId));
+    }
 }

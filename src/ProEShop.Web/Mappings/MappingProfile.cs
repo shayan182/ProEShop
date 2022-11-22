@@ -8,6 +8,7 @@ using ProEShop.ViewModels.FeatureConstantValues;
 using ProEShop.ViewModels.Guarantees;
 using ProEShop.ViewModels.Product;
 using ProEShop.ViewModels.Products;
+using ProEShop.ViewModels.ProductVariants;
 using ProEShop.ViewModels.Sellers;
 using ProEShop.ViewModels.Variants;
 
@@ -131,5 +132,6 @@ public class MappingProfile : AutoMapper.Profile
                     options.MapFrom(src => src.Category.CategoryVariants));
         this.CreateMap<Entities.CategoryVariant, ShowCategoryVariantInAddVariantViewModel>();
         this.CreateMap<AddVariantForSellerPanelViewModel, ProductVariant>();
+        this.CreateMap<ProductVariant, ShowProductVariantViewModel>();
     }
 }

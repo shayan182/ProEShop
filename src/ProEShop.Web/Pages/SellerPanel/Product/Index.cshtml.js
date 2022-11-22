@@ -22,3 +22,19 @@ function productStatusInManagingProducts(message) {
     $('#html-modal-place').modal('hide');
     fillDataTable();
 }
+
+function getProductVariants(e) {
+    var productId = $(e).attr('product-id');
+    getHtmlWithAJAX('?handler=ShowProductVariants', { productId: productId }, 'showProductVariantsInModal', e);
+}
+
+function showProductVariantsInModal(result, clickedButton) {
+    appendHtmlModalPlaceToBody();
+    var currnetModal = $('#html-modal-place');
+    currnetModal.find('.modal-body').html(result);
+    currnetModal.modal('show');
+    $('#html-modal-place .modal-header h5').html(
+        'تنوع های من برای محصول: ' +
+        $(clickedButton).parents('tr').find('td:eq(1)').html()
+    );
+}

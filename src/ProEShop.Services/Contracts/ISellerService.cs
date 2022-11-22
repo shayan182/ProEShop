@@ -11,7 +11,7 @@ public interface ISellerService : IGenericService<Seller>
     Task<Seller?> GetSellerToRemoveInManagingSeller(long id);
     Task<long> GetSellerId(long userId);
     /// <summary>
-    /// get Seller Id (if your user is already logged in)
+    /// Get Seller Id (if your user is already logged in)
     /// </summary>
     /// <returns></returns>
     Task<long> GetSellerId();
