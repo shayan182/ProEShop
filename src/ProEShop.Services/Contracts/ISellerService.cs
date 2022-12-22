@@ -9,11 +9,11 @@ public interface ISellerService : IGenericService<Seller>
     Task<ShowSellersViewModel> GetSellers(ShowSellersViewModel model);
     Task<SellerDetailsViewModel?> GetSellerDetails(long id);
     Task<Seller?> GetSellerToRemoveInManagingSeller(long id);
-    Task<long> GetSellerId(long userId);
+    Task<long> GetSellerIdAsync(long userId);
     /// <summary>
     /// Get Seller Id (if your user is already logged in)
     /// </summary>
     /// <returns></returns>
-    Task<long> GetSellerId();
+    Task<long> GetSellerIdAsync();
     Task<List<string?>> GetShopNamesForAutocomplete(string input);
 }

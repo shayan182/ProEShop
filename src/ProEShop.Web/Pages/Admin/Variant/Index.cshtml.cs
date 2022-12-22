@@ -77,7 +77,7 @@ public class IndexModel : PageBase
         var model = await _variantService.GetForEdit(id);
         if (model is null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
 
         return Partial("Edit", model);
@@ -93,7 +93,7 @@ public class IndexModel : PageBase
         }
         var variant = await _variantService.FindByIdAsync(model.Id);
         if (variant is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         variant = _mapper.Map(model, variant);
         if (!variant.IsColor)
             variant.ColorCode = null;

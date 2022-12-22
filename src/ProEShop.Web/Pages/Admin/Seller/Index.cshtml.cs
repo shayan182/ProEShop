@@ -87,7 +87,7 @@ public class IndexModel : PageBase
         var seller = await _sellerService.GetSellerDetails(sellerId);
         if (seller is null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
         return Partial("SellerDetails", seller);
     }

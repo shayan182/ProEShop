@@ -52,7 +52,7 @@ public class IsImageAttribute : BaseValidationAttribute, IClientModelValidator
             {
                 if (file == null || file.Length == 0)
                 {
-                    return new ValidationResult(ErrorMessage);
+                    continue; 
                 }
                 if (!_allowExtensions.Contains(file.ContentType))
                 {

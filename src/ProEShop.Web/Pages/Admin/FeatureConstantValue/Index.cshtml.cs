@@ -78,7 +78,7 @@ public class IndexModel : PageBase
         var featureConstantValue = await _featureConstantValueService.FindByIdAsync(featureConstantValueId);
         if (featureConstantValue == null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
         _featureConstantValueService.Remove(featureConstantValue);
         await _uow.SaveChangesAsync();
@@ -118,7 +118,7 @@ public class IndexModel : PageBase
     {
         var featureConstantValue = await _featureConstantValueService.FindByIdAsync(id);
         if (featureConstantValue == null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
 
         var categories = await _categoryService.GetCategoriesToShowInSelectBoxAsync();
         var features = await _categoryFeatureService.GetCategoryFeatures(featureConstantValue.CategoryId);
@@ -144,7 +144,7 @@ public class IndexModel : PageBase
 
         var featureConstantValue = await _featureConstantValueService.FindByIdAsync(model.Id);
         if (featureConstantValue is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         featureConstantValue = _mapper.Map(model,featureConstantValue);
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "مقدار ثابت ویژگی با موفقیت ویرایش شد"));

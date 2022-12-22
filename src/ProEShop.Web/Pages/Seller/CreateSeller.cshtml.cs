@@ -114,7 +114,7 @@ public class CreateSellerModel : PageBase
         var user = await _userManager.GetUserForCreateSeller(CreateSeller.PhoneNumber);
         if (user is null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
         user = _mapper.Map(CreateSeller, user);
 

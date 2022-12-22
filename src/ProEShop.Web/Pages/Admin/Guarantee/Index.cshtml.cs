@@ -87,7 +87,7 @@ public class IndexModel : PageBase
         var model = await _guaranteeService.GetForEdit(id);
         if (model is null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
 
         return Partial("Edit", model);

@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
-using DNTCommon.Web.Core;
-using MailKit.Search;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
-using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels;
 using ProEShop.ViewModels.Products;
-using ProEShop.ViewModels.Sellers;
 using ProEShop.ViewModels.Variants;
 
 
@@ -96,7 +92,7 @@ public class ProductService : GenericService<Product>, IProductService
 
     public async Task<ShowProductsInSellerPanelViewModel> GetProductsInSellerPanel(ShowProductsInSellerPanelViewModel model)
     {
-        var sellerId = await _sellerService.GetSellerId();
+        var sellerId = await _sellerService.GetSellerIdAsync();
         var products = _products.AsNoTracking()
             .Where(x => x.SellerId == sellerId ||
                         x.ProductVariants.Any(pv=>pv.SellerId == sellerId))
@@ -248,7 +244,7 @@ public class ProductService : GenericService<Product>, IProductService
 
     public async Task<List<string?>> GetPersianTitlesForAutocompleteInSellerPanel(string input)
     {
-        var sellerId = await _sellerService.GetSellerId();
+        var sellerId = await _sellerService.GetSellerIdAsync();
         return await _products.AsNoTracking()
             .Where(x => x.SellerId == sellerId)
             .Where(x => x.PersianTitle.Contains(input))

@@ -133,5 +133,6 @@ public class MappingProfile : AutoMapper.Profile
         this.CreateMap<Entities.CategoryVariant, ShowCategoryVariantInAddVariantViewModel>();
         this.CreateMap<AddVariantForSellerPanelViewModel, ProductVariant>();
         this.CreateMap<ProductVariant, ShowProductVariantViewModel>();
+        this.CreateMap<ProductVariant, ShowProductVariantInCreateConsignmentViewModel>();
     }
 }

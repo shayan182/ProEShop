@@ -163,7 +163,7 @@ public class SellerService : GenericService<Seller>, ISellerService
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<long> GetSellerId(long userId)
+    public async Task<long> GetSellerIdAsync(long userId)
     {
         var seller = await _sellers.Select(x => new
         {
@@ -172,7 +172,7 @@ public class SellerService : GenericService<Seller>, ISellerService
         }).SingleAsync(x => x.UserId == userId);
         return seller.Id;
     }
-    public async Task<long> GetSellerId()
+    public async Task<long> GetSellerIdAsync()
     {
         var userId = _contextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
         var seller = await _sellers.Select(x => new

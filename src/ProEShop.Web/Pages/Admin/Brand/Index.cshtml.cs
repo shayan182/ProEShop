@@ -102,7 +102,7 @@ public class IndexModel : PageBase
         var model = await _brandService.GetForEdit(id);
         if (model is null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
 
         return Partial("Edit", model);
@@ -120,7 +120,7 @@ public class IndexModel : PageBase
 
         var brandToUpdate = await _brandService.FindByIdAsync(model.Id);
         if (brandToUpdate is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
 
         var oldLogoPictureFileName = brandToUpdate.LogoPicture;
         var oldBrandRegistrationFileName = brandToUpdate.BrandRegistrationPicture;
@@ -161,7 +161,7 @@ public class IndexModel : PageBase
     {
         var model = await _brandService.GetBrandDetails(brandId);
         if (model is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         return Partial("BrandDetails", model);
     }
 
@@ -174,7 +174,7 @@ public class IndexModel : PageBase
 
         var brand = await _brandService.GetInActiveBrand(model.Id);
         if (brand is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         _brandService.Remove(brand);
         await _uow.SaveChangesAsync();
         //todo: send reject reasons to seller Email
@@ -184,7 +184,7 @@ public class IndexModel : PageBase
     {
         var brand = await _brandService.GetInActiveBrand(id);
         if (brand is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         brand.IsConfirmed = true;
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "برند مورد نظر با موفقیت شد"));

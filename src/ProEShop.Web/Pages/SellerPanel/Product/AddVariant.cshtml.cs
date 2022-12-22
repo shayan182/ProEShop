@@ -56,9 +56,9 @@ public class AddVariantModel : PageBase
         }
 
         var productVariant = _mapper.Map<ProductVariant>(Variant);
-
+        productVariant.VariantCode = await _productVariantService.GetVariantCodeForCreateProductVariant();
         //Get Seller Id For Entity
-        var sellerId = await _sellerService.GetSellerId();
+        var sellerId = await _sellerService.GetSellerIdAsync();
         productVariant.SellerId = sellerId;
 
         await _productVariantService.AddAsync(productVariant);

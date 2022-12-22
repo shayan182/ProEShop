@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ProEShop.DataLayer.Context;
 namespace ProEShop.DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221122164626_V2022_11_22_2015")]
+    partial class V2022_11_22_2015
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,121 +339,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.HasIndex("VariantId");
 
                     b.ToTable("CategoryVariant");
-                });
-
-            modelBuilder.Entity("ProEShop.Entities.Consignment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<byte>("ConsignmentStatus")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("CreatedByBrowserName")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("CreatedByIp")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long?>("CreatedByUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DeliveryTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedByBrowserName")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("ModifiedByIp")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long?>("ModifiedByUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("SellerId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SellerId");
-
-                    b.ToTable("Consignments");
-                });
-
-            modelBuilder.Entity("ProEShop.Entities.ConsignmentItem", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<long>("ConsignmentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedByBrowserName")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("CreatedByIp")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long?>("CreatedByUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedByBrowserName")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("ModifiedByIp")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long?>("ModifiedByUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("ProductVariantId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConsignmentId");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.ToTable("ConsignmentItems");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.Feature", b =>
@@ -1755,36 +1642,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.Navigation("Variant");
                 });
 
-            modelBuilder.Entity("ProEShop.Entities.Consignment", b =>
-                {
-                    b.HasOne("ProEShop.Entities.Seller", "Seller")
-                        .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Seller");
-                });
-
-            modelBuilder.Entity("ProEShop.Entities.ConsignmentItem", b =>
-                {
-                    b.HasOne("ProEShop.Entities.Consignment", "Consignment")
-                        .WithMany("ConsignmentItems")
-                        .HasForeignKey("ConsignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProEShop.Entities.ProductVariant", "ProductVariant")
-                        .WithMany("ConsignmentItems")
-                        .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Consignment");
-
-                    b.Navigation("ProductVariant");
-                });
-
             modelBuilder.Entity("ProEShop.Entities.FeatureConstantValue", b =>
                 {
                     b.HasOne("ProEShop.Entities.Category", "Category")
@@ -2042,11 +1899,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ProEShop.Entities.Consignment", b =>
-                {
-                    b.Navigation("ConsignmentItems");
-                });
-
             modelBuilder.Entity("ProEShop.Entities.Feature", b =>
                 {
                     b.Navigation("CategoryFeatures");
@@ -2084,11 +1936,6 @@ namespace ProEShop.DataLayer.Migrations
                     b.Navigation("ProductMedia");
 
                     b.Navigation("ProductVariants");
-                });
-
-            modelBuilder.Entity("ProEShop.Entities.ProductVariant", b =>
-                {
-                    b.Navigation("ConsignmentItems");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.ProvinceAndCity", b =>

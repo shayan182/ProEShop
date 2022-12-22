@@ -64,7 +64,7 @@ public class IndexModel : PageBase
         {
             if (!await _categoryService.IsExistsBy(nameof(Entities.Category.Id), id))
             {
-                return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+                return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
             }
         }
 
@@ -115,7 +115,7 @@ public class IndexModel : PageBase
     {
         var model = await _categoryService.GetForEdit(id);
         if (model is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         var categories = await _categoryService.GetCategoriesToShowInSelectBoxAsync();
         model.MainCategories = categories
            .CreateSelectListItem(firstItemText: "خودش دسته اصلی باشد");
@@ -147,7 +147,7 @@ public class IndexModel : PageBase
 
         var category = await _categoryService.FindByIdAsync(model.Id);
         if (category == null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
 
         var oldFileName = category.Picture;
 
@@ -176,7 +176,7 @@ public class IndexModel : PageBase
 
         var category = await _categoryService.FindByIdAsync(elementId);
         if (category is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         _categoryService.SoftDelete(category);
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت حذف شد."));
@@ -185,7 +185,7 @@ public class IndexModel : PageBase
     {
         var category = await _categoryService.FindByIdAsync(elementId);
         if (category is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
 
         var fileName = category.Picture;
         category.Picture = null;
@@ -197,7 +197,7 @@ public class IndexModel : PageBase
     {
         var category = await _categoryService.FindByIdAsync(elementId);
         if (category is null)
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         _categoryService.Restore(category);
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "دسته بندی مورد نظر با موفقیت بازگردانی شد."));
@@ -228,7 +228,7 @@ public class IndexModel : PageBase
         var selectedCategory = await _categoryService.GetCategoryWithItsBrands(model.SelectedCategoryId);
         if (selectedCategory is null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
         selectedCategory.CategoryBrands.Clear();
 

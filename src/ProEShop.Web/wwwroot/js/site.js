@@ -653,6 +653,42 @@ $(document).on('submit', 'form.public-ajax-form', function (e) {
     });
 });
 
+$(document).on('submit', '.get-html-by-sending-form', function (e) {
+    e.preventDefault();
+    let currentForm = $(this);
+    let formAction = currentForm.attr('action');
+    let functionName = currentForm.attr('functionNameToCallInTheEnd');
+    let formData = new FormData(this);
+    $.ajax({
+        url: formAction,
+        data: formData,
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            $('#html-modal-place').modal('hide');
+            showLoading();
+        },
+        success: function (data) {
+            if (data.isSuccessful === false) {
+                let finalData = data.data != null ? data.data : [data.message];
+                fillValidationForm(finalData, currentForm);
+                showToastr('warning', data.message);
+            }
+            else {
+                window[functionName](data.data);
+            }
+        },
+        complete: function () {
+            hideLoading();
+        },
+        error: function () {
+            showErrorMessage();
+        }
+    });
+});
 
 let isMainPaginationClicked = false;
 let isGotoPageClicked = false;

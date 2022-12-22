@@ -65,7 +65,7 @@ public class IndexModel : PageBase
         var product = await _productService.GetProductDetails(productId);
         if (product is null)
         {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundErrorMessage));
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
         return Partial("ProductDetails", product);
     }
