@@ -4,6 +4,8 @@ using ProEShop.Entities.Identity;
 using ProEShop.ViewModels.Brands;
 using ProEShop.ViewModels.Categories;
 using ProEShop.ViewModels.CategoryFeatures;
+using ProEShop.ViewModels.ConsignmentItems;
+using ProEShop.ViewModels.Consignments;
 using ProEShop.ViewModels.FeatureConstantValues;
 using ProEShop.ViewModels.Guarantees;
 using ProEShop.ViewModels.Product;
@@ -134,5 +136,12 @@ public class MappingProfile : AutoMapper.Profile
         this.CreateMap<AddVariantForSellerPanelViewModel, ProductVariant>();
         this.CreateMap<ProductVariant, ShowProductVariantViewModel>();
         this.CreateMap<ProductVariant, ShowProductVariantInCreateConsignmentViewModel>();
+        this.CreateMap<ProductVariant, GetProductVariantInCreateConsignmentViewModel>();
+        this.CreateMap<Entities.Consignment, ShowConsignmentViewModel>()
+            .ForMember(dest => dest.DeliveryDate,
+                options =>
+                    options.MapFrom(src => src.DeliveryDate.ToLongPersianDate()));
+        this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
+
     }
 }

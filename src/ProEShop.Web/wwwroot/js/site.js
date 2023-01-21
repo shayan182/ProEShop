@@ -804,6 +804,8 @@ function getHtmlWithAJAX(url, formData, functionNameToCallInTheEnd, clickedButto
             showLoading();
         },
         success: function (data) {
+            console.log(data)
+
             if (data.isSuccessful === false) {
                 showToastr('warning', data.message);
             } else {
@@ -813,7 +815,8 @@ function getHtmlWithAJAX(url, formData, functionNameToCallInTheEnd, clickedButto
         complete: function () {
             hideLoading();
         },
-        error: function () {
+        error: function (e) {
+            console.log(e)
             showErrorMessage();
         }
     });

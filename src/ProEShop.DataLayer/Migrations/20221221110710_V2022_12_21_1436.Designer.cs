@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ProEShop.DataLayer.Context;
 namespace ProEShop.DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221221110710_V2022_12_21_1436")]
+    partial class V2022_12_21_1436
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -364,7 +366,7 @@ namespace ProEShop.DataLayer.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeliveryDate")
+                    b.Property<DateTime>("DeliveryTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -449,8 +451,7 @@ namespace ProEShop.DataLayer.Migrations
 
                     b.HasIndex("ConsignmentId");
 
-                    b.HasIndex("ProductVariantId", "ConsignmentId")
-                        .IsUnique();
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("ConsignmentItems");
                 });

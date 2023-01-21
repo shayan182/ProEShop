@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
+using ProEShop.DataLayer.Context;
+using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.Consignments;
 
@@ -14,16 +16,21 @@ public class CreateModel : SellerPanelBase
 
     private readonly IProductVariantService _productVariantService;
     private readonly IViewRendererService _rendererViewService;
+    private readonly IConsignmentService _consignmentService;
+    private readonly IUnitOfWork _uow;
+    private readonly ISellerService _sellerService;
 
-    public CreateModel(IProductVariantService productVariantService, IViewRendererService rendererViewService)
+    public CreateModel(IProductVariantService productVariantService, IViewRendererService rendererViewService, IConsignmentService consignmentService, IUnitOfWork uow, ISellerService sellerService)
     {
         _productVariantService = productVariantService;
         _rendererViewService = rendererViewService;
+        _consignmentService = consignmentService;
+        _uow = uow;
+        _sellerService = sellerService;
     }
 
     #endregion
 
-    [BindProperty]
     [Display(Name = "کد تنوع")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [Range(1, int.MaxValue, ErrorMessage = AttributesErrorMessages.RegularExpressionMessage)]
@@ -32,7 +39,7 @@ public class CreateModel : SellerPanelBase
     public void OnGet()
     {
     }
-    public IActionResult OnPost(CreateConsignmentViewModel createConsignment)
+    public async Task<IActionResult> OnPost(CreateConsignmentViewModel createConsignment)
     {
         if (!ModelState.IsValid)
         {
@@ -42,10 +49,69 @@ public class CreateModel : SellerPanelBase
             });
         }
 
-        return Json(new JsonResultOperation(true, string.Empty));
+        if (createConsignment.Variants?.Count < 1)
+            return Json(new JsonResultOperation(false));
+
+        var deliveryDate = createConsignment.DeliveryDate.ToGregorianDateTime();
+        if (!deliveryDate.IsSuccessful)
+            return Json(new JsonResultOperation(false));
+
+        var variantCodes = new List<int>();
+        foreach (var variant in createConsignment.Variants)
+        {
+            var splitVariant = variant.Split("|||");
+            if(!int.TryParse(splitVariant[0], out var variantCodeToAdd))
+                return Json(new JsonResultOperation(false));
+            
+            variantCodes.Add(variantCodeToAdd);
+        }
+
+        if (variantCodes.Count !=  variantCodes.Distinct().Count())
+                return Json(new JsonResultOperation(false));
+
+        var consignmentToAdd = new Entities.Consignment()
+        {
+            DeliveryDate = deliveryDate.Result
+        };
+
+        //check with database
+        var productVariants = await _productVariantService
+            .GetProductVariantForCreateConsignment(variantCodes);
+
+        if (productVariants.Count != variantCodes.Count)
+            return Json(new JsonResultOperation(false));
+
+        foreach (var productVariant in productVariants)
+        {
+            var variantCodeToCompare = $"{productVariant.VariantCode}|||";
+            var variantItem = createConsignment.Variants
+                .Single(x => x.StartsWith(variantCodeToCompare));
+            var productCountString = variantItem.Split("|||")[1];
+            if (!int.TryParse(productCountString, out var productCount))
+                return Json(new JsonResultOperation(false));
+
+            var maxProductCount = 100000;
+            if (productCount > maxProductCount)
+                return Json(new JsonResultOperation(false,$"نعداد هر محصول باید بین 1 تا {maxProductCount} باشد."));
+            consignmentToAdd.ConsignmentItems.Add(new ConsignmentItem()
+            {
+                Count = productCount,
+                ProductVariantId = productVariant.Id
+            });
+
+        }
+
+        consignmentToAdd.SellerId = await _sellerService.GetSellerIdAsync();
+
+        await _consignmentService.AddAsync(consignmentToAdd);
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "محموله مورد نظر ایجاد شد")
+        {
+            Data = "/"
+        });
     }
 
-    public async Task<IActionResult> OnPostGetConsignmentTr()
+    public async Task<IActionResult> OnPostGetConsignmentTr(int variantCode)
     {
         if (!ModelState.IsValid)
         {
@@ -55,13 +121,13 @@ public class CreateModel : SellerPanelBase
             });
         }
 
-        var productVariant = await _productVariantService.GetProductVariantForCreateConsignment(VariantCode);
+        var productVariant = await _productVariantService.GetProductVariantForCreateConsignment(variantCode);
         if (productVariant is null)
         {
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
 
-        return Json(new JsonResultOperation(true,String.Empty)
+        return Json(new JsonResultOperation(true, String.Empty)
         {
             Data = await _rendererViewService.RenderViewToStringAsync(
                 "~/Pages/SellerPanel/Consignment/_ProductVariantTrPartial.cshtml"

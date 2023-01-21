@@ -15,13 +15,14 @@ public interface IIdentityDbInitializer
     /// </summary>
     void SeedData();
 
-    Task<IdentityResult> SeedDatabaseWithAdminUserAsync();
+    Task<IdentityResult> SeedAdminRole();
 
     Task<IdentityResult> SeedSellerRole();
+    Task<IdentityResult> SeedWarehouseRole();
 
-    Task<IdentityResult> SeedUserForSeller();
+    //Task<IdentityResult> SeedUserForSeller();
 
     Task SeedProvincesAndCities();
 
-    Task SeedSeller();
+    //Task SeedSeller();
 }
