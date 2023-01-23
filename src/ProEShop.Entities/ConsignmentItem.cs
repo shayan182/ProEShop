@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Entities.AuditableEntity;
 
@@ -16,6 +17,13 @@ public class ConsignmentItem : EntityBase, IAuditableEntity
     public long ConsignmentId { get; set; }
 
     public int Count { get; set; }
+
+    //Example
+    // (VariantCode)--(SellerId)
+    // 4--28
+    [Required]
+    [MaxLength(40)]
+    public string? Barcode { get; set; }
 
     #endregion
 
