@@ -1,6 +1,13 @@
 ﻿$(function () {
     fillDataTable();
     initializingAutocomplete();
+
+    const dtp1Instance = new mds.MdsPersianDateTimePicker(document.getElementById('delivery-date-icon-inventory-consignment'), {
+        targetTextSelector: '#Consignments_SearchConsignments_DeliveryDate',
+        persianNumber: true,
+        selectedDate: new Date(),
+        selectedDateToShow: new Date()
+    });
 });
 
 function getProductDetails(e) {
@@ -26,13 +33,13 @@ function productStatusInManagingProducts(message) {
     fillDataTable();
 }
 
-function getConsignmentItems(e) {
+function getConsignmentDetails(e) {
     var consignmentId = $(e).attr('consignment-id');
-    getHtmlWithAJAX('?handler=GetConsignmentItems', { consignmentId: consignmentId }, 'showCosignmentItemsInModal', e);
+    getHtmlWithAJAX('?handler=GetConsignmentDetails', { consignmentId: consignmentId }, 'showCosignmentDetailsInModal', e);
 }
 
 
-function showCosignmentItemsInModal(result, clickedButton) {
+function showCosignmentDetailsInModal(result, clickedButton) {
     appendHtmlModalPlaceToBody();
     var currnetModal = $('#html-modal-place');
     currnetModal.find('.modal-body').html(result);

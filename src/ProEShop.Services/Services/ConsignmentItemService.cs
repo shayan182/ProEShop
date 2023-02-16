@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
-using ProEShop.ViewModels.ConsignmentItems;
+using ProEShop.ViewModels.Consignments;
 
 namespace ProEShop.Services.Services;
 
@@ -21,10 +21,5 @@ public class ConsignmentItemService : GenericService<ConsignmentItem>, IConsignm
         _consignmentItems = uow.Set<ConsignmentItem>();
     }
 
-    public Task<List<ShowConsignmentItemViewModel>> GetConsignmentItems(long consignmentId)
-    {
-        return _mapper.ProjectTo<ShowConsignmentItemViewModel>(
-            _consignmentItems
-        ).Where(x => x.ConsignmentId == consignmentId).ToListAsync();
-    }
+ 
 }

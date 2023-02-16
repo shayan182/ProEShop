@@ -186,6 +186,7 @@ public class SellerService : GenericService<Seller>, ISellerService
     public async Task<List<string?>> GetShopNamesForAutocomplete(string input)
     {
         return await _sellers.AsNoTracking()
+            .OrderBy(x=>x.Id)
             .Where(x => x.ShopName.Contains(input))
             .Take(20)
             .Select(x => x.ShopName)

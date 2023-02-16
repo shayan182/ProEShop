@@ -95,6 +95,39 @@ public static class ExpressionHelpers
 
         return result;
     }
+    public static IQueryable<T> CreateEqualDateTimeExpressions<T>(IQueryable<T> query, object model)
+    {
+        var result = query;
+        var propertiesToSearch = model.GetType().GetProperties()
+            .Where(x => Attribute.IsDefined(x, typeof(EqualDateTimeSearchAttribute)))
+            .ToList();
+        if (propertiesToSearch.Count > 0)
+        {
+            foreach (var propertyInfo in propertiesToSearch)
+            {
+                var propertyValue = propertyInfo.GetValue(model);
+                if (!string.IsNullOrWhiteSpace(propertyValue?.ToString()))
+                {
+                    var parameter = Expression.Parameter(typeof(T));
+                    var property = Expression.Property(parameter, propertyInfo.Name);
+                    var dateProperty = Expression.Property(property,"Date");
+                    if (propertyValue is string)
+                    {
+                        var (isSuccessful,dateTimeResult) = propertyValue.ToString().ToGregorianDateTime();
+                        if (isSuccessful)
+                        {
+                            var constantValue = Expression.Constant(dateTimeResult.Date);
+                            var equal = Expression.Equal(dateProperty, constantValue);
+                            var exp = Expression.Lambda<Func<T, bool>>(equal, parameter);
+                            result = result.Where(exp);
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
     /// <summary>
     /// Search in the DeletedStatus properties
     /// </summary>
@@ -122,10 +155,11 @@ public static class ExpressionHelpers
     {
         var containsExpressions = CreateContainsExpressions(query, model);
         var equalExpressions = CreateEqualExpressions(containsExpressions, model);
+        var equalDateTimeExpressions = CreateEqualDateTimeExpressions(containsExpressions, model);
         if (callDeletedStatusExpression)
         {
-            return CreateDeletedStatusExpression(equalExpressions, model);
+            return CreateDeletedStatusExpression(equalDateTimeExpressions, model);
         }
-        return equalExpressions;
+        return equalDateTimeExpressions;
     }
 }

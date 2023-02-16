@@ -14,4 +14,6 @@ public interface IConsignmentService : IGenericService<Consignment>
     /// <param name="consignmentId"></param>
     /// <returns></returns>
     Task<Consignment?> GetConsignmentForConfirmation(long consignmentId);
+    Task<ShowConsignmentDetailsViewModel?> GetConsignmentDetails(long consignmentId);
+    Task<Consignment?> GetConsignmentToChangeStatusToReceived(long consignmentId);
 }

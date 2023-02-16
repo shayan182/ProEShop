@@ -67,16 +67,17 @@ public static class DateTimeHelper
 
     public static (bool IsSuccessful, DateTime Result) ToGregorianDateTime(this string input)
     {
-        input = input.ToEnglishNumbers();
-
-        var splitInput = input.Split('/');
-
-        var year = int.Parse(splitInput[0]);
-        var month = int.Parse(splitInput[1]);
-        var day = int.Parse(splitInput[2]);
+       
 
         try
         {
+            input = input.ToEnglishNumbers();
+
+            var splitInput = input.Split('/');
+
+            var year = int.Parse(splitInput[0]);
+            var month = int.Parse(splitInput[1]);
+            var day = int.Parse(splitInput[2]);
             return (true, new DateTime(year, month, day, new PersianCalendar()));
 
         }

@@ -1,12 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProEShop.Entities;
+using System.ComponentModel.DataAnnotations;
 
-namespace ProEShop.ViewModels.ConsignmentItems;
+namespace ProEShop.ViewModels.Consignments;
+public class ShowConsignmentDetailsViewModel
+{
+    
+
+    public long Id { get; set; }
+    public string? DeliveryDate { get; set; }
+    public string? SellerShopName { get; set; }
+    public ConsignmentStatus ConsignmentStatus { get; set; }
+
+    public List<ShowConsignmentItemViewModel>? Items { get; set; }
+}
 public class ShowConsignmentItemViewModel
 {
     [Display(Name = "شناسه آیتم محموله")]
     public long Id { get; set; }
-
-    public long ConsignmentId { get; set; }
 
     [Display(Name = "شناسه کالا")]
     public long ProductVariantProductId { get; set; }
@@ -27,6 +37,6 @@ public class ShowConsignmentItemViewModel
     [Display(Name = "تعداد")]
     public int Count { get; set; }
 
-    [Display(Name ="بارکد")]
+    [Display(Name = "بارکد")]
     public string Barcode { get; set; }
 }

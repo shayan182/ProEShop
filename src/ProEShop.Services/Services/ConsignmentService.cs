@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
@@ -70,4 +71,19 @@ public class ConsignmentService : GenericService<Consignment>, IConsignmentServi
         return _consignments.Where(x => x.ConsignmentStatus == ConsignmentStatus.AwaitingApproval)
             .SingleOrDefaultAsync(x => x.Id == consignmentId);
     }
+
+    public Task<ShowConsignmentDetailsViewModel?> GetConsignmentDetails(long consignmentId)
+    {
+        return _consignments.ProjectTo<ShowConsignmentDetailsViewModel>(
+               configuration: _mapper.ConfigurationProvider, parameters: new { consignmentId = consignmentId })
+           .SingleOrDefaultAsync(x => x.Id == consignmentId);
+    }
+
+    public Task<Consignment?> GetConsignmentToChangeStatusToReceived(long consignmentId)
+    {
+        return _consignments
+            .Where(x => x.ConsignmentStatus == ConsignmentStatus.ConfirmAndAwaitingForConsignment)
+            .SingleOrDefaultAsync(x => x.Id == consignmentId);
+    }
+
 }

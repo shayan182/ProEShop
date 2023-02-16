@@ -6,15 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="wwwroot\lib\select2\**" />
     <Content Remove="wwwroot\lib\select2\**" />
     <EmbeddedResource Remove="wwwroot\lib\select2\**" />
     <None Remove="wwwroot\lib\select2\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\Inventory\Consignment\ConsignmentItems.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +42,6 @@
     <None Include="Pages\Admin\Seller\Index.cshtml" />
     <None Include="Pages\Admin\Seller\List.cshtml" />
     <None Include="Pages\Inventory\Consignment\Index.cshtml" />
-    <None Include="Pages\Inventory\Consignment\ConsignmentItems.cshtml" />
     <None Include="Pages\Inventory\Consignment\List.cshtml" />
     <None Include="Pages\SellerPanel\Product\Create.cshtml" />
     <None Include="Pages\SellerPanel\Product\_SelectProductCategoryPartial.cshtml" />
