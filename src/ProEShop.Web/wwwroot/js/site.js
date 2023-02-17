@@ -609,7 +609,12 @@ $(document).on('submit', 'form.custom-ajax-form', function (e) {
 
 // کد های پایین را جایگزین با بالایی ها کردیم
 $(document).on('blur', 'form input', function () {
-    $(this).parents('form').valid();
+    var currentForm = $(this).parents('form');
+    currentForm.valid();
+    if (currentForm.valid()) {
+        currentForm.find('div[class*="validation-summary"] ul').html('');
+    }
+
 });
 
 $(document).on('change', 'form input.custom-md-persian-datepicker, form select, form input[type="checkbox"], form input[type="file"]', function () {
