@@ -105,6 +105,7 @@ public static class FileHelper
 
         var variantText = isVariantColor ? "رنگ" : "اندازه";
         variantText += $": {variantValue}";
+        variantText += $" (کد تنوع:{barcode.Split("--")[0]})";
 
         var barcodeWithProductTitleBitmap = (Bitmap)Image.FromStream(productTitleStream);
         using var graphics2 = Graphics.FromImage(barcodeWithProductTitleBitmap);

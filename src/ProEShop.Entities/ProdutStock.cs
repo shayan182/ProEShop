@@ -1,0 +1,25 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using ProEShop.Entities.AuditableEntity;
+
+namespace ProEShop.Entities;
+
+[Table("ProductStocks")]
+[Index (nameof(ProductStock.ProductVariantId),
+    nameof( ProductStock.ConsignmentId),IsUnique =true)]
+public class ProductStock : EntityBase, IAuditableEntity
+{
+    #region Properties
+
+    public long ProductVariantId { get; set; }
+    public long ConsignmentId { get; set; }
+    public int Count { get; set; }
+
+    #endregion
+
+    #region Relations
+    public ProductVariant? ProductVariant { get; set; }
+    public Consignment? Consignment { get; set; }
+
+    #endregion
+}

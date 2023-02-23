@@ -5,5 +5,6 @@ namespace ProEShop.Services.Contracts;
 
 public interface IConsignmentItemService : IGenericService<ConsignmentItem>
 {
-   
+    Task<bool> IsExistsByProductVariantIdAndConsignmentId(long productVariantId, long consignmentId);
+
 }

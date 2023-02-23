@@ -9,9 +9,11 @@ using ProEShop.ViewModels.FeatureConstantValues;
 using ProEShop.ViewModels.Guarantees;
 using ProEShop.ViewModels.Product;
 using ProEShop.ViewModels.Products;
+using ProEShop.ViewModels.ProductStocks;
 using ProEShop.ViewModels.ProductVariants;
 using ProEShop.ViewModels.Sellers;
 using ProEShop.ViewModels.Variants;
+using ProEShop.Web.Pages.Inventory.ProductStock;
 
 namespace ProEShop.Web.Mappings;
 
@@ -149,6 +151,8 @@ public class MappingProfile : AutoMapper.Profile
             options =>
                 options.MapFrom(src => src.ConsignmentItems.Where(x => x.ConsignmentId == consignmentId))); 
         this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
+        this.CreateMap<AddProductStockByConsignmentViewModel, Entities.ProductStock>();
+
 
     }
 }
