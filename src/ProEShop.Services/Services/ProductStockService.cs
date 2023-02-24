@@ -23,4 +23,9 @@ public class ProductStockService : GenericService<ProductStock>, IProductStockSe
             .SingleOrDefaultAsync(x => x.ProductVariantId == productVariantId);
     }
 
+    public Task<Dictionary<long, int>> GetProductStocksForAddProductVariantsCount(long consignmentId)
+    {
+        return _productStocks.Where(x => x.ConsignmentId == consignmentId)
+            .ToDictionaryAsync(x => x.ProductVariantId, x => x.Count);
+    }
 }

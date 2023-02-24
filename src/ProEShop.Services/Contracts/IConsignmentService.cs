@@ -16,4 +16,6 @@ public interface IConsignmentService : IGenericService<Consignment>
     Task<Consignment?> GetConsignmentForConfirmation(long consignmentId);
     Task<ShowConsignmentDetailsViewModel?> GetConsignmentDetails(long consignmentId);
     Task<Consignment?> GetConsignmentToChangeStatusToReceived(long consignmentId);
+    Task<bool> IsExistsConsignmentWithReceivedStatus(long consignmentId);
+    Task<Consignment?> GetConsignmentWithReceivedStatus(long consignmentId);
 }

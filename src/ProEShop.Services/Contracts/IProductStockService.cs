@@ -6,5 +6,6 @@ public interface IProductStockService : IGenericService<ProductStock>
 {
 
     Task<ProductStock?> GetByProductVariantIdAndConsignmentId(long productVariantId, long consignmentId);
+    Task<Dictionary<long, int>> GetProductStocksForAddProductVariantsCount(long consignmentId);
 
 }

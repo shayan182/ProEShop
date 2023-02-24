@@ -39,6 +39,8 @@ public enum ConsignmentStatus : byte
     [Display(Name = "دریافت شده")]
     Received,
 
+    [Display(Name = "دریافت شده و موجودی افزایش یافته")]
+    ReceivedAndAddStock,
     [Display(Name = "رد شده")]
     Rejected,
 

@@ -20,6 +20,7 @@ public class ProductVariant : EntityBase, IAuditableEntity
     public long SellerId { get; set; }
     public int Price { get; set; }
     public int VariantCode { get; set; }
+    public int Count { get; set; }
     #endregion
 
     #region Relations
@@ -27,6 +28,7 @@ public class ProductVariant : EntityBase, IAuditableEntity
     public Seller? Seller { get; set; }
     public Variant? Variant { get; set; }
     public Guarantee? Guarantee { get; set; }
+
     public ICollection<ConsignmentItem>? ConsignmentItems { get; set; }
     public ICollection<ProductStock>? ProductStocks { get; set; }
 

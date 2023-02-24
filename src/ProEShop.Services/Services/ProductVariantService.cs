@@ -4,6 +4,7 @@ using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.ProductVariants;
+using System.Linq;
 
 namespace ProEShop.Services.Services;
 
@@ -54,5 +55,11 @@ public class ProductVariantService : GenericService<ProductVariant>, IProductVar
                 .Where(x=>x.SellerId == sellerId)
                 .Where(x => variantCodes.Contains(x.VariantCode))
         ).ToListAsync();
+    }
+
+    public Task<List<ProductVariant>> GetProductVariantsToAddCount(List<long> Ids)
+    {
+        return _productVariants.Where(x=>Ids.Contains(x.Id))
+            .ToListAsync();
     }
 }

@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace ProEShop.ViewModels.Consignments;
 public class ShowConsignmentDetailsViewModel
 {
-    
-
     public long Id { get; set; }
     public string? DeliveryDate { get; set; }
     public string? SellerShopName { get; set; }
+    public string? Description { get; set; }
     public ConsignmentStatus ConsignmentStatus { get; set; }
 
     public List<ShowConsignmentItemViewModel>? Items { get; set; }

@@ -30,7 +30,16 @@
         <img src="data:image/png;base64, @FileHelper.GenerateConsignmentItemBarcode(Model.Id.ToString(), Model.SellerShopName, Model.DeliveryDate)" />
     </span>
 </div>
-
+<div class="alert alert-primary">
+    @if (!string.IsNullOrWhiteSpace(Model.Description))
+    {
+        @Html.Raw(Model.Description)
+    }
+    else
+    {
+        @:بدون توضیح
+    }
+</div>
 <div class="table-responsive data-table-body">
     <table class="table table-bordered table-striped table-hover">
         <thead class="table-light">

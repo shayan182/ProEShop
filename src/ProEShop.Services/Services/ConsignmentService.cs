@@ -86,4 +86,15 @@ public class ConsignmentService : GenericService<Consignment>, IConsignmentServi
             .SingleOrDefaultAsync(x => x.Id == consignmentId);
     }
 
+    public Task<bool> IsExistsConsignmentWithReceivedStatus(long consignmentId)
+    {
+        return _consignments.Where(x=>x.ConsignmentStatus == ConsignmentStatus.Received)
+            .AnyAsync(x=>x.Id == consignmentId);
+    }
+
+    public Task<Consignment?> GetConsignmentWithReceivedStatus(long consignmentId)
+    {
+        return _consignments.Where(x => x.ConsignmentStatus == ConsignmentStatus.Received)
+           .SingleOrDefaultAsync(x => x.Id == consignmentId);
+    }
 }
