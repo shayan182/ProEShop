@@ -51,6 +51,11 @@
             </div>
         </div>
         <div class="col-12 my-2">
+            <label class="form-label" asp-for="ProductPageGuide"></label>
+            <textarea class="form-control " asp-for="ProductPageGuide" rows="5"></textarea>
+            <span class="span-error-message" asp-validation-for="ProductPageGuide"></span>
+        </div>
+        <div class="col-12 my-2">
             <label class="form-label" asp-for="Description"></label>
             <textarea class="form-control custom-tinymce" asp-for="Description"></textarea>
             <span class="span-error-message" asp-validation-for="Description"></span>

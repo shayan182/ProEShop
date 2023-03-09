@@ -50,6 +50,8 @@ public class EditCategoryViewModel
     [Display(Name = "آیا میتوان کالای غیر اصل وارد کرد؟")]
     public bool CanAddFakeProduct { get; set; }
 
-
+    [Display(Name = "راهنمای صفحه محصول")]
+    [MaxLength(1000, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
+    public string? ProductPageGuide { get; set; }
     public List<SelectListItem>? MainCategories { get; set; }
 }

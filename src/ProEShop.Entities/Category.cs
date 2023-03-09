@@ -30,11 +30,10 @@ public class Category : EntityBase, IAuditableEntity
     public long? ParentId { get; set; }
 
     public bool ShowInMenus { get; set; }
-
-
     public bool CanAddFakeProduct { get; set; }
     public bool IsVariantColor { get; set; }
-
+    [MaxLength(1000)]
+    public string? ProductPageGuide { get; set; }
     #endregion
 
     #region Relations

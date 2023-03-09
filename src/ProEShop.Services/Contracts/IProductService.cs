@@ -22,5 +22,6 @@ public interface IProductService: IGenericService<Product>
     Task<int> GetProductCodeForCreateProduct();
 
     Task<List<string?>> GetPersianTitlesForAutocompleteInSellerPanel(string input);
-    Task<AddVariantForSellerPanelViewModel> GetProductInfoForAddVariant(long productId);
+    Task<AddVariantForSellerPanelViewModel?> GetProductInfoForAddVariant(long productId);
+    Task<ShowProductInfoViewModel?> GetProductInfo(long productCode);
 }

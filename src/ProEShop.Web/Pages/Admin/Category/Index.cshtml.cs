@@ -94,6 +94,7 @@ public class IndexModel : PageBase
 
         var category = _mapper.Map<Entities.Category>(model);
         category.Description = _htmlSanitizer.Sanitize(model.Description);
+        category.ProductPageGuide = _htmlSanitizer.Sanitize(model.ProductPageGuide);
         if (model.ParentId is 0)
             category.ParentId = null;
         category.Picture = pictureFileName;
@@ -152,7 +153,8 @@ public class IndexModel : PageBase
         var oldFileName = category.Picture;
 
         category.Title = model.Title;
-        category.Description = model.Description;
+        category.Description = _htmlSanitizer.Sanitize(model.Description);
+        category.ProductPageGuide = _htmlSanitizer.Sanitize(model.ProductPageGuide);
         category.ShowInMenus = model.ShowInMenus;
         category.Slug = model.Slug;
         category.ParentId = model.ParentId == 0 ? null : model.ParentId;

@@ -152,6 +152,7 @@ public class MappingProfile : AutoMapper.Profile
                 options.MapFrom(src => src.ConsignmentItems.Where(x => x.ConsignmentId == consignmentId))); 
         this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
         this.CreateMap<AddProductStockByConsignmentViewModel, Entities.ProductStock>();
+        this.CreateMap<Entities.Product,ShowProductInfoViewModel>();
 
 
     }
