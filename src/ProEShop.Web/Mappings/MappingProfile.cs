@@ -153,7 +153,8 @@ public class MappingProfile : AutoMapper.Profile
         this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
         this.CreateMap<AddProductStockByConsignmentViewModel, Entities.ProductStock>();
         this.CreateMap<Entities.Product,ShowProductInfoViewModel>();
-
+        this.CreateMap<Entities.ProductMedia, ProductMediaForProductInfoViewModel>();
+        this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();
 
     }
 }
