@@ -15,6 +15,7 @@ namespace ProEShop.Web.Pages.Inventory.ProductStock;
 public class AddProductStockByConsignmentModel : InventoryPanelBase
 {
     private readonly IConsignmentItemService _consignmentItemService;
+    private readonly IConsignmentService _consignmentService;
     private readonly IProductStockService _productStockService;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _uow;
@@ -23,12 +24,13 @@ public class AddProductStockByConsignmentModel : InventoryPanelBase
         IConsignmentItemService consignmentItemService,
         IProductStockService productStockService,
         IMapper mapper,
-        IUnitOfWork uow)
+        IUnitOfWork uow, IConsignmentService consignmentService)
     {
         _consignmentItemService = consignmentItemService;
         _productStockService = productStockService;
         _mapper = mapper;
         _uow = uow;
+        _consignmentService = consignmentService;
     }
 
     [BindProperty]
@@ -39,6 +41,11 @@ public class AddProductStockByConsignmentModel : InventoryPanelBase
     }
     public async Task<IActionResult> OnPostAsync()
     {
+        if (!await _consignmentService.CanAddStockForConsignmentItems(AddProductStock.ConsignmentId))
+        {
+            return Json(new JsonResultOperation(false,
+                "موجودی این محموله قادر به افزایش و تغییر نمی باشد"));
+        }
         if (! await _consignmentItemService
             .IsExistsByProductVariantIdAndConsignmentId(AddProductStock.ProductVariantId,AddProductStock.ConsignmentId))
             return Json(new JsonResultOperation(false,PublicConstantStrings.RecordNotFoundMessage));

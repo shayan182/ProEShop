@@ -68,7 +68,6 @@
 }
 
 #product-variants-box-in-show-product-info span {
-    background-color: red;
     width: 90%;
     height: 90%;
 }
@@ -81,9 +80,7 @@
     border: 3px solid #19bfd3 !important;
 }
 
-li {
-    list-style-type: none;
-}
+
 
 #category-guide {
     line-height: 1.6rem;

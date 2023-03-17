@@ -14,7 +14,7 @@ public class AddBrandViewModel
     [Display(Name = "نام فارسی برند")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
-    public string TitleFa { get; set; }
+    public string? TitleFa { get; set; }
 
     [PageRemote(PageName = "index", PageHandler = "CheckForTitleEn"
         , ErrorMessage = AttributesErrorMessages.RemoteMessage,
@@ -24,7 +24,7 @@ public class AddBrandViewModel
     [LtrDirection]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [MaxLength(200, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]
-    public string TitleEn { get; set; }
+    public string? TitleEn { get; set; }
 
     [Display(Name = "شرح برند")]
     [MakeTinyMceRequired]

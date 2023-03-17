@@ -152,9 +152,39 @@ public class MappingProfile : AutoMapper.Profile
                 options.MapFrom(src => src.ConsignmentItems.Where(x => x.ConsignmentId == consignmentId))); 
         this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
         this.CreateMap<AddProductStockByConsignmentViewModel, Entities.ProductStock>();
-        this.CreateMap<Entities.Product,ShowProductInfoViewModel>();
+
+        this.CreateMap<Entities.Product,ShowProductInfoViewModel>()
+            .ForMember(dest => dest.Score,
+                options =>
+                    options.MapFrom(src => 
+                        src.ProductComments!.Any() ?
+                            src.ProductComments!.Average(pc => pc.Score)
+                           : 0))
+            .ForMember(dest => dest.ProductCommentsCount,
+                options =>
+                    options.MapFrom(src =>
+                        src.ProductComments!.LongCount(pc => pc.CommentTitle != null)))
+            .ForMember(dest => dest.SuggestCount,
+                options =>
+                    options.MapFrom(src =>
+                        src.ProductComments!
+                            .Where(x=>x.IsBuyer)
+                            .LongCount(pc => pc.Suggest == true)))
+            .ForMember(dest => dest.BuyerCount,
+                options =>
+                    options.MapFrom(src =>
+                        src.ProductComments!
+                            .LongCount(x => x.IsBuyer)))
+            .ForMember(dest => dest.ProductVariants,
+                options =>
+                    options.MapFrom(src =>
+                        src.ProductVariants!
+                            .Where(x => x.Count > 0)));
+
         this.CreateMap<Entities.ProductMedia, ProductMediaForProductInfoViewModel>();
         this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();
+        this.CreateMap<Entities.ProductFeature, ProductFeatureForProductInfoViewModel>();
+        this.CreateMap<Entities.ProductVariant, ProductVariantForProductInfoViewModel>();
 
     }
 }

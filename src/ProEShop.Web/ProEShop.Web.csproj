@@ -23,12 +23,14 @@
     <None Remove="Pages\Identity\RegisterLogin.cshtml.css" />
     <None Remove="Pages\Inventory\ProductStock\AddProductStockByConsignment.cshtml.js" />
     <None Remove="Pages\Product\index.cshtml.css" />
+    <None Remove="Pages\Product\index.cshtml.js" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Pages\Identity\LoginWithPhoneNumber.cshtml.css" />
     <Content Include="Pages\Identity\RegisterLogin.cshtml.css" />
     <Content Include="Pages\Inventory\ProductStock\AddProductStockByConsignment.cshtml.js" />
+    <Content Include="Pages\Product\index.cshtml.js" />
     <Content Include="Pages\Product\index.cshtml.css" />
   </ItemGroup>
 
