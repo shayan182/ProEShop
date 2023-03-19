@@ -24,6 +24,7 @@
     <None Remove="Pages\Inventory\ProductStock\AddProductStockByConsignment.cshtml.js" />
     <None Remove="Pages\Product\index.cshtml.css" />
     <None Remove="Pages\Product\index.cshtml.js" />
+    <None Remove="Pages\Product\_OtherVariantsPartial.cshtml.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
     <Content Include="Pages\Inventory\ProductStock\AddProductStockByConsignment.cshtml.js" />
     <Content Include="Pages\Product\index.cshtml.js" />
     <Content Include="Pages\Product\index.cshtml.css" />
+    <Content Include="Pages\Product\_OtherVariantsPartial.cshtml.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,6 +80,10 @@
 
   <ItemGroup>
     <Content Update="Pages\Admin\Brand\Add.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Pages\Product\_OtherVariantsPartial.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
