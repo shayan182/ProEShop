@@ -12,23 +12,23 @@
         <!-- Other sellers table -->
         @foreach (var variants in groupedVariants)
         {
-            if (variants.Count()==1)
-                continue;
+            
             <div variant-value="@variants.First().VariantValue"
              class="table-responsive mt-4 other-sellers-table @(variantCount++==1?String.Empty :"d-none")" >
-                <table class="table table-bordered box-shadow align-middle">
+                <table class="table table-bordered shadow-sm align-middle">
                     <thead class="bg-primary text-white">
                     <tr>
                         <th>فروشنده</th>
                         <th>گارانتی</th>
                         <th>قیمت</th>
+                            <th>امتیاز</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var variant in variants.Skip(1))
+                    @foreach (var variant in variants)
                     {
-                        <tr>
+                        <tr free-delivery="@(variant.Price >= 500000 ?"true":"false")">
                             <td>
                                 @if (!string.IsNullOrWhiteSpace(variant.SellerLogo))
                                 {
@@ -43,8 +43,16 @@
                             </td>
                             <td>@variant.GuaranteeFullTitle</td>
                             <td>
-                                @variant.Price
+                                @variant.Price.ToString("0,#")
                                 تومان
+                            </td>
+                            <td>
+                                <span>
+                                    @variant.Score
+                                </span>
+                                امتیاز پروشاپ
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                   title="بعد از پایان مهلت مرجوعی، برای دریافت امتیاز به صفحه ماموریت های پروشاپی سر بزنید."></i>
                             </td>
                             <td class="text-center">
                                 <button class="btn btn-danger rounded-3">
