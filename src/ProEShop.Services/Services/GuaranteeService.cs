@@ -4,6 +4,7 @@ using ProEShop.Common.Helpers;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
+using ProEShop.ViewModels;
 using ProEShop.ViewModels.Guarantees;
 
 namespace ProEShop.Services.Services;
@@ -53,5 +54,20 @@ public class GuaranteeService : GenericService<Guarantee>, IGuaranteeService
         return await _mapper.ProjectTo<EditGuaranteeViewMode>(
             _guarantees
         ).SingleOrDefaultAsync(x => x.Id == id);
+    }
+
+    public Task<List<ShowSelect2DataByAjaxViewModel>> SearchOnGuaranteesForSelect2(string input)
+    {
+        return _guarantees
+            .Where(x=>x.Title.Contains(input))
+            .Select(x => new ShowSelect2DataByAjaxViewModel()
+        {
+            Id = x.Id,
+            Text = x.FullTitle
+        })
+            .OrderBy(x=>x.Id)
+            .Take(20)
+            .ToListAsync();
+
     }
 }

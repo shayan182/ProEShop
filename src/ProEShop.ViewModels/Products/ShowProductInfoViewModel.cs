@@ -4,6 +4,8 @@ namespace ProEShop.ViewModels.Products;
 
 public class ShowProductInfoViewModel
 {
+    public long Id { get; set; }
+    public bool IsFavorite { get; set; }
     public int ProductCode { get; set; }
     public string? PersianTitle { get; set; }
     public string? EnglishTitle { get; set; }

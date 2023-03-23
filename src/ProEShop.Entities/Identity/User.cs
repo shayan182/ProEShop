@@ -37,17 +37,18 @@ public class User : IdentityUser<long>, IAuditableEntity
 
     [Required]
     [MaxLength(50)]
-    public string Avatar { get; set; }
+    public string? Avatar { get; set; }
 
     public DateTime SendSmsLastTime { get; set; }
 
     #region Relations
 
-    public virtual ICollection<UserClaim> UserClaims { get; set; }
-    public virtual ICollection<UserLogin> UserLogins { get; set; }
-    public virtual ICollection<UserRole> UserRoles { get; set; }
-    public virtual ICollection<UserToken> UserTokens { get; set; }
-    public Seller Seller { get; set; }
+    public virtual ICollection<UserClaim>? UserClaims { get; set; }
+    public virtual ICollection<UserLogin>? UserLogins { get; set; }
+    public virtual ICollection<UserRole>? UserRoles { get; set; }
+    public virtual ICollection<UserToken>? UserTokens { get; set; }
+    public virtual ICollection<UserProductFavorite>? UserProductFavorites { get; set; }
+    public Seller? Seller { get; set; }
 
     #endregion
 }

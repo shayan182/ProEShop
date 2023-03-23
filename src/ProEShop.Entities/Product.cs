@@ -20,7 +20,7 @@ public class Product : EntityBase, IAuditableEntity
 
     [Required]
     [MaxLength(200)]
-    public string Slug { get; set; } 
+    public string? Slug { get; set; } 
 
     public bool IsFake { get; set; }
 
@@ -61,11 +61,12 @@ public class Product : EntityBase, IAuditableEntity
     public ICollection<ProductFeature> ProductFeatures { get; set; }
         = new List<ProductFeature>();
 
-    public Brand Brand { get; set; }
-    public Seller Seller { get; set; }
-    public Category Category { get; set; }
-    public ICollection<ProductVariant> ProductVariants { get; set; }
+    public Brand? Brand { get; set; }
+    public Seller? Seller { get; set; }
+    public Category? Category { get; set; }
+    public ICollection<ProductVariant>? ProductVariants { get; set; }
     public ICollection<ProductComment>? ProductComments { get; set; }
+    public ICollection<UserProductFavorite>? UserProductFavorites { get; set; }
     #endregion
 
 }

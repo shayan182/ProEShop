@@ -1,22 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Common.Constants;
+using ProEShop.Common.Helpers;
+using ProEShop.Common.IdentityToolkit;
+using ProEShop.DataLayer.Context;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.Products;
 
 namespace ProEShop.Web.Pages.Product;
 
-public class IndexModel : PageModel
+public class IndexModel : PageBase
 {
     #region Constractor
 
     private readonly IProductService _productService;
-
+    private readonly IUserProductFavoriteService _userProductFavoriteService;
+    private readonly IUnitOfWork _uow;
     #endregion
 
-    public IndexModel(IProductService productService)
+    public IndexModel(IProductService productService, IUserProductFavoriteService userProductFavoriteService, IUnitOfWork uow)
     {
         _productService = productService;
+        _userProductFavoriteService = userProductFavoriteService;
+        _uow = uow;
     }
 
     public ShowProductInfoViewModel? ProductInfo { get; set; }
@@ -38,5 +44,37 @@ public class IndexModel : PageModel
             });
         }
         return Page();
+    }
+    public async Task<IActionResult> OnPostAddOrRemoveFavorite(long productId, bool addFavorite)
+    {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        if (!await _productService.IsExistsBy(nameof(Entities.Product.Id), productId))
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        var userId = User.Identity.GetLoggedInUserId();
+
+        var userProductFavorite = await _userProductFavoriteService.FindAsync(userId, productId);
+        if (userProductFavorite is null && addFavorite)
+        {
+            await _userProductFavoriteService.AddAsync(new Entities.UserProductFavorite
+            {
+                ProductId = productId,
+                UserId = userId
+            });
+        }
+        else if (userProductFavorite != null && !addFavorite)
+        {
+            _userProductFavoriteService.Remove(userProductFavorite);
+        }
+
+        await _uow.SaveChangesAsync();
+
+        return Json(new JsonResultOperation(true, string.Empty));
     }
 }

@@ -59,7 +59,7 @@
                                 گارانتی جدید
                             </a>
                         </label>
-                        <input asp-for="Variant.GuaranteeId" class="form-control" />
+                        <select class="form-select custom-select2" asp-for="Variant.GuaranteeId"></select>
                         <span asp-validation-for="Variant.GuaranteeId" class="span-error-message"></span>
                     </div>
                     <div class="my-2" id="variant-box">
@@ -108,7 +108,14 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script src="~/lib/select2/js/i18n/fa.min.js"></script>
 }
 @section CustomScripts{
     <script src="~/Pages/SellerPanel/Product/AddVariant.cshtml.js"></script>
+}
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/select2-bootstrap-5-theme/select2-bootstrap-5-theme.rtl.min.css" />
 }

@@ -18,15 +18,17 @@ public class AddVariantModel : PageBase
     private readonly IMapper _mapper;
     private readonly ISellerService _sellerService;
     private readonly IProductVariantService _productVariantService;
+    private readonly IGuaranteeService _guaranteeService;
     private readonly IUnitOfWork _uow;
 
-    public AddVariantModel(IProductService productService, IMapper mapper, ISellerService sellerService, IProductVariantService productVariantService, IUnitOfWork uow)
+    public AddVariantModel(IProductService productService, IMapper mapper, ISellerService sellerService, IProductVariantService productVariantService, IUnitOfWork uow, IGuaranteeService guaranteeService)
     {
         _productService = productService;
         _mapper = mapper;
         _sellerService = sellerService;
         _productVariantService = productVariantService;
         _uow = uow;
+        _guaranteeService = guaranteeService;
     }
 
     #endregion
@@ -68,4 +70,15 @@ public class AddVariantModel : PageBase
             Data = Url.Page("SuccessfulProductVariant")
         });
     }
+
+    public async Task<IActionResult> OnGetGetGuarantees(string input)
+    {
+        var result = await _guaranteeService.SearchOnGuaranteesForSelect2(input);
+        // we most send a object of many array 
+        return Json(new
+        {
+            results = result
+        });
+    }
+
 }

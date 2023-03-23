@@ -142,7 +142,7 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.DeliveryDate,
                 options =>
                     options.MapFrom(src => src.DeliveryDate.ToLongPersianDate()));
-        var consignmentId = 0;
+        long consignmentId = 0;
         this.CreateMap<Entities.Consignment, ShowConsignmentDetailsViewModel>()
             .ForMember(dest => dest.DeliveryDate,
                 options =>
@@ -152,6 +152,7 @@ public class MappingProfile : AutoMapper.Profile
                 options.MapFrom(src => src.ConsignmentItems.Where(x => x.ConsignmentId == consignmentId))); 
         this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
         this.CreateMap<AddProductStockByConsignmentViewModel, Entities.ProductStock>();
+        long userId = 0;
 
         this.CreateMap<Entities.Product,ShowProductInfoViewModel>()
             .ForMember(dest => dest.Score,
@@ -179,7 +180,12 @@ public class MappingProfile : AutoMapper.Profile
                 options =>
                     options.MapFrom(src =>
                         src.ProductVariants!
-                            .Where(x => x.Count > 0)));
+                            .Where(x => x.Count > 0)))
+            .ForMember(dest => dest.IsFavorite,
+                options =>
+                    options.MapFrom(src =>
+                        src.UserProductFavorites.Any(x=>x.UserId == userId)
+                           ));
 
         this.CreateMap<Entities.ProductMedia, ProductMediaForProductInfoViewModel>();
         this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();
