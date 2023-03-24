@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Ganss.XSS;
+﻿using Ganss.XSS;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Common;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
@@ -9,7 +7,6 @@ using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
-using ProEShop.Services.Services;
 using ProEShop.ViewModels.Products;
 using ProEShop.ViewModels.Sellers;
 
@@ -25,9 +22,10 @@ public class IndexModel : PageBase
     private readonly IUnitOfWork _uow;
     private readonly IUploadFileService _uploadFile;
     private readonly IHtmlSanitizer _htmlSanitizer;
+    private readonly IProductShortLinkService _productShortLinkService;
 
     public IndexModel(
-        IProductService productService, ISellerService sellerService, ICategoryService categoryService, IUnitOfWork uow, IUploadFileService uploadFile, IHtmlSanitizer htmlSanitizer)
+        IProductService productService, ISellerService sellerService, ICategoryService categoryService, IUnitOfWork uow, IUploadFileService uploadFile, IHtmlSanitizer htmlSanitizer, IProductShortLinkService productShortLinkService)
     {
         _productService = productService;
         _sellerService = sellerService;
@@ -35,6 +33,7 @@ public class IndexModel : PageBase
         _uow = uow;
         _uploadFile = uploadFile;
         _htmlSanitizer = htmlSanitizer;
+        _productShortLinkService = productShortLinkService;
     }
 
     #endregion
@@ -93,6 +92,8 @@ public class IndexModel : PageBase
         if (product is null)
             return Json(new JsonResultOperation(false, "محصول مورد نظر یافت نشد!"));
 
+        var productShortLink = await _productShortLinkService.FindByIdAsync(product.ProductShortLinkId);
+        productShortLink.IsUsed = false;
         _productService.Remove(product);
         await _uow.SaveChangesAsync();
         foreach (var media in product.ProductMedia)

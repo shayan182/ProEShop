@@ -149,15 +149,15 @@ public class MappingProfile : AutoMapper.Profile
                     options.MapFrom(src => src.DeliveryDate.ToLongPersianDate()))
             .ForMember(dest => dest.Items,
             options =>
-                options.MapFrom(src => src.ConsignmentItems.Where(x => x.ConsignmentId == consignmentId))); 
+                options.MapFrom(src => src.ConsignmentItems.Where(x => x.ConsignmentId == consignmentId)));
         this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
         this.CreateMap<AddProductStockByConsignmentViewModel, Entities.ProductStock>();
         long userId = 0;
 
-        this.CreateMap<Entities.Product,ShowProductInfoViewModel>()
+        this.CreateMap<Entities.Product, ShowProductInfoViewModel>()
             .ForMember(dest => dest.Score,
                 options =>
-                    options.MapFrom(src => 
+                    options.MapFrom(src =>
                         src.ProductComments!.Any() ?
                             src.ProductComments!.Average(pc => pc.Score)
                            : 0))
@@ -169,7 +169,7 @@ public class MappingProfile : AutoMapper.Profile
                 options =>
                     options.MapFrom(src =>
                         src.ProductComments!
-                            .Where(x=>x.IsBuyer)
+                            .Where(x => x.IsBuyer)
                             .LongCount(pc => pc.Suggest == true)))
             .ForMember(dest => dest.BuyerCount,
                 options =>
@@ -184,8 +184,7 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.IsFavorite,
                 options =>
                     options.MapFrom(src =>
-                        src.UserProductFavorites.Any(x=>x.UserId == userId)
-                           ));
+                        userId != 0 && src.UserProductFavorites.Any(x => x.UserId == userId)));
 
         this.CreateMap<Entities.ProductMedia, ProductMediaForProductInfoViewModel>();
         this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();

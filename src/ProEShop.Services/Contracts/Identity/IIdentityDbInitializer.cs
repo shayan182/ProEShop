@@ -23,6 +23,7 @@ public interface IIdentityDbInitializer
     //Task<IdentityResult> SeedUserForSeller();
 
     Task SeedProvincesAndCities();
+    Task SeedProductShortLinks();
 
     //Task SeedSeller();
 }

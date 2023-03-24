@@ -24,14 +24,15 @@ public class IdentityDbInitializer : IIdentityDbInitializer
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IUnitOfWork _uow;
     private readonly IProvinceAndCityService _provinceAndCityService;
-    private readonly ISellerService _sellerService;
+    private readonly IProductShortLinkService _productShortLinkService;
 
     public IdentityDbInitializer(
         IApplicationUserManager applicationUserManager,
         IServiceScopeFactory scopeFactory,
         IApplicationRoleManager roleManager,
         IOptionsSnapshot<SiteSettings> adminUserSeedOptions,
-        ILogger<IdentityDbInitializer> logger, IUnitOfWork uow, IProvinceAndCityService provinceAndCityService, ISellerService sellerService)
+        ILogger<IdentityDbInitializer> logger, IUnitOfWork uow,
+        IProvinceAndCityService provinceAndCityService, IProductShortLinkService productShortLinkService)
     {
         _applicationUserManager = applicationUserManager;
         _applicationUserManager.CheckArgumentIsNull(nameof(_applicationUserManager));
@@ -48,7 +49,7 @@ public class IdentityDbInitializer : IIdentityDbInitializer
         _logger = logger;
         _uow = uow;
         _provinceAndCityService = provinceAndCityService;
-        _sellerService = sellerService;
+        _productShortLinkService = productShortLinkService;
         _logger.CheckArgumentIsNull(nameof(_logger));
     }
 
@@ -58,10 +59,7 @@ public class IdentityDbInitializer : IIdentityDbInitializer
     /// </summary>
     public void Initialize()
     {
-        _scopeFactory.RunScopedService<ApplicationDbContext>(context =>
-        {
-            context.Database.Migrate();
-        });
+        _scopeFactory.RunScopedService<ApplicationDbContext>(context => { context.Database.Migrate(); });
     }
 
 
@@ -83,6 +81,7 @@ public class IdentityDbInitializer : IIdentityDbInitializer
             {
                 throw new InvalidOperationException(sellerRole.DumpErrors());
             }
+
             var warehouseRole = identityDbSeedData.SeedWarehouseRole().Result;
             if (warehouseRole == IdentityResult.Failed())
             {
@@ -90,6 +89,7 @@ public class IdentityDbInitializer : IIdentityDbInitializer
             }
 
             identityDbSeedData.SeedProvincesAndCities().GetAwaiter().GetResult();
+            identityDbSeedData.SeedProductShortLinks().GetAwaiter().GetResult();
         });
     }
 
@@ -115,7 +115,7 @@ public class IdentityDbInitializer : IIdentityDbInitializer
         {
             _logger.LogInformation($"{thisMethodName}: adminRole already exists.");
         }
-        
+
 
         return IdentityResult.Success;
     }
@@ -156,7 +156,8 @@ public class IdentityDbInitializer : IIdentityDbInitializer
             var sellerRoleResult = await _roleManager.CreateAsync(warehouseRole);
             if (sellerRoleResult == IdentityResult.Failed())
             {
-                _logger.LogError($"{thisMethodName}: WarehouseRole CreateAsync failed. {sellerRoleResult.DumpErrors()}");
+                _logger.LogError(
+                    $"{thisMethodName}: WarehouseRole CreateAsync failed. {sellerRoleResult.DumpErrors()}");
                 return IdentityResult.Failed();
             }
 
@@ -246,43 +247,85 @@ public class IdentityDbInitializer : IIdentityDbInitializer
         }
     }
 
-    //public async Task SeedSeller()
-    //{
-    //    if (!await _sellerService.IsExistsBy(nameof(Entities.Seller.ShopName),
-    //            "فروشگاه برادران احمدی"))
-    //    {
-    //        var user = await _applicationUserManager.FindByNameAsync("09103332211");
-    //        var (provinceId, cityId) = await _provinceAndCityService.GetForSeedData();
-    //        var seller = new Entities.Seller()
-    //        {
-    //            SellerCode = 1,
-    //            AboutSeller =
-    //                "<p>شرکت رها گستر دانا از سال 1380 شروع به کار کرده و در این مدت توانسته با تکیه بر دانش کارکنان خود در زمنیه فروش لوارم جانبی موبایل اقدام به فعالیت کند</p>",
-    //            Address = "خیابان آزادی - کوچه بهار 5 - پلاک 39",
-    //            IsRealPerson = false,
-    //            CompanyName = "شرکت رها گستر دانا",
-    //            CompanyType = CompanyType.LimitedResponsibility,
-    //            SignatureOwners = "میلاد احمدی - منصور کریمی - سینا شاهرخی",
-    //            RegisterNumber = "12356488942128489",
-    //            EconomicCode = "123234345456",
-    //            NationalId = "159357258456147369",
-    //            TelePhone = "02199335484",
-    //            Website = "https://rahagostardana.com",
-    //            IsActive = true,
-    //            PostalCode = "5544184933",
-    //            ShopName = "فروشگاه برادران احمدی",
-    //            ShabaNumber = "123456789123456789123456",
-    //            Logo = "9dc9cb1134ab42b8978758834445c15b.png",
-    //            IdCartPicture = "35366c86a8fc4a67ac5abba5978ef381.jpg",
-    //            IsDeleted = false,
-    //            ProvinceId = provinceId,
-    //            CityId = cityId,
-    //            DocumentStatus = DocumentStatus.Confirmed,
-    //            User = user
-    //        };
-    //        await _applicationUserManager.AddToRoleAsync(user, ConstantRoles.Seller);
-    //        await _sellerService.AddAsync(seller);
-    //        await _uow.SaveChangesAsync();
-    //    }
-    //}
+    public async Task SeedProductShortLinks()
+    {
+        if (!await _productShortLinkService.AnyAsync() )
+        {
+            var links = new List<Entities.ProductShortLink>();
+
+            for (var letter1 = 'A'; letter1 <= 'z'; letter1++)
+            {
+                if (!char.IsLetterOrDigit(letter1))
+                    continue;
+                var link = $"{(byte)letter1}";
+                links.Add(new ProductShortLink()
+                {
+                    Link = link
+                });
+                //for (var letter2 = '0'; letter2 <= 'z'; letter2++)
+                //{
+                //    if (!char.IsLetterOrDigit(letter2))
+                //        continue;
+                //    //var link = $"{(byte)letter1}.{(byte)letter2}";
+                //    //links.Add(new ProductShortLink()
+                //    //{
+                //    //    Link = link
+                //    //});
+                //    for (var letter3 = '0'; letter3 <= 'z'; letter3++)
+                //    {
+                //        if (!char.IsLetterOrDigit(letter3))
+                //            continue;
+                //        var link = $"{(byte)letter1}.{(byte)letter2}.{(byte)letter3}";
+                //        links.Add(new ProductShortLink()
+                //        {
+                //            Link = link
+                //        });
+                //    }
+                //}
+            }
+
+            await _productShortLinkService.AddRangeAsync(links);
+            await _uow.SaveChangesAsync();
+        }
+
+        //public async Task SeedSeller()
+        //{
+        //    if (!await _sellerService.IsExistsBy(nameof(Entities.Seller.ShopName),
+        //            "فروشگاه برادران احمدی"))
+        //    {
+        //        var user = await _applicationUserManager.FindByNameAsync("09103332211");
+        //        var (provinceId, cityId) = await _provinceAndCityService.GetForSeedData();
+        //        var seller = new Entities.Seller()
+        //        {
+        //            SellerCode = 1,
+        //            AboutSeller =
+        //                "<p>شرکت رها گستر دانا از سال 1380 شروع به کار کرده و در این مدت توانسته با تکیه بر دانش کارکنان خود در زمنیه فروش لوارم جانبی موبایل اقدام به فعالیت کند</p>",
+        //            Address = "خیابان آزادی - کوچه بهار 5 - پلاک 39",
+        //            IsRealPerson = false,
+        //            CompanyName = "شرکت رها گستر دانا",
+        //            CompanyType = CompanyType.LimitedResponsibility,
+        //            SignatureOwners = "میلاد احمدی - منصور کریمی - سینا شاهرخی",
+        //            RegisterNumber = "12356488942128489",
+        //            EconomicCode = "123234345456",
+        //            NationalId = "159357258456147369",
+        //            TelePhone = "02199335484",
+        //            Website = "https://rahagostardana.com",
+        //            IsActive = true,
+        //            PostalCode = "5544184933",
+        //            ShopName = "فروشگاه برادران احمدی",
+        //            ShabaNumber = "123456789123456789123456",
+        //            Logo = "9dc9cb1134ab42b8978758834445c15b.png",
+        //            IdCartPicture = "35366c86a8fc4a67ac5abba5978ef381.jpg",
+        //            IsDeleted = false,
+        //            ProvinceId = provinceId,
+        //            CityId = cityId,
+        //            DocumentStatus = DocumentStatus.Confirmed,
+        //            User = user
+        //        };
+        //        await _applicationUserManager.AddToRoleAsync(user, ConstantRoles.Seller);
+        //        await _sellerService.AddAsync(seller);
+        //        await _uow.SaveChangesAsync();
+        //    }
+        //}
+    }
 }

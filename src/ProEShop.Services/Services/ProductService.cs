@@ -56,18 +56,20 @@ public class ProductService : GenericService<Product>, IProductService
         {
             if (isSortingAsc)
                 products = products.OrderBy(x => x.Seller.ShopName);
-            
+
             else
                 products = products.OrderByDescending(x => x.Seller.ShopName);
-            
-        } else if (sorting == SortingProducts.BrandFa)
+
+        }
+        else if (sorting == SortingProducts.BrandFa)
         {
             if (isSortingAsc)
                 products = products.OrderBy(x => x.Brand.TitleFa);
 
             else
                 products = products.OrderByDescending(x => x.Brand.TitleFa);
-        } else if (sorting == SortingProducts.BrandEn)
+        }
+        else if (sorting == SortingProducts.BrandEn)
         {
             if (isSortingAsc)
                 products = products.OrderBy(x => x.Brand.TitleEn);
@@ -97,7 +99,7 @@ public class ProductService : GenericService<Product>, IProductService
         var sellerId = await _sellerService.GetSellerIdAsync();
         var products = _products.AsNoTracking()
             .Where(x => x.SellerId == sellerId ||
-                        x.ProductVariants.Any(pv=>pv.SellerId == sellerId))
+                        x.ProductVariants.Any(pv => pv.SellerId == sellerId))
             .AsQueryable();
 
         #region Search
@@ -151,9 +153,9 @@ public class ProductService : GenericService<Product>, IProductService
 
     public async Task<ShowAllProductsInSellerPanelViewModel> GetAllProductsInSellerPanel(ShowAllProductsInSellerPanelViewModel model)
     {
-        
+
         var products = _products
-            .Where(x=>x.Status == ProductStatus.Confirmed)
+            .Where(x => x.Status == ProductStatus.Confirmed)
             .AsNoTracking().AsQueryable();
 
         #region Search
@@ -209,7 +211,7 @@ public class ProductService : GenericService<Product>, IProductService
     {
         return await _products.AsNoTracking()
             .Where(x => x.PersianTitle.Contains(input))
-            .OrderBy(x=>x.Id)
+            .OrderBy(x => x.Id)
             .Take(20)
             .Select(x => x.PersianTitle)
             .ToListAsync();
@@ -225,13 +227,13 @@ public class ProductService : GenericService<Product>, IProductService
                 .AsSplitQuery()
                 .Include(x => x.ProductFeatures)
                 .ThenInclude(x => x.Feature))
-            .SingleOrDefaultAsync(x=>x.Id == productId);
+            .SingleOrDefaultAsync(x => x.Id == productId);
     }
     public async Task<Product?> GetProductToRemoveInManagingProducts(long id)
     {
         return await _products.Where(x => x.Status == ProductStatus.AwaitingInitialApproval)
             .AsNoTracking()
-            .Include(x=>x.ProductMedia)
+            .Include(x => x.ProductMedia)
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 
@@ -239,7 +241,7 @@ public class ProductService : GenericService<Product>, IProductService
     {
         var lastProductCode = await _products
             .OrderByDescending(x => x.Id)
-            .Select(x=>x.ProductCode)
+            .Select(x => x.ProductCode)
             .FirstOrDefaultAsync();
         return lastProductCode + 1;
     }
@@ -264,7 +266,11 @@ public class ProductService : GenericService<Product>, IProductService
 
     public Task<ShowProductInfoViewModel?> GetProductInfo(long productCode)
     {
-        var userId = _httpContextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
+        long userId = 0;
+        if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+        {
+            userId = _httpContextAccessor.HttpContext.User.Identity.GetLoggedInUserId();
+        }
         return _products
             .AsNoTracking()
             .AsSplitQuery()
@@ -272,6 +278,23 @@ public class ProductService : GenericService<Product>, IProductService
                 configuration: _mapper.ConfigurationProvider,
                 parameters: new { userId = userId }
             ).SingleOrDefaultAsync(x => x.ProductCode == productCode);
-        
+
+    }
+
+    public async Task<(int productCode, string slug)> FindByShortLink(string productShortLint)
+    {
+        var productShortLink = await _products
+            .Select(x => new
+            {
+                x.Slug,
+                x.ProductCode,
+                x.ProductShortLink
+            }).SingleOrDefaultAsync(x => // search case sensitive (% means like in TSql)
+                EF.Functions.Like(x.ProductShortLink.Link, $"%{productShortLint}%")
+            );
+        return (
+            productShortLink?.ProductCode ?? 0,
+            productShortLink?.Slug
+        );
     }
 }

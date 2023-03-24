@@ -6,6 +6,7 @@ namespace ProEShop.Services.Contracts;
 public interface IGenericService<TEntity> where TEntity : EntityBase,new() // most have an empty ctor
 {
     Task<DuplicateColumns> AddAsync(TEntity entity);
+    Task AddRangeAsync(IEnumerable<TEntity> entity);
     Task<DuplicateColumns> Update(TEntity entity);
     void Remove(TEntity entity);
     void Remove(long id);

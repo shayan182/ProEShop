@@ -49,6 +49,8 @@ public class Product : EntityBase, IAuditableEntity
 
     [ForeignKey(nameof(Category))]
     public long MainCategoryId { get; set; }
+
+    public long ProductShortLinkId { get; set; }
     #endregion
     #region Relations
 
@@ -67,8 +69,9 @@ public class Product : EntityBase, IAuditableEntity
     public ICollection<ProductVariant>? ProductVariants { get; set; }
     public ICollection<ProductComment>? ProductComments { get; set; }
     public ICollection<UserProductFavorite>? UserProductFavorites { get; set; }
+    public ProductShortLink? ProductShortLink { get; set; }
     #endregion
-
+    
 }
 public enum ProductStatus : byte
 {

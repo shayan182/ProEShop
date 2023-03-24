@@ -31,10 +31,11 @@ public class CreateModel : SellerPanelBase
     private readonly IHtmlSanitizer _htmlSanitizer;
     private readonly IProductService _productService;
     private readonly ICategoryBrandService _categoryBrandService;
+    private readonly IProductShortLinkService _productShortLinkService;
 
     public CreateModel(
         ICategoryService categoryService,
-        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService, ICategoryFeatureService categoryFeatureService, IFeatureConstantValueService featureConstantValueService, IViewRendererService viewRendererService, IHtmlSanitizer htmlSanitizer, IProductService productService, ICategoryBrandService categoryBrandService)
+        IMapper mapper, IBrandService brandService, IUnitOfWork uow, IUploadFileService uploadFileService, ISellerService sellerService, ICategoryFeatureService categoryFeatureService, IFeatureConstantValueService featureConstantValueService, IViewRendererService viewRendererService, IHtmlSanitizer htmlSanitizer, IProductService productService, ICategoryBrandService categoryBrandService, IProductShortLinkService productShortLinkService)
     {
         _categoryService = categoryService;
         _mapper = mapper;
@@ -48,6 +49,7 @@ public class CreateModel : SellerPanelBase
         _htmlSanitizer = htmlSanitizer;
         _productService = productService;
         _categoryBrandService = categoryBrandService;
+        _productShortLinkService = productShortLinkService;
     }
 
     #endregion
@@ -76,6 +78,9 @@ public class CreateModel : SellerPanelBase
 
         var productToAdd = _mapper.Map<Entities.Product>(product);
 
+        var shortLink = await _productShortLinkService.GetProductShortLinkForCreateProduct();
+        productToAdd.ProductShortLinkId = shortLink.Id;
+        shortLink.IsUsed = true;
 
         productToAdd.Slug = product.PersianTitle.ToUrlSlug();
         productToAdd.SellerId = await _sellerService.GetSellerIdAsync();

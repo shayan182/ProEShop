@@ -8,5 +8,6 @@ public interface IVariantService : IGenericService<Variant>
 {
     Task<ShowVariantsViewModel> GetVariants(ShowVariantsViewModel model);
     Task<EditVariantViewMode?> GetForEdit(long id);
+    Task<bool> CheckProductAndVariantTypeForForAddVariant(long productId, long variantId);
 
 }
