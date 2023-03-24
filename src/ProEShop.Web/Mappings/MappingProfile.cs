@@ -9,6 +9,7 @@ using ProEShop.ViewModels.FeatureConstantValues;
 using ProEShop.ViewModels.Guarantees;
 using ProEShop.ViewModels.Product;
 using ProEShop.ViewModels.Products;
+using ProEShop.ViewModels.ProductShortLinks;
 using ProEShop.ViewModels.ProductStocks;
 using ProEShop.ViewModels.ProductVariants;
 using ProEShop.ViewModels.Sellers;
@@ -190,6 +191,7 @@ public class MappingProfile : AutoMapper.Profile
         this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();
         this.CreateMap<Entities.ProductFeature, ProductFeatureForProductInfoViewModel>();
         this.CreateMap<Entities.ProductVariant, ProductVariantForProductInfoViewModel>();
+        this.CreateMap<Entities.ProductShortLink, ShowProductShortLinkViewModel>();
 
     }
 }

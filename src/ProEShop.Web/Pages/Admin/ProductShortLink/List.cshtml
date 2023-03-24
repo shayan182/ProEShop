@@ -1,42 +1,43 @@
-﻿@using ProEShop.Common.Helpers
-@using ProEShop.Entities
-@model ProEShop.ViewModels.Products.ShowAllProductsInSellerPanelViewModel
-@if (Model.Products.Count > 0)
+﻿@model ProEShop.ViewModels.ProductShortLinks.ShowProductShortLinksViewModel
+@if (Model.ProductShortLinks.Count > 0)
 {
     <div class="table-responsive data-table-body">
         <table class="table table-bordered table-striped table-hover">
             <thead class="table-light">
                 <tr>
-                    <th>@Html.DisplayNameFor(x => x.Products[0].Id)</th>
-                    <th>@Html.DisplayNameFor(x => x.Products[0].PersianTitle)</th>
-                    <th>@Html.DisplayNameFor(x => x.Products[0].ProductCode)</th>
-                    <th>@Html.DisplayNameFor(x => x.Products[0].CategoryTitle)</th>
-                    <th>@Html.DisplayNameFor(x => x.Products[0].MainPicture)</th>
-                    <th>@Html.DisplayNameFor(x => x.Products[0].SellerShopName)</th>
-                    <th>@Html.DisplayNameFor(x => x.Products[0].BrandFullTitle)</th>
+                    <th>@Html.DisplayNameFor(x => x.ProductShortLinks[0].Id)</th>
+                    <th>@Html.DisplayNameFor(x => x.ProductShortLinks[0].Link)</th>
+                    <th>@Html.DisplayNameFor(x => x.ProductShortLinks[0].IsUsed)</th>
                     <th>عملیات</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in Model.Products)
+                @foreach (var shortLink in Model.ProductShortLinks)
                 {
                     <tr>
-                        <td>@product.Id</td>
-                        <td>@product.PersianTitle</td>
-                        <td>@product.ProductCode</td>
-                        <td>@product.CategoryTitle</td>
+                        <td>@shortLink.Id</td>
+                        <td>@shortLink.Link</td>
                         <td>
-                            <img src="~/images/products/@product.MainPicture" alt="@product.PersianTitle" width="100" />
+                            @if (shortLink.IsUsed)
+                            {
+                                <div class="d-flex justify-content-center">
+                                    <i class="fa fa-check fa-2x text-success"></i>
+
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center">
+                                    <i class="fa fa-remove fa-2x text-danger"></i>
+
+                                </div>                            }
                         </td>
-                        <td>@product.SellerShopName</td>
-                        <td>@product.BrandFullTitle</td>
                         <td>
-                            <button product-id="@product.Id" functionNameToCallOnClick="getProductDetails" type="button" class="get-html-with-ajax btn btn-info">
-                                جزییات محصول
-                            </button>
-                            <a asp-page="./AddVariant" asp-route-productId="@product.Id" class="btn btn-primary">
-                                شماهم فروشنده شوید
-                            </a>
+                            <form asp-page-handler="Delete" class="d-inline-block">
+                                <input type="hidden" name="shortLinkId" value="@shortLink.Id" />
+                                <button type="button" class="btn btn-danger delete-row-button">حذف</button>
+                            </form>
                         </td>
                     </tr>
                 }
