@@ -133,7 +133,10 @@ public class MappingProfile : AutoMapper.Profile
                     options.MapFrom(src => src.ProductMedia.First().FileName))
             .ForMember(dest => dest.Variants,
                 options =>
-                    options.MapFrom(src => src.Category.CategoryVariants));
+                    options.MapFrom(src => 
+                        src.Category.CategoryVariants.Where(x=>x.Variant.IsConfirmed)
+                        ));
+
         this.CreateMap<Entities.CategoryVariant, ShowCategoryVariantInAddVariantViewModel>();
         this.CreateMap<AddVariantForSellerPanelViewModel, ProductVariant>();
         this.CreateMap<ProductVariant, ShowProductVariantViewModel>();

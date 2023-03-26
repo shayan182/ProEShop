@@ -113,15 +113,30 @@ function showToastr(status, message) {
 
 // Enable tooltips
 function enablingTooltips() {
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('.data-table-place[data-bs-toggle="tooltip"]'));
+    //$('[data-toggle="tooltip"]').tooltip({
+    //    trigger: 'hover'
+    //});
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl,
+            {
+                trigger:'hover'
+                });
+    });
+}
+
+function enablingNormalTooltips() {
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     //$('[data-toggle="tooltip"]').tooltip({
     //    trigger: 'hover'
     //});
     let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+        return new bootstrap.Tooltip(tooltipTriggerEl,
+            {
+                trigger: 'hover'
+            });
     });
 }
-
 
 function showErrorMessage(message) {
     showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
@@ -489,7 +504,7 @@ function activationModalForm() {
 
 
 function activatingPagination() {
-    $('#main-pagination button').click(function () {
+    $('#main-pagination button').not('.active').click(function () {
         isMainPaginationClicked = true;
         let currentPageSelected = $(this).val();
         $('.search-form-via-ajax input[name$="Pagination.CurrentPage"]').val(currentPageSelected);
@@ -865,11 +880,26 @@ $('.multiple-images-preview-input').change(function () {
         $(`#${imagesPreviewBox}`).addClass('d-none');
     }
 });
+
+// Convert English numbers to Persian numbers
+// https://seifzadeh.blog.ir/post/convert-number-javascript
+String.prototype.toPersinaDigit = function () {
+    var id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return this.replace(/[0-9]/g, function (w) {
+        return id[+w];
+    });
+}
+
 $(function () {
     activatingInputAttributes();
     initializeSelect2WithoutModal();
     initializeTinyMCE();
-    enablingTooltips();
+    enablingNormalTooltips();
+
+    $('.persian-numbers').each(function () {
+        var result = $(this).html().toPersinaDigit();
+        $(this).html(result);
+    });
 
     // Enable img for tinymce 
     $('textarea[add-image-plugin="true"]').each(function () {

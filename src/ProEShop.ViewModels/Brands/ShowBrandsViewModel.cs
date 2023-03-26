@@ -21,25 +21,25 @@ public class ShowBrandViewModel
     public long Id { get; set; }
 
     [Display(Name = "نام فارسی برند")]
-    public string TitleFa { get; set; }
+    public string? TitleFa { get; set; }
 
     [Display(Name = "نام انگلیسی برند")]
-    public string TitleEn { get; set; }
+    public string? TitleEn { get; set; }
 
     [Display(Name = "نوع برند")]
     public bool IsIranianBrand { get; set; }
 
     [Display(Name = "لوگوی برند")]
-    public string LogoPicture { get; set; }
+    public string? LogoPicture { get; set; }
 
     [Display(Name = "برگه ثبت برند")]
-    public string BrandRegistrationPicture { get; set; }
+    public string? BrandRegistrationPicture { get; set; }
 
     [Display(Name = "لینک سایت قوه قضاییه")]
-    public string JudiciaryLink { get; set; }
+    public string? JudiciaryLink { get; set; }
 
     [Display(Name = "لینک سایت معتبر خارجی")]
-    public string BrandLinkEn { get; set; }
+    public string? BrandLinkEn { get; set; }
 
     [Display(Name = "وضعیت")]
     public bool IsConfirmed { get; set; }    

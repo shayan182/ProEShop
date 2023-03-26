@@ -12,55 +12,57 @@
         <!-- Other sellers table -->
         @foreach (var variants in groupedVariants)
         {
-            
+
             <div variant-value="@variants.First().VariantValue"
-             class="table-responsive mt-4 other-sellers-table @(variantCount++==1?String.Empty :"d-none")" >
+             class="table-responsive mt-4 other-sellers-table @(variantCount++==1?String.Empty :"d-none")">
                 <table class="table table-bordered shadow-sm align-middle">
                     <thead class="bg-primary text-white">
-                    <tr>
-                        <th>فروشنده</th>
-                        <th>گارانتی</th>
-                        <th>قیمت</th>
+                        <tr>
+                            <th>فروشنده</th>
+                            <th>گارانتی</th>
+                            <th>قیمت</th>
                             <th>امتیاز</th>
-                        <th></th>
-                    </tr>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @foreach (var variant in variants)
-                    {
-                        <tr free-delivery="@(variant.Price >= 500000 ?"true":"false")">
-                            <td>
-                                @if (!string.IsNullOrWhiteSpace(variant.SellerLogo))
-                                {
-                                    <img src="~/images/seller-logos/@variant.SellerLogo" width="50"
-                                         alt="@variant.SellerShopName" />
-                                }
-                                else
-                                {
-                                    <i class="bi bi-shop me-2 rem21px"></i>
-                                }
-                                @variant.SellerShopName
-                            </td>
-                            <td>@variant.GuaranteeFullTitle</td>
-                            <td>
-                                @variant.Price.ToString("0,#")
-                                تومان
-                            </td>
-                            <td>
-                                <span>
-                                    @variant.Score
-                                </span>
-                                امتیاز پروشاپ
-                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
-                                   title="بعد از پایان مهلت مرجوعی، برای دریافت امتیاز به صفحه ماموریت های پروشاپی سر بزنید."></i>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-danger rounded-3">
-                                    افزودن به سبد
-                                </button>
-                            </td>
-                        </tr>
-                    }
+                        @foreach (var variant in variants)
+                        {
+                            <tr free-delivery="@(variant.Price >= 500000 ?"true":"false")">
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(variant.SellerLogo))
+                                    {
+                                        <img src="~/images/seller-logos/@variant.SellerLogo" width="50"
+                                 alt="@variant.SellerShopName" />
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-shop me-2 rem21px"></i>
+                                    }
+                                    @variant.SellerShopName
+                                </td>
+                                <td class="persian-numbers">@variant.GuaranteeFullTitle</td>
+                                <td>
+                                    <span class="persian-numbers">
+                                        @variant.Price.ToString("0,#")
+                                    </span>
+                                    تومان
+                                </td>
+                                <td>
+                                    <span class="persian-numbers">
+                                        @variant.Score
+                                    </span>
+                                    امتیاز پروشاپ
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                               title="بعد از پایان مهلت مرجوعی، برای دریافت امتیاز به صفحه ماموریت های پروشاپی سر بزنید."></i>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-danger rounded-3">
+                                        افزودن به سبد
+                                    </button>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

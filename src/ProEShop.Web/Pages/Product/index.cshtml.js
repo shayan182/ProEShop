@@ -1,8 +1,47 @@
 ﻿$(function () {
 
+    var zoomPluginOptions = {
+        fillContainer: true,
+        zoomPosition: 'original'
+    };
+    new ImageZoom(document.getElementById('zoom-image-place'), zoomPluginOptions);
+
+    $('#add-product-to-favorite-form').submit(function () {
+        if (!isAuthenticated) {
+            showFirstLoginModal();
+            return false;
+        }
+    });
+
+    //start custom code (this code is in the main-script.js file but this file can not find these codes)
+    const firstLoginModalBody = `<div class="modal" id="first-login-modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h5>
+                    لطفا ابتدا وارد وبسایت شوید
+                </h5>
+                <a class="btn btn-secondary">ورود</a>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+    </div>`;
+    function showFirstLoginModal() {
+        if ($('#first-login-modal').length === 0) {
+            $('body').append(firstLoginModalBody);
+            $('#first-login-modal a').attr('href', loginPageUrl);
+        }
+        $('#first-login-modal').modal('show');
+    }
+
+    //end custom code
+    $('#share-product-button').click(function () {
+        $('#share-product-modal').modal('show');
+    });
+
     if ($('.other-seller-table:first  tbody tr').length == 1) {
         $('#other-sellers-box, #other-sellers-count-box').addClass('d-none');
-
     }
 
     $('#show-all-product-features').click(function () {
@@ -75,7 +114,7 @@
         }
 
         //change other sellers count
-        $('#other-sellers-count-box span').html(otherSellersCount-1);
+        $('#other-sellers-count-box span').html((otherSellersCount - 1).toString().toPersinaDigit());
 
         //show or hide free delivery box
         if (selectedSeller.attr('free-delivery') === 'true') {
@@ -140,8 +179,7 @@
         }
 
         //change other sellers count
-        $('#other-sellers-count-box span').html(otherSellersCount - 1);
-
+        $('#other-sellers-count-box span').html((otherSellersCount - 1).toString().toPersinaDigit());
         //show or hide free delivery box
         if (selectedSeller.attr('free-delivery') === 'true') {
             $('#free-delivery-box').removeClass('d-none');

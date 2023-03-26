@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Ganss.XSS;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
@@ -46,7 +44,6 @@ public class IndexModel : PageBase
             });
         }
 
-        var a = await _productShortLinkService.GetProductShortLinks(ProductShortLinks);
         return Partial("List", await _productShortLinkService.GetProductShortLinks(ProductShortLinks));
     }
 

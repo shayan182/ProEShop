@@ -19,17 +19,17 @@ public class ShowCategoryViewModel
     [Display(Name = "شناسه")]
     public long Id { get; set; }
     [Display(Name = "عنوان")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     [Display(Name = "والد")]
-    public string Parent { get; set; }
+    public string? Parent { get; set; }
 
     [Display(Name = "آدرس")]
-    public string Slug { get; set; }
+    public string? Slug { get; set; }
 
     [Display(Name = "نمایش در منو های اصلی")]
     public bool ShowInMenus { get; set; }
-    public string Picture { get; set; }
+    public string? Picture { get; set; }
     public bool IsDeleted { get; set; }
 
 }

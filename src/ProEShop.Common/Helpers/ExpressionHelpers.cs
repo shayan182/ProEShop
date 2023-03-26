@@ -37,7 +37,7 @@ public static class ExpressionHelpers
     {
         var result = query;
         var propertiesToSearch = model.GetType().GetProperties()
-            .Where(x => Attribute.IsDefined(x, typeof(EqualDateTimeSearchAttribute)))
+            .Where(x => Attribute.IsDefined(x, typeof(ContainsSearchAttribute)))
             .ToList();
         if (propertiesToSearch.Count > 0)
         {
