@@ -40,7 +40,7 @@ public class ShowProductInfoViewModel
         }
     }
 
-    public string? ProductShortLinkLink { get; set; }
+    public string? ProductShortLinkDisplayLink { get; set; }
     public List<ProductMediaForProductInfoViewModel>? ProductMedia { get; set; }
 
     public List<ProductCategoryForProductInfoViewModel>? ProductCategories { get; set; }

@@ -1,5 +1,6 @@
 ﻿@page "/product/pc-{productCode}/{slug}"
 @using DNTPersianUtils.Core
+@using ProEShop.Entities
 @model ProEShop.Web.Pages.Product.IndexModel
 @{
     var productInfo = Model.ProductInfo;
@@ -370,7 +371,7 @@
 
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="fw-bold">فروشنده</div>
-                            <div class="text-info rem13px" id="other-sellers-count-box">
+                            <div class="text-info rem13px pointer-cursor" id="other-sellers-count-box">
                                 <span class="persian-numbers">
                                     @(productVariants.Count(x => x.VariantValue == firstProductVariant.VariantValue) - 1)
                                 </span>
@@ -497,7 +498,8 @@
 
 <!-- End website features -->
 @{
-    var shareProductData = (productInfo.PersianTitle, productInfo.ProductShortLinkLink);
+    var shareProductData = (productInfo.PersianTitle, 
+        Url.PageLink("/Product/ProductShortLink",null,new {productShortLink = productInfo.ProductShortLinkDisplayLink}));
 }
 <partial name="_OtherVariantsPartial" model="productVariants" />
 <partial name="_ShareProductPartial" model="shareProductData" />

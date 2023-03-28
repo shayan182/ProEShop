@@ -1,30 +1,27 @@
 ﻿using AutoMapper;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Common;
+using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
-using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
-using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.Products;
-using ProEShop.ViewModels.Sellers;
+using ProEShop.ViewModels.ProductVariants;
 
 namespace ProEShop.Web.Pages.SellerPanel.Product;
 
-public class IndexModel : PageBase
+[CheckModelStateInRazorPages]
+public class IndexModel : SellerPanelBase
 {
     #region Constructor
 
     private readonly IProductService _productService;
-    private readonly ISellerService _sellerService;
     private readonly ICategoryService _categoryService;
-    private readonly IUploadFileService _uploadFile;
     private readonly IUnitOfWork _uow;
-    private readonly IHtmlSanitizer _htmlSanitizer;
     private readonly IProductVariantService _productVariantService;
+    private readonly IMapper _mapper;
 
     public IndexModel(
         IProductService productService,
@@ -32,15 +29,13 @@ public class IndexModel : PageBase
         ICategoryService categoryService,
         IUploadFileService uploadFile,
         IUnitOfWork uow,
-        IHtmlSanitizer htmlSanitizer, IProductVariantService productVariantService)
+        IHtmlSanitizer htmlSanitizer, IProductVariantService productVariantService, IMapper mapper)
     {
         _productService = productService;
-        _sellerService = sellerService;
         _categoryService = categoryService;
-        _uploadFile = uploadFile;
         _uow = uow;
-        _htmlSanitizer = htmlSanitizer;
         _productVariantService = productVariantService;
+        _mapper = mapper;
     }
 
     #endregion
@@ -57,13 +52,7 @@ public class IndexModel : PageBase
 
     public async Task<IActionResult> OnGetGetDataTableAsync()
     {
-        if (!ModelState.IsValid)
-        {
-            return Json(new JsonResultOperation(false, PublicConstantStrings.ModelStateErrorMessage)
-            {
-                Data = ModelState.GetModelStateErrors()
-            });
-        }
+       
         return Partial("List", await _productService.GetProductsInSellerPanel(Products));
     }
 
@@ -91,4 +80,54 @@ public class IndexModel : PageBase
         }
         return Partial("ProductVariants", await _productVariantService.GetProductVariants(productId));
     }
+    public async Task<IActionResult> OnGetEditProductVariant(long productVariantId)
+    {
+        if (productVariantId < 1)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        var productVariant = await _productVariantService.GetDataForEdit(productVariantId);
+        if (productVariant is null)
+            return Json(new JsonResultOperation(false,PublicConstantStrings.RecordNotFoundMessage));
+        return Partial("_EditProductVariantPartial", productVariant);
+    }
+    public async Task<IActionResult> OnPostEditProductVariant(EditProductVariantViewModel model)
+    {
+        var productVariant = await _productVariantService.GetForEdit(model.Id);
+        if (productVariant is null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
+        }
+
+        productVariant.Price = model.Price;
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "تنوع محصول مورد نظر با موفقیت ویرایش شد"));
+    }
+
+    public async Task<IActionResult> OnGetAddEditDiscount(long productVariantId)
+    {
+        if (productVariantId < 1)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        var productVariant = await _productVariantService.GetDataForAddEditDiscount(productVariantId);
+        if (productVariant is null)
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
+        return Partial("_AddEditDiscountPartial", productVariant);
+    }
+    public async Task<IActionResult> OnPostAddEditDiscount(AddEditDiscountViewModel model)
+    {
+        var productVariant = await _productVariantService.GetForEdit(model.Id);
+        if (productVariant is null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
+        }
+
+        _mapper.Map(model, productVariant);
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "تخفییف محصول مورد نظر با موفقیت ویرایش / ایحاد شد"));
+    }
+
 }

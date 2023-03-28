@@ -19,8 +19,15 @@ public class ProductVariant : EntityBase, IAuditableEntity
     public long GuaranteeId { get; set; }
     public long SellerId { get; set; }
     public int Price { get; set; }
+    public int? OffPrice { get; set; }
+    public byte? OffPercentage { get; set; }
+    [NotMapped]
+    public int FinalPrice => OffPrice ?? Price;
+    public DateTime? StartDateTime { get; set; }
+    public DateTime? EndDateTime { get; set; }
     public int VariantCode { get; set; }
     public int Count { get; set; }
+
     #endregion
 
     #region Relations

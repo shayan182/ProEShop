@@ -62,4 +62,28 @@ public class ProductVariantService : GenericService<ProductVariant>, IProductVar
         return _productVariants.Where(x=>Ids.Contains(x.Id))
             .ToListAsync();
     }
+
+    public async Task<EditProductVariantViewModel?> GetDataForEdit(long id)
+    {
+        var sellerId = await _sellerService.GetSellerIdAsync();
+        return await _mapper.ProjectTo<EditProductVariantViewModel>
+                (_productVariants.Where(x=>x.SellerId == sellerId))
+            .SingleOrDefaultAsync(x=>x.Id == id);
+    }
+
+    public async Task<AddEditDiscountViewModel?> GetDataForAddEditDiscount(long id)
+    {
+        var sellerId = await _sellerService.GetSellerIdAsync();
+        return await _mapper.ProjectTo<AddEditDiscountViewModel>
+                (_productVariants.Where(x => x.SellerId == sellerId))
+            .SingleOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<ProductVariant?> GetForEdit(long id)
+    {
+        var sellerId = await _sellerService.GetSellerIdAsync();
+        return await _productVariants
+            .Where(x => x.SellerId == sellerId)
+            .SingleOrDefaultAsync(x => x.Id == id);
+    }
 }

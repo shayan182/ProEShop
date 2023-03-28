@@ -12,4 +12,7 @@ public interface IProductVariantService : IGenericService<ProductVariant>
     Task<List<GetProductVariantInCreateConsignmentViewModel>> GetProductVariantForCreateConsignment(
         List<int> variantCodes);
     Task<List<ProductVariant>> GetProductVariantsToAddCount(List<long> Ids);
+    Task<EditProductVariantViewModel?> GetDataForEdit(long id);
+    Task<AddEditDiscountViewModel?> GetDataForAddEditDiscount(long id);
+    Task<ProductVariant?> GetForEdit(long id);
 }
