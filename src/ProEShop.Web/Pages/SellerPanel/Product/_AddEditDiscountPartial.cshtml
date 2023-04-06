@@ -69,14 +69,24 @@
                     <div class="col-md-4 my-2">
                         <label class="d-flex justify-content-between form-label" asp-for="StartDateTime">
                         </label>
-                        <input asp-for="StartDateTime" class="form-control" />
-                        <span asp-validation-for="StartDateTime" class="span-error-message"></span>
+                        <div class="input-group">
+                            <input date-en="@Model.StartDateTimeEn" readonly="readonly"
+                                   class="custom-md-persian-datepicker form-control" asp-for="StartDateTime" />
+                            <span class="input-group-text">
+                                <i id="start-datetime-add-edit-discount" class="pointer-cursor bi bi-calendar2-date"></i>
+                            </span>
+                        </div>                        <span asp-validation-for="StartDateTime" class="span-error-message"></span>
                     </div>
                     <div class="col-md-4 my-2">
                         <label class="d-flex justify-content-between form-label" asp-for="EndDateTime">
                         </label>
-                        <input asp-for="EndDateTime" class="form-control" />
-                        <span asp-validation-for="EndDateTime" class="span-error-message"></span>
+                        <div class="input-group">
+                            <input date-en="@Model.EndDateTimeEn" readonly="readonly"
+                                   class="custom-md-persian-datepicker form-control" asp-for="EndDateTime" />
+                            <span class="input-group-text">
+                                <i id="end-datetime-add-edit-discount" class="pointer-cursor bi bi-calendar2-date"></i>
+                            </span>
+                        </div>                        <span asp-validation-for="EndDateTime" class="span-error-message"></span>
                     </div>
                 </div>
                

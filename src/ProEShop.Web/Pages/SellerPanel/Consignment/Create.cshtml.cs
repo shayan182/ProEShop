@@ -52,7 +52,7 @@ public class CreateModel : SellerPanelBase
         if (createConsignment.Variants?.Count < 1)
             return Json(new JsonResultOperation(false));
 
-        var deliveryDate = createConsignment.DeliveryDate.ToGregorianDateTime();
+        var deliveryDate = createConsignment.DeliveryDate.ToGregorianDate();
         if (!deliveryDate.IsSuccessful)
             return Json(new JsonResultOperation(false));
 

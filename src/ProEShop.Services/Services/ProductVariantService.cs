@@ -5,6 +5,8 @@ using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.ProductVariants;
 using System.Linq;
+using DNTPersianUtils.Core;
+using ProEShop.Common.Helpers;
 
 namespace ProEShop.Services.Services;
 
@@ -74,9 +76,21 @@ public class ProductVariantService : GenericService<ProductVariant>, IProductVar
     public async Task<AddEditDiscountViewModel?> GetDataForAddEditDiscount(long id)
     {
         var sellerId = await _sellerService.GetSellerIdAsync();
-        return await _mapper.ProjectTo<AddEditDiscountViewModel>
+        var result = await _mapper.ProjectTo<AddEditDiscountViewModel>
                 (_productVariants.Where(x => x.SellerId == sellerId))
             .SingleOrDefaultAsync(x => x.Id == id);
+        if (result?.OffPercentage != null)
+        {
+            var parsedStartDateTime = DateTime.Parse(result.StartDateTime);
+            result.StartDateTimeEn = parsedStartDateTime.ToString("yyyy/MM/dd HH:mm");
+            result.StartDateTime = parsedStartDateTime.ToShortPersianDateTime().ToPersianNumbers();
+
+            var parsedEndDateTime = DateTime.Parse(result.EndDateTime);
+            result.EndDateTimeEn = parsedEndDateTime.ToString("yyyy/MM/dd HH:mm");
+            result.EndDateTime = parsedEndDateTime.ToShortPersianDateTime().ToPersianNumbers();
+        }
+
+        return result;
     }
 
     public async Task<ProductVariant?> GetForEdit(long id)

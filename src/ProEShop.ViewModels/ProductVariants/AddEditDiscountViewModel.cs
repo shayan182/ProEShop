@@ -15,23 +15,28 @@ public class AddEditDiscountViewModel
     public int ProductCode { get; set; }
 
     [Display(Name = "قیمت")]
-    [Range(1, 2000000000, ErrorMessage = AttributesErrorMessages.RangeMessage)]
     public int Price { get; set; }
 
     [Display(Name = "قیمت با تخفیف")]
+    [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [Range(1, 2000000000, ErrorMessage = AttributesErrorMessages.RangeMessage)]
     [DivisibleBy10]
     public int? OffPrice { get; set; }
 
     [Display(Name = "درصد تخفیف")]
+    [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [Range(1, 99, ErrorMessage = AttributesErrorMessages.RangeMessage)]
     public byte? OffPercentage { get; set; }
 
     [Display(Name = "تاریخ شروع تخفیف")]
+    [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     public string? StartDateTime { get; set; }
+    public string? StartDateTimeEn { get; set; }
 
     [Display(Name = "تاریخ پایان تخفیف")]
+    [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     public string? EndDateTime { get; set; }
+    public string? EndDateTimeEn { get; set; }
 
     public string? ProductTitle { get; set; }
 

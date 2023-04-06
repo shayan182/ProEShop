@@ -125,9 +125,26 @@ public class IndexModel : SellerPanelBase
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
 
+        var parsedDateTimes = DateTimeHelper.ConvertDateTimeForAddEditDiscount(model.StartDateTime, model.EndDateTime);
+        if (!parsedDateTimes.IsSuccessful)
+        {
+            return Json(new JsonResultOperation(false, "لطفا تاریخ ها را به درستی وارد نمایید"));
+        }
+
+        if (parsedDateTimes.IsStartDateTimeGreatherOrEqualEndDateTime)
+        {
+            return Json(new JsonResultOperation(false, "تاریخ پایان تخفیف باید بزرگتر از تاریخ شروع تخفیف باشد"));
+        }
+
+        if (parsedDateTimes.IsTimeSpanLowerThan3Hour)
+        {
+            return Json(new JsonResultOperation(false, "تاریخ پایان تخفیف باید حداقل 3 ساعت بزرگتر از تاریخ شروع تخفیف باشد"));
+        }
+
+        productVariant.StartDateTime = parsedDateTimes.StartDate;
+        productVariant.EndDateTime = parsedDateTimes.EndDate;
         _mapper.Map(model, productVariant);
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "تخفییف محصول مورد نظر با موفقیت ویرایش / ایحاد شد"));
     }
-
 }

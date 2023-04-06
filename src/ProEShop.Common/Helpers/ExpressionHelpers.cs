@@ -113,7 +113,7 @@ public static class ExpressionHelpers
                     var dateProperty = Expression.Property(property,"Date");
                     if (propertyValue is string)
                     {
-                        var (isSuccessful,dateTimeResult) = propertyValue.ToString().ToGregorianDateTime();
+                        var (isSuccessful,dateTimeResult) = propertyValue.ToString().ToGregorianDate();
                         if (isSuccessful)
                         {
                             var constantValue = Expression.Constant(dateTimeResult.Date);
