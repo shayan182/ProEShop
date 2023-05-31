@@ -159,7 +159,7 @@ function enablingNormalTooltips() {
 }
 
 function showErrorMessage(message) {
-    showToastr('error', 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
+    showToastr('error', message != null ? message : 'خطایی به وجود آمد، لطفا مجددا تلاش نمایید');
 }
 
 //function initializeTinyMCE() {
@@ -958,7 +958,10 @@ function convertEnglishNumbersToPersianNumber() {
         $(this).html(result);
     });
 }
-
+// Add comma after 3 digits
+String.prototype.addCommaToDigits = function () {
+    return this.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
 $(function () {
     activatingInputAttributes();
     initializeSelect2WithoutModal();
