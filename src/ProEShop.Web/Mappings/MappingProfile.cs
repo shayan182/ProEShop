@@ -1,4 +1,5 @@
-﻿using ProEShop.Common.Helpers;
+﻿using System.Globalization;
+using ProEShop.Common.Helpers;
 using ProEShop.Entities;
 using ProEShop.Entities.Identity;
 using ProEShop.ViewModels.Brands;
@@ -205,7 +206,12 @@ public class MappingProfile : AutoMapper.Profile
         this.CreateMap<Entities.ProductMedia, ProductMediaForProductInfoViewModel>();
         this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();
         this.CreateMap<Entities.ProductFeature, ProductFeatureForProductInfoViewModel>();
-        this.CreateMap<Entities.ProductVariant, ProductVariantForProductInfoViewModel>();
+        this.CreateMap<Entities.ProductVariant, ProductVariantForProductInfoViewModel>()
+            .ForMember(dest => dest.EndDateTime,
+                options =>
+                    options.MapFrom(src =>
+                        src.EndDateTime != null ? src.EndDateTime.Value.ToString() : null // custom code
+            ));
         this.CreateMap<Entities.ProductShortLink, ShowProductShortLinkViewModel>();
         this.CreateMap<Entities.ProductVariant, EditProductVariantViewModel>()
             .ForMember(dest => dest.MainPicture,

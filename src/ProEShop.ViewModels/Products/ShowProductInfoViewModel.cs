@@ -76,18 +76,21 @@ public class ProductVariantForProductInfoViewModel
 
     public string? VariantColorCode { get; set; }
     public int Price { get; set; }
+    public int FinalPrice { get; set; }
 
+    public byte? OffPercentage { get; set; }
     public string? SellerShopName { get; set; }
 
     public string? SellerLogo { get; set; }
 
     public string? GuaranteeFullTitle { get; set; }
+    public string? EndDateTime { get; set; }
 
     public byte Score
     {
         get
         {
-            var result = Price / 10000;
+            var result = Math.Ceiling((double)FinalPrice / 10000);
             if (result <= 1)
                 return 1;
             if (result >= 150)

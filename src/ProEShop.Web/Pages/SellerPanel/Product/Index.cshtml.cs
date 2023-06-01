@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DNTPersianUtils.Core;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common;
@@ -139,6 +140,31 @@ public class IndexModel : SellerPanelBase
         if (parsedDateTimes.IsTimeSpanLowerThan3Hour)
         {
             return Json(new JsonResultOperation(false, "تاریخ پایان تخفیف باید حداقل 3 ساعت بزرگتر از تاریخ شروع تخفیف باشد"));
+        }
+
+        var offPrice = model.OffPrice;
+        var price = productVariant.Price;
+        var offPercentage = model.OffPercentage;
+        var discountPrice = price / 100 * offPercentage;
+        var priceWithDiscount = price - discountPrice;
+        var discountPriceSubtract1Percentage = price / 100 * (offPercentage - 1);
+        var priceWithDiscountSubtract1Percentage = price - discountPriceSubtract1Percentage;
+
+        // برای مثال قیمت کالا هزارتومان است
+        // درصد تخفیف 7 درصد
+        // یعنی میزان تخفیف 70 تومان است و مبلغ نهایی 930 تومان است
+        // اگر قیمتی که در اینپوت تخفیف وارد میشود کمتر از 930 تومان باشد وارد
+        // شاخه 8 درصد تخفیف میشود، پس باید به کاربر خطا نمایش دهیم
+        // ما مخواهیم میزان تخفیف بین 6 تا 7 درصد باشد
+        // بزرگتر از 6 و کوچکتر و مساوی 7 درصد
+        // یعنی
+        // OffPrice >= 930 && OffPrice < 940
+        // شش درصد تخفیف روی هزارتومان میشود 940 تومان
+        // اگر قرار است که مبلغ 940 تومان باشد پس باید شش درصد تخفیف وارد شود نه 7 درصد
+        if (offPrice < priceWithDiscount || offPrice >= priceWithDiscountSubtract1Percentage)
+        {
+            return Json(new JsonResultOperation(false,
+                $"قیمت تخفیف باید بزرگتر مساوی {priceWithDiscount.ToString("#,0").ToPersianNumbers()} تومان و کوچکتر از {priceWithDiscountSubtract1Percentage.ToString("#,0").ToPersianNumbers()} تومان باشد"));
         }
 
         productVariant.StartDateTime = parsedDateTimes.StartDate;

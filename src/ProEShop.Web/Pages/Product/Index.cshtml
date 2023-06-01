@@ -5,7 +5,7 @@
 @{
     var productInfo = Model.ProductInfo;
     var productVariants = productInfo.ProductVariants
-        .OrderBy(x => x.Price)
+        .OrderBy(x => x.FinalPrice)
         .ToList();
     var productFeatures = productInfo.ProductFeatures
         .Where(x => x.FeatureShowNextToProduct).ToList();
@@ -435,18 +435,48 @@
                         <hr class="bg-secondary" />
 
                         <!-- 5 -->
-
-                        <div class="d-flex justify-content-end align-items-center mt-3">
-                            <span class="fw-bold rem21px" id="product-price-in-single-page-of-product">
-                                <span class="persian-numbers">
-                                    @firstProductVariant.Price.ToString("0,#")
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                   title="این کالا توسط فروشنده آن، فروشگاه تست، قیمت گذاری شده است."></i>
+                            </div>
+                            @if (firstProductVariant.OffPercentage is null)
+                        {
+                                <span class=" rem21px" id="product-price-in-single-page-of-product">
+                                    <span class="persian-numbers">
+                                        @firstProductVariant.Price.ToString("0,#")
+                                    </span>
+                                    تومان
                                 </span>
-                                تومان
-                            </span>
+                        }
+                        else
+                        {
+                                <div>
+                                    <span class="text-decoration-line-through text-custom-grey rem14px me-2 persian-numbers">
+                                        @firstProductVariant.Price.ToString("0,#")
+                                    </span>
+                                    <span class="badge rounded-pill bg-danger persian-numbers">@firstProductVariant.OffPercentage%</span>
+                                </div>
+                                <span class="rem21px mt-2 persian-numbers">
+                                    @firstProductVariant.FinalPrice.ToString("0,#")
+                                    تومان
+                                </span>
+                        }
                         </div>
 
                         <!-- End 5 -->
+                        <!-- 6 -->
 
+                        <div class="d-flex flex-column align-items-center mt-3 text-danger fw-bold" id="product-count-down-timer-box">
+                            <div>
+                                پیشنهاد شگفت انگیز
+                            </div>
+                            <div class="text-center count-down-timer" selector-to-remove="#product-count-down-timer-box">
+                                @firstProductVariant.EndDateTime
+                            </div>
+                        </div>
+                       
+                        <!-- End 6 -->
                         <div class="d-grid mt-3">
                             <button class="btn btn-danger rounded-3">
                                 افزودن به سبد خرید
