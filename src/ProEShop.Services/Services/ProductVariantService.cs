@@ -5,6 +5,7 @@ using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.ProductVariants;
 using System.Linq;
+using AutoMapper.QueryableExtensions;
 using DNTPersianUtils.Core;
 using ProEShop.Common.Helpers;
 
@@ -68,9 +69,12 @@ public class ProductVariantService : GenericService<ProductVariant>, IProductVar
     public async Task<EditProductVariantViewModel?> GetDataForEdit(long id)
     {
         var sellerId = await _sellerService.GetSellerIdAsync();
-        return await _mapper.ProjectTo<EditProductVariantViewModel>
-                (_productVariants.Where(x=>x.SellerId == sellerId))
-            .SingleOrDefaultAsync(x=>x.Id == id);
+        return await _productVariants
+            .Where(x=>x.SellerId == sellerId)
+            .ProjectTo<EditProductVariantViewModel>(
+                _mapper.ConfigurationProvider,
+                parameters:new{now = DateTime.Now})
+            .SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<AddEditDiscountViewModel?> GetDataForAddEditDiscount(long id)
@@ -79,7 +83,7 @@ public class ProductVariantService : GenericService<ProductVariant>, IProductVar
         var result = await _mapper.ProjectTo<AddEditDiscountViewModel>
                 (_productVariants.Where(x => x.SellerId == sellerId))
             .SingleOrDefaultAsync(x => x.Id == id);
-        if (result?.OffPercentage != null)
+        if (result?.OffPercentage > 0)
         {
             var parsedStartDateTime = DateTime.Parse(result.StartDateTime);
             result.StartDateTimeEn = parsedStartDateTime.ToString("yyyy/MM/dd HH:mm");

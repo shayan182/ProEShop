@@ -9,55 +9,69 @@
 
 $(function () {
 
+    $('.count-down-timer-in-other-variants').each(function () {
+        var currentEl = $(this);
+        var selectorToShow = currentEl.parents('td').find('div:first');
+        var selectorToHide = currentEl.parents('td').find('div:eq(1)');
+        countDownTimer(currentEl, selectorToShow, selectorToHide);
+    });
     $('.count-down-timer').each(function () {
         var currentEl = $(this);
-        var selectorToRemove = currentEl.attr('selector-to-remove');
-        if (selectorToRemove) {
-            countDownTimer($(this), $(selectorToRemove));
-        } else {
-            countDownTimer($(this));
-        }
+        var variantValue = currentEl.parent().attr('variant-value');
+        var selectorToShow = $('.product-price-in-single-page-of-product[variant-value="' + variantValue + '"]');
+        var selectorToHide = currentEl.parent();
+        var selectorToHide2 = $('.product-final-price-in-single-page-of-product[variant-value="' + variantValue + '"]');
+        countDownTimer(currentEl, selectorToShow, selectorToHide, selectorToHide2); 
     });
+    function countDownTimerFunction(selector, selectorToShow, selectorToHide, selectorToHide2, countDownDate) {
+        // Get today's date and time
+        var now = new Date().getTime();
 
-    //CountDownStart
-    function countDownTimer(selector, selectorToRemove) {
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        var daysText = `${days} روز و<br />`;
+        if (days === 0) {
+            daysText = '';
+        }
+
+        var result =
+            `${daysText}${seconds < 10 ? '0' + seconds : seconds} : ${minutes < 10 ? '0' + minutes : minutes} : ${hours < 10 ? '0' + hours : hours}`;
+
+        selector.html(result.toPersinaDigit());
+
+        // If the count down is finished, write some text
+        if (distance < 0) {
+            selector.parents('tr').attr('is-discount-active', 'false');
+            selectorToShow.removeClass('d-none');
+            selectorToHide.addClass('d-none');
+            if (selectorToHide2) {
+                selectorToHide2.addClass('d-none');
+            }
+        }
+        return distance;
+    }
+
+    function countDownTimer(selector, selectorToShow, selectorToHide, selectorToHide2) {
+
         var endDateTime = selector.html().trim();
 
         // Set the date we're counting down to
         var countDownDate = new Date(endDateTime).getTime();
 
+        countDownTimerFunction(selector, selectorToShow, selectorToHide, selectorToHide2, countDownDate);
+
         // Update the count down every 1 second
         var x = setInterval(function () {
-
-            // Get today's date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now and the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            var daysText = `${days} روز و<br />`;
-            if (days === 0) {
-                daysText = '';
-            }
-
-            var result =
-                `${daysText}${seconds < 10 ? '0' + seconds : seconds} : ${minutes < 10 ? '0' + minutes : minutes} : ${hours < 10 ? '0' + hours : hours}`;
-
-            selector.html(result.toPersinaDigit());
-
-            // If the count down is finished, write some text
-            if (distance < 0) {
+            var result = countDownTimerFunction(selector, selectorToShow, selectorToHide, selectorToHide2, countDownDate);
+            if (result < 0) {
                 clearInterval(x);
-                if (selectorToRemove) {
-                    selectorToRemove.addClass('d-none');
-                }
-                $(selector).remove();
             }
         }, 1000);
    
@@ -139,74 +153,22 @@ $(function () {
         $(this).find('i').removeClass('d-none');
         $(this).addClass('selected-variant-in-show-product-info');
 
-        var selectedVariantValue = $(this).attr('data-bs-original-title');
-
-        $('.other-sellers-table').addClass('d-none');
-
-        $('.other-sellers-table[variant-value="' + selectedVariantValue + '"]').removeClass('d-none');
-
-     
-
-        //change variant value
-        $('#product-variant-value').html(selectedVariantValue);
-
-        //change product info in left side box
-
-        //change product name
-        var selectedSeller = $('.other-sellers-table[variant-value="' + selectedVariantValue + '"] tbody tr:first');
-        var selectedShopName = selectedSeller.find('td:first').text();
-        $('#shop-details-in-single-page-of-product div').html(selectedShopName);
-
-        // Change product logo
-        var selectedShopLogo = selectedSeller.find('td:first i').length === 0 ? 'img' : 'i';
-        if (selectedShopLogo === 'img') {
-            selectedShopLogo = selectedSeller.find('td:first img').attr('src');
-            $('#shop-details-in-single-page-of-product i').addClass('d-none');
-            $('#shop-details-in-single-page-of-product img').removeClass('d-none');
-            $('#shop-details-in-single-page-of-product img').attr('src', selectedShopLogo);
-        }
-        else {
-            $('#shop-details-in-single-page-of-product i').removeClass('d-none');
-            $('#shop-details-in-single-page-of-product img').addClass('d-none');
-        }
-
-        // Change product guarantee
-        var selectedGuarantee = selectedSeller.find('td:nth-child(2)').text();
-        $('#product-guarantee-in-single-page-of-product').html(selectedGuarantee);
-
-        // Change product price
-        var selectedprice = selectedSeller.find('td:nth-child(3)').text();
-        $('#product-price-in-single-page-of-product').html(selectedprice);
-
-        // Change product price
-        var selectedscore = selectedSeller.find('td:nth-child(4) span').text();
-        $('#product-score-in-single-page-of-product span').html(selectedscore);
-       
-        // Hide other sellers box if it has just one item
-        var otherSellersCount = $('.other-sellers-table[variant-value="' + selectedVariantValue + '"] tbody tr').length;
-        if (otherSellersCount === 1) {
-            $('#other-sellers-box, #other-sellers-count-box').addClass('d-none');
-        } else {
-            $('#other-sellers-box, #other-sellers-count-box').removeClass('d-none');
-        }
-
-        //change other sellers count
-        $('#other-sellers-count-box span').html((otherSellersCount - 1).toString().toPersinaDigit());
-
-        //show or hide free delivery box
-        if (selectedSeller.attr('free-delivery') === 'true') {
-            $('#free-delivery-box').removeClass('d-none');
-        } else {
-            $('#free-delivery-box').addClass('d-none');
-        }
+        var selectedVariantValue = $(this).attr('data-bs-original-title'); //aria-label
+        changeVariant(selectedVariantValue);
     });
 
     //change variants (size)
     $('#product-variants-box-in-show-product-info select').change(function () {
 
         var selectedVariantValue = this.value;
+        changeVariant(selectedVariantValue);
+    });
+    function changeVariant(selectedVariantValue) {
 
         $('.other-sellers-table').addClass('d-none');
+        $('.product-final-price-in-single-page-of-product').addClass('d-none');
+        $('.product-price-in-single-page-of-product').addClass('d-none');
+        $('.discount-count-down-box').addClass('d-none');
 
         $('.other-sellers-table[variant-value="' + selectedVariantValue + '"]').removeClass('d-none');
 
@@ -219,6 +181,16 @@ $(function () {
 
         //change product name
         var selectedSeller = $('.other-sellers-table[variant-value="' + selectedVariantValue + '"] tbody tr:first');
+
+        if (selectedSeller.attr('is-discount-active') === 'true') {
+            $('.product-final-price-in-single-page-of-product[variant-value="' + selectedVariantValue + '"]').removeClass('d-none');
+            $('.discount-count-down-box[variant-value="' + selectedVariantValue + '"]').removeClass('d-none');
+        } else {
+            $('.product-price-in-single-page-of-product[variant-value="' + selectedVariantValue + '"]').removeClass('d-none');
+
+        }
+
+
         var selectedShopName = selectedSeller.find('td:first').text();
         $('#shop-details-in-single-page-of-product div').html(selectedShopName);
 
@@ -239,9 +211,10 @@ $(function () {
         var selectedGuarantee = selectedSeller.find('td:nth-child(2)').text();
         $('#product-guarantee-in-single-page-of-product').html(selectedGuarantee);
 
-        // Change product price
-        var selectedprice = selectedSeller.find('td:nth-child(3)').text();
-        $('#product-price-in-single-page-of-product').html(selectedprice);
+        //// we dont need this code
+        //// Change product price
+        //var selectedprice = selectedSeller.find('td:nth-child(3)').text();
+        //$('#product-price-in-single-page-of-product').html(selectedprice);
 
         // Change product price
         var selectedscore = selectedSeller.find('td:nth-child(4) span').text();
@@ -263,8 +236,7 @@ $(function () {
         } else {
             $('#free-delivery-box').addClass('d-none');
         }
-    });
-
+    }
 });
 
 

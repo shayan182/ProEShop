@@ -85,7 +85,7 @@ public class ProductVariantForProductInfoViewModel
 
     public string? GuaranteeFullTitle { get; set; }
     public string? EndDateTime { get; set; }
-
+    public bool IsDiscountActive { get; set; }
     public byte Score
     {
         get

@@ -134,8 +134,8 @@ public class MappingProfile : AutoMapper.Profile
                     options.MapFrom(src => src.ProductMedia.First().FileName))
             .ForMember(dest => dest.Variants,
                 options =>
-                    options.MapFrom(src => 
-                        src.Category.CategoryVariants.Where(x=>x.Variant.IsConfirmed)
+                    options.MapFrom(src =>
+                        src.Category.CategoryVariants.Where(x => x.Variant.IsConfirmed)
                         ));
 
         this.CreateMap<Entities.CategoryVariant, ShowCategoryVariantInAddVariantViewModel>();
@@ -206,12 +206,18 @@ public class MappingProfile : AutoMapper.Profile
         this.CreateMap<Entities.ProductMedia, ProductMediaForProductInfoViewModel>();
         this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();
         this.CreateMap<Entities.ProductFeature, ProductFeatureForProductInfoViewModel>();
+        DateTime now = default;
         this.CreateMap<Entities.ProductVariant, ProductVariantForProductInfoViewModel>()
             .ForMember(dest => dest.EndDateTime,
                 options =>
                     options.MapFrom(src =>
                         src.EndDateTime != null ? src.EndDateTime.Value.ToString() : null // custom code
-            ));
+                ))
+            .ForMember(dest => dest.IsDiscountActive,
+                options =>
+                    options.MapFrom(src =>
+                        src.OffPercentage != null && (src.StartDateTime <= now && src.EndDateTime >= now)
+                        ));
         this.CreateMap<Entities.ProductShortLink, ShowProductShortLinkViewModel>();
         this.CreateMap<Entities.ProductVariant, EditProductVariantViewModel>()
             .ForMember(dest => dest.MainPicture,
@@ -220,6 +226,9 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.ProductTitle,
                 options =>
                     options.MapFrom(src => src.Product.PersianTitle))
+            .ForMember(dest => dest.IsDiscountActive,
+                options =>
+                    options.MapFrom(src => src.OffPercentage != null && (src.StartDateTime <= now && src.EndDateTime >= now)))
             .ForMember(dest => dest.CommissionPercentage,
                 options =>
                     options.MapFrom(

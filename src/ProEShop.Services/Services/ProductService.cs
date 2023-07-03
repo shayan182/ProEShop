@@ -276,25 +276,25 @@ public class ProductService : GenericService<Product>, IProductService
             .AsSplitQuery()
             .ProjectTo<ShowProductInfoViewModel>(
                 configuration: _mapper.ConfigurationProvider,
-                parameters: new { userId = userId }
+                parameters: new { userId = userId , now = DateTime.Now}
             ).SingleOrDefaultAsync(x => x.ProductCode == productCode);
 
     }
 
-    public async Task<(int productCode, string slug)> FindByShortLink(string productShortLint)
+    public async Task<(int productCode, string slug)> FindByShortLink(string productShortLink)
     {
-        var productShortLink = await _products
+        var productShortLinkResult = await _products
             .Select(x => new
             {
                 x.Slug,
                 x.ProductCode,
                 x.ProductShortLink
             }).SingleOrDefaultAsync(x => // search case sensitive (% means like in TSql)
-                EF.Functions.Like(x.ProductShortLink.Link, $"%{productShortLint}%")
+               x.ProductShortLink.Link == productShortLink
             );
         return (
-            productShortLink?.ProductCode ?? 0,
-            productShortLink?.Slug
+            productShortLinkResult?.ProductCode ?? 0,
+            productShortLinkResult?.Slug
         );
     }
 }

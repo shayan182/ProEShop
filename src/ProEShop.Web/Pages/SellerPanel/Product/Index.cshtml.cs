@@ -102,6 +102,9 @@ public class IndexModel : SellerPanelBase
         }
 
         productVariant.Price = model.Price;
+        productVariant.StartDateTime = productVariant.EndDateTime = null;
+        productVariant.OffPrice = productVariant.OffPercentage = null;
+
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "تنوع محصول مورد نظر با موفقیت ویرایش شد"));
     }
