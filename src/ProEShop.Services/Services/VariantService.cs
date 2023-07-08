@@ -75,4 +75,12 @@ public class VariantService : GenericService<Variant>, IVariantService
         if(variant is null) return false;
         return product.IsVariantColor == variant.IsColor;
     }
+
+    public Task<List<ShowVariantInEditCategoryVariantViewModel>> GetVariantsForEditCategoryVariants(bool isColor)
+    {
+        return _mapper.ProjectTo<ShowVariantInEditCategoryVariantViewModel>(
+             _variants.Where(x=>x.IsConfirmed)
+                 .Where(x=>x.IsColor == isColor))
+            .ToListAsync();
+    }
 }

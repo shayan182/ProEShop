@@ -16,6 +16,7 @@ using ProEShop.ViewModels.ProductVariants;
 using ProEShop.ViewModels.Sellers;
 using ProEShop.ViewModels.Variants;
 using ProEShop.Web.Pages.Inventory.ProductStock;
+using EditCategoryViewModel = ProEShop.ViewModels.Categories.EditCategoryViewModel;
 
 namespace ProEShop.Web.Mappings;
 
@@ -268,6 +269,6 @@ public class MappingProfile : AutoMapper.Profile
                 opt => opt.Ignore())
             .ForMember(x => x.EndDateTime,
                 opt => opt.Ignore());
-
+        this.CreateMap<Entities.Variant, ShowVariantInEditCategoryVariantViewModel>();
     }
 }

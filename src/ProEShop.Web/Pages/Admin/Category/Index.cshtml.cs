@@ -10,6 +10,7 @@ using ProEShop.Entities;
 using ProEShop.Services.Contracts;
 using ProEShop.Services.Services;
 using ProEShop.ViewModels.Categories;
+using ProEShop.ViewModels.CategoryVariants;
 
 namespace ProEShop.Web.Pages.Admin.Category;
 
@@ -22,13 +23,17 @@ public class IndexModel : PageBase
     private readonly IUploadFileService _uploadFileService;
     private readonly IBrandService _brandServices;
     private readonly IMapper _mapper;
+    private readonly ICategoryVariantService _categoryVariantService;
+    private readonly IVariantService _variantService;
     private readonly IHtmlSanitizer _htmlSanitizer;
 
     public IndexModel(ICategoryService categoryService,
         IUnitOfWork uow, IUploadFileService uploadFileService,
         IBrandService brandServices,
         IMapper mapper,
-        IHtmlSanitizer htmlSanitizer)
+        IHtmlSanitizer htmlSanitizer, 
+        IVariantService variantService, 
+        ICategoryVariantService categoryVariantService)
     {
         _categoryService = categoryService;
         _uploadFileService = uploadFileService;
@@ -36,6 +41,8 @@ public class IndexModel : PageBase
         _mapper = mapper;
         _uow = uow;
         _htmlSanitizer = htmlSanitizer;
+        _variantService = variantService;
+        _categoryVariantService = categoryVariantService;
     }
 
     #endregion
@@ -302,5 +309,42 @@ public class IndexModel : PageBase
     public async Task<IActionResult> OnGetAutocompleteSearch(string term)
     {
         return Json(await _brandServices.AutoCompleteSearch(term));
+    }
+    public async Task<IActionResult> OnGetEditCategoryVariant(long categoryId)
+    {
+        if (!await _categoryService.IsExistsBy(nameof(Entities.Category.Id), categoryId))
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
+
+        var isVariantTypeColor = await _categoryService.IsVariantTypeColor(categoryId);
+        var variants = await _variantService.GetVariantsForEditCategoryVariants(isVariantTypeColor);
+        var selectedVariants = await _categoryVariantService.GetCategoryVariants(categoryId);
+        var model = new EditCategoryVariantViewModel() 
+        {
+            Variants = variants,
+            SelectedVariants = selectedVariants
+        };
+        return Partial("_EditCategoryVariantPartial", model);
+    }
+    public async Task<IActionResult> OnPostEditCategoryVariant(EditCategoryVariantViewModel model)
+    {
+       
+        var category = await _categoryService.GetCategoryForEditVariant(model.CategoryId);
+        if (category is null)
+        {
+            return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
+        }
+
+        category.CategoryVariants.Clear();
+
+        foreach (var variantId in model.SelectedVariants)
+        {
+            category.CategoryVariants.Add(new CategoryVariant()
+            {
+                VariantId = variantId
+            });
+        }
+
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true, "تنوع های دسته بندی مورد نظر با موفقیت ویرایش شد"));
     }
 }

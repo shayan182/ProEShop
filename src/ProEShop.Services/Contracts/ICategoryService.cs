@@ -18,4 +18,6 @@ public interface ICategoryService : IGenericService<Category>
     Task<bool> CanAddFakeProduct(long categoryId);
     Task<(bool IsSuccessful,List<long> categoryIds)> GetCategoryParentIds(long categoryId);
     Task<Dictionary<long, string>> GetSellerCategories();
+    Task<bool> IsVariantTypeColor(long categoryId);
+    Task<Entities.Category?> GetCategoryForEditVariant(long categoryId);
 }
