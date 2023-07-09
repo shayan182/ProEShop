@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ProEShop.DataLayer.Context;
 namespace ProEShop.DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230709170047_V_09_23_2030")]
+    partial class V_09_23_2030
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1642,7 +1644,7 @@ namespace ProEShop.DataLayer.Migrations
                     b.Property<int>("VariantCode")
                         .HasColumnType("int");
 
-                    b.Property<long?>("VariantId")
+                    b.Property<long>("VariantId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -1657,8 +1659,7 @@ namespace ProEShop.DataLayer.Migrations
                     b.HasIndex("VariantId");
 
                     b.HasIndex("SellerId", "ProductId", "VariantId")
-                        .IsUnique()
-                        .HasFilter("[VariantId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ProductVariants");
                 });
@@ -2334,7 +2335,9 @@ namespace ProEShop.DataLayer.Migrations
 
                     b.HasOne("ProEShop.Entities.Variant", "Variant")
                         .WithMany()
-                        .HasForeignKey("VariantId");
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Guarantee");
 

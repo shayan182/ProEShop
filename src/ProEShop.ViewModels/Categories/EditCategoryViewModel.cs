@@ -49,6 +49,10 @@ public class EditCategoryViewModel
 
     [Display(Name = "آیا میتوان کالای غیر اصل وارد کرد؟")]
     public bool CanAddFakeProduct { get; set; }
+    [Display(Name = "نوع تنوع")]
+    public bool? IsVariantColor { get; set; }
+
+    public bool CanVariantTypeChange { get; set; }
 
     [Display(Name = "راهنمای صفحه محصول")]
     [MaxLength(1000, ErrorMessage = AttributesErrorMessages.MaxLengthMessage)]

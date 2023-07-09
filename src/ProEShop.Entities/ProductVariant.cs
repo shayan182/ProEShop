@@ -15,7 +15,7 @@ public class ProductVariant : EntityBase, IAuditableEntity
 {
     #region Properties
     public long ProductId { get; set; }
-    public long VariantId { get; set; } 
+    public long? VariantId { get; set; } 
     public long GuaranteeId { get; set; }
     public long SellerId { get; set; }
     public int Price { get; set; }

@@ -153,11 +153,15 @@ public class IndexModel : PageBase
             pictureFileName = model.Picture.GenerateFileName();
         }
 
-        var category = await _categoryService.FindByIdAsync(model.Id);
+        var category = await _categoryService.FindByIdWithIncludeAsync(model.Id,nameof(Entities.Category.CategoryVariants));
         if (category == null)
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
 
         var oldFileName = category.Picture;
+        if (category.CategoryVariants.Any())
+        {
+            model.IsVariantColor = category.IsVariantColor;
+        }
 
         category.Title = model.Title;
         category.Description = _htmlSanitizer.Sanitize(model.Description);
@@ -167,6 +171,7 @@ public class IndexModel : PageBase
         category.ParentId = model.ParentId == 0 ? null : model.ParentId;
         category.Picture = pictureFileName == null ? oldFileName : pictureFileName;
         category.CanAddFakeProduct = model.CanAddFakeProduct;
+        category.IsVariantColor = model.IsVariantColor;
 
         var result = await _categoryService.Update(category);
         if (!result.Ok)
@@ -316,7 +321,12 @@ public class IndexModel : PageBase
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
 
         var isVariantTypeColor = await _categoryService.IsVariantTypeColor(categoryId);
-        var variants = await _variantService.GetVariantsForEditCategoryVariants(isVariantTypeColor);
+        if (isVariantTypeColor is null)
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        var variants = await _variantService.GetVariantsForEditCategoryVariants(isVariantTypeColor.Value);
         var selectedVariants = await _categoryVariantService.GetCategoryVariants(categoryId);
         var model = new EditCategoryVariantViewModel() 
         {

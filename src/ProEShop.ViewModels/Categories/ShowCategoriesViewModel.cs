@@ -31,6 +31,7 @@ public class ShowCategoryViewModel
     public bool ShowInMenus { get; set; }
     public string? Picture { get; set; }
     public bool IsDeleted { get; set; }
+    public bool ShowEditVariantButton { get; set; }
 
 }
 public class SearchCategoryViewModel

@@ -60,7 +60,10 @@ public class MappingProfile : AutoMapper.Profile
                 opt => opt.Ignore())
             .ForMember(dest => dest.SelectedPicture,
                 options =>
-                    options.MapFrom(src => src.Picture));
+                    options.MapFrom(src => src.Picture))
+            .ForMember(dest => dest.CanVariantTypeChange,
+                options =>
+                    options.MapFrom(src => src.CategoryVariants.Any() ? false : true));
 
         CreateMap<EditCategoryViewModel, Entities.Category>()
             .AddTransform<string>(str => str != null ? str.Trim() : null);

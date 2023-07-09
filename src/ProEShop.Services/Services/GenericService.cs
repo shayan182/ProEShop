@@ -51,6 +51,17 @@ public abstract class GenericService<TEntity> : IGenericService<TEntity> where T
     public async Task<TEntity?> FindByIdAsync(long id)
         => await _entities.FindAsync(id);
 
+    public Task<TEntity?> FindByIdWithIncludeAsync(long id,params string[] includes)
+    {
+        var query = _entities.AsQueryable();
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return query.SingleOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task<bool> IsExistsByIdAsync(long id)
         => await _entities.AsNoTracking().AnyAsync(x => x.Id == id);
 
