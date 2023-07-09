@@ -1,5 +1,29 @@
 ﻿$(function () {
     fillDataTable();
+    $(document).on('click', '.remove-selected-variant-button', function () {
+
+        var variantId = $(this).parent().attr('variant-id');
+        $(this).parents('form').find('input[name="SelectedVariants"][value="' + variantId + '"]').remove();
+        $(this).parent().remove();
+
+    });
+    $(document).on('click', '.variant-item-button', function () {
+        var variantId = $(this).attr('variant-id');
+
+        if ($(this).parents('form').find('input[name="SelectedVariants"][value="' + variantId + '"]').length > 0) {
+            showToastr('warning', 'این تنوع از قبل برای این دسته بندی اضافه شده است');
+            return;
+        }
+
+        $(this).parents('form').prepend('<input type="hidden" name="SelectedVariants" value="' + variantId + '" />');
+        var variantToAppend =
+            '<button variant-id="' + variantId + '" type="button" class="mx-1 p-2 badge rounded-pill bg-primary border-0">' +
+            $(this).html() +
+            '</button>';
+
+        $('#selected-variants-box').append(variantToAppend);
+        $('#selected-variants-box button:last').append('<i class="bi bi-x-circle remove-selected-variant-button"></i>');
+    });
 });
 
 var brandBox = `<div class="btn-group m-1">

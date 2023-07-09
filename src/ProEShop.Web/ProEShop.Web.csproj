@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <None Remove="Pages\Admin\Brand\AddBrand.cshtml.css" />
+    <None Remove="Pages\Admin\Category\_EditCategoryVariantPartial.cshtml.css" />
     <None Remove="Pages\Identity\LoginWithPhoneNumber.cshtml.css" />
     <None Remove="Pages\Identity\RegisterLogin.cshtml.css" />
     <None Remove="Pages\Inventory\ProductStock\AddProductStockByConsignment.cshtml.js" />
@@ -32,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Pages\Admin\Category\_EditCategoryVariantPartial.cshtml.css" />
     <Content Include="Pages\Identity\LoginWithPhoneNumber.cshtml.css" />
     <Content Include="Pages\Identity\RegisterLogin.cshtml.css" />
     <Content Include="Pages\Inventory\ProductStock\AddProductStockByConsignment.cshtml.js" />
