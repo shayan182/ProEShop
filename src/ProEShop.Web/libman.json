@@ -57,7 +57,7 @@
     },
     {
       "provider": "jsdelivr",
-      "library": "md.bootstrappersiandatetimepicker@4.1.1",
+      "library": "md.bootstrappersiandatetimepicker@4.2.6",
       "destination": "wwwroot\\lib\\md.bootstrappersiandatetimepicker"
     },
     {

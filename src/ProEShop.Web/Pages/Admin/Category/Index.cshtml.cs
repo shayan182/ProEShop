@@ -8,7 +8,6 @@ using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
-using ProEShop.Services.Services;
 using ProEShop.ViewModels.Categories;
 using ProEShop.ViewModels.CategoryVariants;
 
@@ -23,6 +22,7 @@ public class IndexModel : PageBase
     private readonly IUploadFileService _uploadFileService;
     private readonly IBrandService _brandServices;
     private readonly IMapper _mapper;
+    private readonly IProductVariantService _productVariantService;
     private readonly ICategoryVariantService _categoryVariantService;
     private readonly IVariantService _variantService;
     private readonly IHtmlSanitizer _htmlSanitizer;
@@ -33,7 +33,8 @@ public class IndexModel : PageBase
         IMapper mapper,
         IHtmlSanitizer htmlSanitizer, 
         IVariantService variantService, 
-        ICategoryVariantService categoryVariantService)
+        ICategoryVariantService categoryVariantService,
+        IProductVariantService productVariantService)
     {
         _categoryService = categoryService;
         _uploadFileService = uploadFileService;
@@ -43,6 +44,7 @@ public class IndexModel : PageBase
         _htmlSanitizer = htmlSanitizer;
         _variantService = variantService;
         _categoryVariantService = categoryVariantService;
+        _productVariantService = productVariantService;
     }
 
     #endregion
@@ -331,7 +333,9 @@ public class IndexModel : PageBase
         var model = new EditCategoryVariantViewModel() 
         {
             Variants = variants,
-            SelectedVariants = selectedVariants
+            SelectedVariants = selectedVariants,
+            AddedVariantsToProductVariants = await _productVariantService
+                .GetAddedVariantsToProductVariants(selectedVariants,categoryId)
         };
         return Partial("_EditCategoryVariantPartial", model);
     }
@@ -344,10 +348,37 @@ public class IndexModel : PageBase
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
 
-        category.CategoryVariants.Clear();
+        if (category.IsVariantColor is null)
+            return Json(new JsonResultOperation(false));
+
+        var categoryVariantsIds = category.CategoryVariants.Select(x => x.VariantId).ToList();
+        if (!await _variantService.CheckVariantsCountAndConfirmStatusForEditCategoryVariants(categoryVariantsIds,
+                category.IsVariantColor.Value))
+        {
+            return Json(new JsonResultOperation(false));
+        }
+
+        var addedVariantsForProductVariants =
+            await _productVariantService.GetAddedVariantsToProductVariants(categoryVariantsIds,model.CategoryId);
+
+        // Category variants 10, 11, 13
+        // Product variants 10, 11
+
+        foreach (var variant in category.CategoryVariants)
+        {
+            // برای مثال این دسته بندی رنگ آبی دارد
+            // حالا در بخش تنوع محصولات از این رنگ آبی استفاده شده است
+            // پس نباید اجازه دهیم که رنگ آبی دیگر حذف شود
+            // چون از رنگ آبی در بخش تنوع محصولات استفاده شده است
+            if (addedVariantsForProductVariants.Contains(variant.VariantId))
+                continue;
+            category.CategoryVariants.Remove(variant);
+        }
 
         foreach (var variantId in model.SelectedVariants)
         {
+            if (category.CategoryVariants.Any(x=>x.VariantId == variantId))
+                continue;
             category.CategoryVariants.Add(new CategoryVariant()
             {
                 VariantId = variantId

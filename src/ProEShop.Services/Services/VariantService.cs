@@ -56,7 +56,7 @@ public class VariantService : GenericService<Variant>, IVariantService
         ).SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<bool> CheckProductAndVariantTypeForForAddVariant(long productId, long variantId)
+    public async Task<(bool IsSuccessful, bool IsVariantNull)> CheckProductAndVariantTypeForForAddVariant(long productId, long variantId)
     {
         var product = await _products
             .Select(x => new
@@ -64,7 +64,9 @@ public class VariantService : GenericService<Variant>, IVariantService
                 x.Id,
                 x.Category.IsVariantColor
             }).SingleOrDefaultAsync(x=>x.Id == productId);
-        if (product is null) return false;
+        if (product is null) return (false,default);
+        if (product.IsVariantColor is null) return (true,true);
+       
         var variant = await _variants
             .Where(x => x.IsConfirmed)
             .Select(x => new
@@ -72,8 +74,8 @@ public class VariantService : GenericService<Variant>, IVariantService
                 x.Id,
                 x.IsColor
             }).SingleOrDefaultAsync(x => x.Id == variantId);
-        if(variant is null) return false;
-        return product.IsVariantColor == variant.IsColor;
+        if(variant is null) return (false,false);
+        return (product.IsVariantColor == variant.IsColor,false);
     }
 
     public Task<List<ShowVariantInEditCategoryVariantViewModel>> GetVariantsForEditCategoryVariants(bool isColor)
@@ -82,5 +84,14 @@ public class VariantService : GenericService<Variant>, IVariantService
              _variants.Where(x=>x.IsConfirmed)
                  .Where(x=>x.IsColor == isColor))
             .ToListAsync();
+    }
+
+    public async Task<bool> CheckVariantsCountAndConfirmStatusForEditCategoryVariants(List<long> variantsIds, bool isColor)
+    {
+        var result = await _variants
+            .Where(x => variantsIds.Contains(x.Id))
+            .Where(x=>x.IsColor == isColor)
+            .CountAsync(x=>x.IsConfirmed == true);
+        return variantsIds.Count == result;
     }
 }

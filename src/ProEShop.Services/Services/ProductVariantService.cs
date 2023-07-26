@@ -104,4 +104,14 @@ public class ProductVariantService : GenericService<ProductVariant>, IProductVar
             .Where(x => x.SellerId == sellerId)
             .SingleOrDefaultAsync(x => x.Id == id);
     }
+
+    public Task<List<long>> GetAddedVariantsToProductVariants(List<long> variantIds,long categoryId)
+    {
+        return _productVariants
+            .Where(x => x.VariantId != null && variantIds.Contains(x.VariantId.Value))
+            .Where(x => x.Product.MainCategoryId == categoryId)
+            .GroupBy(x=>x.VariantId.Value)
+            .Select(x => x.First().VariantId.Value)
+            .ToListAsync();  
+    }
 }

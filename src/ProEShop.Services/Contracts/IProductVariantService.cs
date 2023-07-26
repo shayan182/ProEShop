@@ -15,4 +15,5 @@ public interface IProductVariantService : IGenericService<ProductVariant>
     Task<EditProductVariantViewModel?> GetDataForEdit(long id);
     Task<AddEditDiscountViewModel?> GetDataForAddEditDiscount(long id);
     Task<ProductVariant?> GetForEdit(long id);
+    Task<List<long>> GetAddedVariantsToProductVariants(List<long> variantIds,long categoryId);
 }

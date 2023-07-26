@@ -147,6 +147,10 @@ $(function () {
 
     //change variants (color)
     $('#product-variants-box-in-show-product-info div').click(function () {
+        if ($(this).find('i').hasClass('d-none') === false) {
+            return;
+        }
+
         $('#product-variants-box-in-show-product-info div').removeClass('selected-variant-in-show-product-info');
         $('#product-variants-box-in-show-product-info i').addClass('d-none');
 
@@ -193,6 +197,13 @@ $(function () {
 
         var selectedShopName = selectedSeller.find('td:first').text();
         $('#shop-details-in-single-page-of-product div').html(selectedShopName);
+
+        // Change tooltip value
+        // Shop name tooltip
+        var tooltip = bootstrap.Tooltip.getInstance('#product-shop-name-tooltip');
+        //tooltip.setContent({ '.tooltip-inner': `این کالا توسط فروشنده آن، ${selectedShopName.trim()}، قیمت گذاری شده است.` }); // main code
+        document.getElementById("product-shop-name-tooltip").setAttribute("data-bs-original-title", `این کالا توسط فروشنده آن، ${selectedShopName.trim()}، قیمت گذاری شده است.`); // custom code
+
 
         // Change product logo
         var selectedShopLogo = selectedSeller.find('td:first i').length === 0 ? 'img' : 'i';

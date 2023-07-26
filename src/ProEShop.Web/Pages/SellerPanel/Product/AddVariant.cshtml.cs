@@ -58,13 +58,19 @@ public class AddVariantModel : PageBase
                 Data = ModelState.GetModelStateErrors()
             });
         }
+        var checkInputs =
+            await _variantService.CheckProductAndVariantTypeForForAddVariant(Variant.ProductId, Variant.VariantId);
 
-        if (!await _variantService.CheckProductAndVariantTypeForForAddVariant(Variant.ProductId, Variant.VariantId))
+        if (!checkInputs.IsSuccessful)
         {
             return Json(new JsonResultOperation(false));
         }
 
         var productVariant = _mapper.Map<ProductVariant>(Variant);
+        if (checkInputs.IsVariantNull)
+        {
+            productVariant.VariantId = null;
+        }
         productVariant.VariantCode = await _productVariantService.GetVariantCodeForCreateProductVariant();
         //Get Seller Id For Entity
         var sellerId = await _sellerService.GetSellerIdAsync();

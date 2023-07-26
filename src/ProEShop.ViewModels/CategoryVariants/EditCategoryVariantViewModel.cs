@@ -10,4 +10,6 @@ public class EditCategoryVariantViewModel
 
     public List<long> SelectedVariants { get; set; }
         = new();
+    public List<long> AddedVariantsToProductVariants { get; set; }
+        = new();
 }

@@ -22,6 +22,7 @@
             '</button>';
 
         $('#selected-variants-box').append(variantToAppend);
+        $('#selected-variants-box span:last').addClass('me-1');
         $('#selected-variants-box button:last').append('<i class="bi bi-x-circle remove-selected-variant-button"></i>');
     });
 });
