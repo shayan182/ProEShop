@@ -39,6 +39,7 @@ public class Product : EntityBase, IAuditableEntity
     public string? SpecialtyCheck { get; set; }
 
     public ProductStatus Status { get; set; }
+    public ProductStockStatus ProductStockStatus { get; set; }
 
     [Column(TypeName = "ntext")]
     public string? RejectReason { get; set; }
@@ -72,6 +73,16 @@ public class Product : EntityBase, IAuditableEntity
     public ProductShortLink? ProductShortLink { get; set; }
     #endregion
     
+}
+
+public enum ProductStockStatus : byte
+{
+    [Display(Name = "جدید")]
+    New,
+    [Display(Name = "موجود")]
+    Available,
+    [Display(Name = "ناموجود")]
+    Unavailable,
 }
 public enum ProductStatus : byte
 {

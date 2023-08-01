@@ -17,6 +17,7 @@ public class IndexModel : InventoryPanelBase
     #region Constructor
 
     private readonly IConsignmentService _consignmentService;
+    private readonly IProductService _productService;
     private readonly ISellerService _sellerService;
     private readonly IProductStockService _productStockService;
     private readonly IProductVariantService _productVariantService;
@@ -28,7 +29,8 @@ public class IndexModel : InventoryPanelBase
         , IUnitOfWork uow,
 IHtmlSanitizer htmlSanitizer,
 IProductStockService productStockService,
-IProductVariantService productVariantService)
+IProductVariantService productVariantService, 
+        IProductService productService)
     {
         _consignmentService = consignmentService;
         _sellerService = sellerService;
@@ -36,6 +38,7 @@ IProductVariantService productVariantService)
         _htmlSanitizer = htmlSanitizer;
         _productStockService = productStockService;
         _productVariantService = productVariantService;
+        _productService = productService;
     }
 
     #endregion
@@ -158,6 +161,12 @@ IProductVariantService productVariantService)
                 productVariant.Count += productStock.Value;
 
             }
+        }
+
+        var product = await _productService.FindByIdAsync(productVariants.First().Id);
+        if (product.ProductStockStatus == ProductStockStatus.Unavailable)
+        {
+            product.ProductStockStatus = ProductStockStatus.Available;
         }
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "موجودی کالاها با موفقیت افزایش یافت!"));
