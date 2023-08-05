@@ -5,6 +5,7 @@ namespace ProEShop.ViewModels.Products;
 public class ShowProductInfoViewModel
 {
     public long Id { get; set; }
+    public bool IsVariantTypeNull { get; set; }
     public bool IsFavorite { get; set; }
     public int ProductCode { get; set; }
     public string? PersianTitle { get; set; }
@@ -46,7 +47,15 @@ public class ShowProductInfoViewModel
     public List<ProductCategoryForProductInfoViewModel>? ProductCategories { get; set; }
     public List<ProductFeatureForProductInfoViewModel>? ProductFeatures { get; set; }
     public List<ProductVariantForProductInfoViewModel>? ProductVariants { get; set; }
+    public List<ProductVariantInCartForProductInfoViewModel>? ProductVariantsInCart { get; set; }
 
+}
+
+public class ProductVariantInCartForProductInfoViewModel
+{
+    public long ProductVariantId { get; set; }
+
+    public int Count { get; set; }
 }
 
 public class ProductMediaForProductInfoViewModel
@@ -72,6 +81,7 @@ public class ProductFeatureForProductInfoViewModel
 }
 public class ProductVariantForProductInfoViewModel
 {
+    public long Id { get; set; }
     public string? VariantValue { get; set; }
 
     public string? VariantColorCode { get; set; }
@@ -86,6 +96,7 @@ public class ProductVariantForProductInfoViewModel
     public string? GuaranteeFullTitle { get; set; }
     public string? EndDateTime { get; set; }
     public bool IsDiscountActive { get; set; }
+    public byte Count { get; set; }
     public byte Score
     {
         get

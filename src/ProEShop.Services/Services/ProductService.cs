@@ -297,4 +297,9 @@ public class ProductService : GenericService<Product>, IProductService
             productShortLinkResult?.Slug
         );
     }
+
+    public Task<List<Product>> GetProductsForChangeStatus(List<long> ids)
+    {
+        return _products.Where(x => ids.Contains(x.Id)).ToListAsync();
+    }
 }

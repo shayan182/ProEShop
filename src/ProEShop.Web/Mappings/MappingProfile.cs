@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using AutoMapper;
 using ProEShop.Common.Helpers;
 using ProEShop.Entities;
 using ProEShop.Entities.Identity;
@@ -20,10 +21,18 @@ using EditCategoryViewModel = ProEShop.ViewModels.Categories.EditCategoryViewMod
 
 namespace ProEShop.Web.Mappings;
 
-public class MappingProfile : AutoMapper.Profile
+public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        #region parameters
+
+        long userId = 0;
+        long consignmentId = 0;
+        DateTime now = default;
+
+
+        #endregion
 
         //if you wanna trim all of the strings (read and create)
         //CreateMap<string, string>()
@@ -63,7 +72,7 @@ public class MappingProfile : AutoMapper.Profile
                     options.MapFrom(src => src.Picture))
             .ForMember(dest => dest.CanVariantTypeChange,
                 options =>
-                    options.MapFrom(src => src.CategoryVariants.Any() ? false : true));
+                    options.MapFrom(src => src.CategoryVariants.Any() ? false : (!src.HasVariant)));
 
         CreateMap<EditCategoryViewModel, Entities.Category>()
             .AddTransform<string>(str => str != null ? str.Trim() : null);
@@ -100,7 +109,6 @@ public class MappingProfile : AutoMapper.Profile
                 options =>
                     options.MapFrom(src => src.ProductMedia.First().FileName));
         CreateMap<Entities.Product, ProductDetailsViewModel>();
-        this.CreateMap<Entities.ProductMedia, ProductMediaForProductDetailsViewModel>();
         this.CreateMap<Entities.ProductFeature, ProductFeatureForProductDetailsViewModel>();
         this.CreateMap<Entities.Variant, ShowVariantViewModel>();
         this.CreateMap<AddVariantViewModel, Entities.Variant>()
@@ -163,7 +171,6 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.DeliveryDate,
                 options =>
                     options.MapFrom(src => src.DeliveryDate.ToLongPersianDate()));
-        long consignmentId = 0;
         this.CreateMap<Entities.Consignment, ShowConsignmentDetailsViewModel>()
             .ForMember(dest => dest.DeliveryDate,
                 options =>
@@ -173,7 +180,6 @@ public class MappingProfile : AutoMapper.Profile
                 options.MapFrom(src => src.ConsignmentItems.Where(x => x.ConsignmentId == consignmentId)));
         this.CreateMap<ConsignmentItem, ShowConsignmentItemViewModel>();
         this.CreateMap<AddProductStockByConsignmentViewModel, Entities.ProductStock>();
-        long userId = 0;
 
         this.CreateMap<Entities.Product, ShowProductInfoViewModel>()
             .ForMember(dest => dest.Score,
@@ -197,20 +203,27 @@ public class MappingProfile : AutoMapper.Profile
                     options.MapFrom(src =>
                         src.ProductComments!
                             .LongCount(x => x.IsBuyer)))
+            //.ForMember(dest => dest.ProductVariants,
+            //    options =>
+            //        options.MapFrom(src =>
+            //            src.ProductVariants!
+            //                .Where(x => x.Count > 0)))
             .ForMember(dest => dest.ProductVariants,
                 options =>
                     options.MapFrom(src =>
-                        src.ProductVariants!
-                            .Where(x => x.Count > 0)))
+                        src.ProductVariants.Where(x => x.Count > 0)
+                    ))
             .ForMember(dest => dest.IsFavorite,
                 options =>
                     options.MapFrom(src =>
-                        userId != 0 && src.UserProductFavorites.Any(x => x.UserId == userId)));
+                        userId != 0 && src.UserProductFavorites.Any(x => x.UserId == userId)))
+            .ForMember(dest => dest.IsVariantTypeNull,
+                options =>
+                    options.MapFrom(src => src.Category.IsVariantColor == null
+                       ));
 
-        this.CreateMap<Entities.ProductMedia, ProductMediaForProductInfoViewModel>();
         this.CreateMap<Entities.ProductCategory, ProductCategoryForProductInfoViewModel>();
         this.CreateMap<Entities.ProductFeature, ProductFeatureForProductInfoViewModel>();
-        DateTime now = default;
         this.CreateMap<Entities.ProductVariant, ProductVariantForProductInfoViewModel>()
             .ForMember(dest => dest.EndDateTime,
                 options =>
@@ -221,7 +234,12 @@ public class MappingProfile : AutoMapper.Profile
                 options =>
                     options.MapFrom(src =>
                         src.OffPercentage != null && (src.StartDateTime <= now && src.EndDateTime >= now)
-                        ));
+                        ))
+            .ForMember(dest => dest.Count,
+                options =>
+                    options.MapFrom(src =>
+                        src.Count > 3 ? (byte)0 : (byte)src.Count
+                    ));
         this.CreateMap<Entities.ProductShortLink, ShowProductShortLinkViewModel>();
         this.CreateMap<Entities.ProductVariant, EditProductVariantViewModel>()
             .ForMember(dest => dest.MainPicture,

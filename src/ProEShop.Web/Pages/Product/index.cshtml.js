@@ -1,4 +1,28 @@
-﻿function copyProductLinkToClipboardFunction() {
+﻿function addProductVariantToCart(message, data) {
+    var addProductVariantToCartEl = $('.add-product-variant-to-cart[variant-id="' + data.productVariantId + '"]');
+    addProductVariantToCartEl.addClass('d-none');
+    var cartSectionEl = $('.product-variant-in-cart-section[variant-id="' + data.productVariantId + '"]');
+    cartSectionEl.removeClass('d-none');
+    cartSectionEl.find('.product-variant-count-in-cart').html(data.count.toString().toPersinaDigit());
+
+    if (data.count === 1) {
+        cartSectionEl.find('.decreaseProductVariantInCartButton').parents('span').addClass('d-none');
+        cartSectionEl.find('.empty-variants-in-cart').parents('span').removeClass('d-none');
+    } else if (data.count === 0) {
+        // اگر تعدا صفر بود بخش افزودن به سبد خرید رو دوباره نشون میدیم
+        // و بخش سبد خرید رو مخفی میکنیم
+        cartSectionEl.addClass('d-none');
+        addProductVariantToCartEl.removeClass('d-none');
+    } else {
+        // اگر تعداد بیشتر از یک بود در اون صورت علامت آیکون
+        // Trash
+        // رو مخفی میکنیم و علامت منفی رو نشون میدیم
+        cartSectionEl.find('.decreaseProductVariantInCartButton').parents('span').removeClass('d-none');
+        cartSectionEl.find('.empty-variants-in-cart').parents('span').addClass('d-none');
+    }
+}
+
+function copyProductLinkToClipboardFunction() {
     var copyButtonSelector = $('#copy-product-link-button');
     var copyButtonHtml = copyButtonSelector.html();
     copyButtonSelector.html('<i class="bi bi-clipboard-check rem20px"></i> کپی شد');
@@ -8,6 +32,9 @@
 }
 
 $(function () {
+    $('.increaseProductVariantInCartButton, .decreaseProductVariantInCartButton, .empty-variants-in-cart').click(function () {
+        $(this).parent().submit();
+    });
 
     $('.count-down-timer-in-other-variants').each(function () {
         var currentEl = $(this);
@@ -158,16 +185,19 @@ $(function () {
         $(this).addClass('selected-variant-in-show-product-info');
 
         var selectedVariantValue = $(this).attr('data-bs-original-title'); //aria-label
-        changeVariant(selectedVariantValue);
+        var selectedProductVariantId = $(this).attr('product-variant-id');
+        changeVariant(selectedVariantValue, selectedProductVariantId);
     });
 
     //change variants (size)
     $('#product-variants-box-in-show-product-info select').change(function () {
 
         var selectedVariantValue = this.value;
-        changeVariant(selectedVariantValue);
+        var selectedProductVariantId = $(this).find(':selected').attr('product-variant-id');
+
+        changeVariant(selectedVariantValue, selectedProductVariantId);
     });
-    function changeVariant(selectedVariantValue) {
+    function changeVariant(selectedVariantValue, selectedProductVariantId) {
 
         $('.other-sellers-table').addClass('d-none');
         $('.product-final-price-in-single-page-of-product').addClass('d-none');
@@ -193,6 +223,8 @@ $(function () {
             $('.product-price-in-single-page-of-product[variant-value="' + selectedVariantValue + '"]').removeClass('d-none');
 
         }
+        $('.latest-product-stock-in-inventory').addClass('d-none');
+        $('.latest-product-stock-in-inventory[variant-value=' + selectedVariantValue + ']').removeClass('d-none');
 
 
         var selectedShopName = selectedSeller.find('td:first').text();
@@ -246,6 +278,18 @@ $(function () {
             $('#free-delivery-box').removeClass('d-none');
         } else {
             $('#free-delivery-box').addClass('d-none');
+        }
+        debugger
+        $('.product-variant-in-cart-section').addClass('d-none');
+        var cartSectionEl = $('.product-variant-in-cart-section[variant-id="' + selectedProductVariantId + '"]');
+        if (cartSectionEl.find('.product-variant-count-in-cart').text() !== '۰') {
+            cartSectionEl.removeClass('d-none');
+        }
+
+        // Change add product to cart button
+        $('.add-product-variant-to-cart').addClass('d-none');
+        if (cartSectionEl.find('.product-variant-count-in-cart').text() === '۰') {
+            $('.add-product-variant-to-cart[variant-id="' + selectedProductVariantId + '"]').removeClass('d-none');
         }
     }
 });

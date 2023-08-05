@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
+using ProEShop.Entities.Identity;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.Products;
 
@@ -14,15 +15,19 @@ public class IndexModel : PageBase
     #region Constractor
 
     private readonly IProductService _productService;
+    private readonly ICartService _cartService;
+    private readonly IProductVariantService _productVariantService;
     private readonly IUserProductFavoriteService _userProductFavoriteService;
     private readonly IUnitOfWork _uow;
     #endregion
 
-    public IndexModel(IProductService productService, IUserProductFavoriteService userProductFavoriteService, IUnitOfWork uow)
+    public IndexModel(IProductService productService, IUserProductFavoriteService userProductFavoriteService, IUnitOfWork uow, IProductVariantService productVariantService, ICartService cartService)
     {
         _productService = productService;
         _userProductFavoriteService = userProductFavoriteService;
         _uow = uow;
+        _productVariantService = productVariantService;
+        _cartService = cartService;
     }
 
     public ShowProductInfoViewModel? ProductInfo { get; set; }
@@ -43,7 +48,9 @@ public class IndexModel : PageBase
                 slug = ProductInfo.Slug
             });
         }
-        return Page();
+        var productVariantsIds = ProductInfo.ProductVariants.Select(x => x.Id).ToList();
+        var userId = User.Identity.GetLoggedInUserId();
+        ProductInfo.ProductVariantsInCart = await _cartService.GetProductVariantsInCart(productVariantsIds, userId); return Page();
     }
     public async Task<IActionResult> OnPostAddOrRemoveFavorite(long productId, bool addFavorite)
     {
@@ -76,5 +83,46 @@ public class IndexModel : PageBase
         await _uow.SaveChangesAsync();
 
         return Json(new JsonResultOperation(true, string.Empty));
+    }
+
+    public async Task<IActionResult> OnPostAddProductVariantToCart(long productVariantId , bool isIncrease)
+    {
+        if (!await _productVariantService.IsExistsBy(nameof(Entities.ProductVariant.Id), productVariantId))
+            return Json(new JsonResultOperation(false));
+
+        var userId = User.Identity.GetLoggedInUserId();
+        var cart = await _cartService.FindAsync(userId,productVariantId);
+        if (cart is null)
+        {
+            var cartToAdd = new Entities.Cart()
+            {
+                ProductVariantId = productVariantId,
+                UserId = userId,
+                Count = 1
+            };
+            await _cartService.AddAsync(cartToAdd);
+
+        }
+        else
+        {
+            if (isIncrease)
+                cart.Count++;
+            else
+            {
+                cart.Count--;
+                if(cart.Count == 0)
+                    _cartService.Remove(cart);
+            }
+        }
+
+        await _uow.SaveChangesAsync();
+        return Json(new JsonResultOperation(true,"Good job")
+        {
+            Data = new
+            {
+                ProductVariantId = productVariantId,
+                Count = cart ?.Count ??  1
+            }
+        });
     }
 }

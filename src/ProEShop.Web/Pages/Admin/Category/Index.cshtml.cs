@@ -160,7 +160,7 @@ public class IndexModel : PageBase
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
 
         var oldFileName = category.Picture;
-        if (category.CategoryVariants.Any())
+        if (category.CategoryVariants.Any() || category.HasVariant)
         {
             model.IsVariantColor = category.IsVariantColor;
         }

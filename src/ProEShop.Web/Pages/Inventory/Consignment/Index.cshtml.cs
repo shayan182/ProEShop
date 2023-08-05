@@ -29,7 +29,7 @@ public class IndexModel : InventoryPanelBase
         , IUnitOfWork uow,
 IHtmlSanitizer htmlSanitizer,
 IProductStockService productStockService,
-IProductVariantService productVariantService, 
+IProductVariantService productVariantService,
         IProductService productService)
     {
         _consignmentService = consignmentService;
@@ -156,17 +156,21 @@ IProductVariantService productVariantService,
         foreach (var productStock in productStocks)
         {
             var productVariant = productVariants.SingleOrDefault(x => x.Id == productStock.Key);
-            if(productVariant is not null) 
+            if (productVariant is not null)
             {
                 productVariant.Count += productStock.Value;
 
             }
         }
 
-        var product = await _productService.FindByIdAsync(productVariants.First().Id);
-        if (product.ProductStockStatus == ProductStockStatus.Unavailable)
+        var productIds = productVariants.Select(x => x.ProductId).Distinct().ToList();
+        var productsToChangeTheirStatus = await _productService.GetProductsForChangeStatus(productIds);
+        foreach (var product in productsToChangeTheirStatus)
         {
-            product.ProductStockStatus = ProductStockStatus.Available;
+            if (product.ProductStockStatus == ProductStockStatus.Unavailable)
+            {
+                product.ProductStockStatus = ProductStockStatus.Available;
+            }
         }
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "موجودی کالاها با موفقیت افزایش یافت!"));

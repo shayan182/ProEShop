@@ -83,12 +83,13 @@ public class AddVariantModel : PageBase
         // وضعیت محصول اگر جدید باشه
         // یعنی به تازگی ایجاد شده باشه و تنوعی نداشته باشه
         // اگر تنوعی براش اضافه بشه باید وضعیت محصول رو در حالت ناموجود قرار بدیم
-        var product = await _productService.FindByIdAsync(Variant.ProductId);
+        var product = await _productService.FindByIdWithIncludeAsync(Variant.ProductId,nameof(Entities.Product.Category));
         if (product.ProductStockStatus == ProductStockStatus.New)
         {
             product.ProductStockStatus = ProductStockStatus.Unavailable;
         }
 
+        product.Category.HasVariant = true;
         await _uow.SaveChangesAsync();
         return Json(new JsonResultOperation(true, "تنوع محصول با موفقیت اضافه شد")
         {
