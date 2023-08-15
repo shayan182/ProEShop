@@ -17,7 +17,7 @@ public class EditProductVariantViewModel
     [Display(Name = "قیمت")]
     [Required(ErrorMessage = AttributesErrorMessages.RequiredMessage)]
     [Range(1, 2000000000, ErrorMessage = AttributesErrorMessages.RangeMessage)]
-    [DivisibleBy10] 
+    [DivisibleBy10]     
     public int Price { get; set; }
 
     public bool IsDiscountActive { get; set; }
@@ -30,6 +30,10 @@ public class EditProductVariantViewModel
     public string? ProductBrandFullTitle { get; set; }
 
     public byte CommissionPercentage { get; set; }
+
+    [Display(Name = "حداکثر تعداد در سبد خرید")]
+    [Range(1, short.MaxValue, ErrorMessage = AttributesErrorMessages.RangeMessage)]
+    public short MaxCountInCart { get; set; }
 
     public string? MainPicture { get; set; }
 }

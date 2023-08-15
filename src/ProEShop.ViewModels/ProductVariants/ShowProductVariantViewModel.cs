@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ProEShop.Common.Attributes;
 using ProEShop.Common.Constants;
 
 namespace ProEShop.ViewModels.ProductVariants;
@@ -34,4 +35,7 @@ public class ShowProductVariantViewModel
 
     [Display(Name = "کد تنوع")]
     public int VariantCode { get; set; }
+
+    [Display(Name = "حداکثر تعداد در سبد خرید")]
+    public short MaxCountInCart { get; set; }
 }

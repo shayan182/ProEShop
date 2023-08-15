@@ -55,7 +55,7 @@ public class ProductVariantInCartForProductInfoViewModel
 {
     public long ProductVariantId { get; set; }
 
-    public int Count { get; set; }
+    public short Count { get; set; }
 }
 
 public class ProductMediaForProductInfoViewModel
@@ -97,6 +97,7 @@ public class ProductVariantForProductInfoViewModel
     public string? EndDateTime { get; set; }
     public bool IsDiscountActive { get; set; }
     public byte Count { get; set; }
+    public short MaxCountInCart { get; set; }
     public byte Score
     {
         get

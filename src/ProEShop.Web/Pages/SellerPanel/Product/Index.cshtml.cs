@@ -101,7 +101,7 @@ public class IndexModel : SellerPanelBase
             return Json(new JsonResultOperation(false, PublicConstantStrings.RecordNotFoundMessage));
         }
 
-        productVariant.Price = model.Price;
+        _mapper.Map(model, productVariant); 
         productVariant.StartDateTime = productVariant.EndDateTime = null;
         productVariant.OffPrice = productVariant.OffPercentage = null;
 

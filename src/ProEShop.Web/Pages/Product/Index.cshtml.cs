@@ -87,7 +87,8 @@ public class IndexModel : PageBase
 
     public async Task<IActionResult> OnPostAddProductVariantToCart(long productVariantId , bool isIncrease)
     {
-        if (!await _productVariantService.IsExistsBy(nameof(Entities.ProductVariant.Id), productVariantId))
+        var productVariant = await _productVariantService.FindByIdAsync(productVariantId);
+        if (productVariant is null)
             return Json(new JsonResultOperation(false));
 
         var userId = User.Identity.GetLoggedInUserId();
@@ -106,7 +107,17 @@ public class IndexModel : PageBase
         else
         {
             if (isIncrease)
+            {
                 cart.Count++;
+
+                // check max value
+                if (cart.Count > productVariant.MaxCountInCart)
+                    cart.Count = productVariant.MaxCountInCart;
+
+                // check stock
+                if (cart.Count > productVariant.Count)
+                    cart.Count = (short)productVariant.Count;
+            }
             else
             {
                 cart.Count--;
@@ -116,12 +127,15 @@ public class IndexModel : PageBase
         }
 
         await _uow.SaveChangesAsync();
+        var isCartFull =  productVariant.MaxCountInCart == (cart?.Count ?? 1) // check max value
+           || (cart?.Count ?? 1) == productVariant.Count;
         return Json(new JsonResultOperation(true,"Good job")
         {
             Data = new
             {
                 ProductVariantId = productVariantId,
-                Count = cart ?.Count ??  1
+                Count = cart ?.Count ??  1,
+                IsCartFull = isCartFull
             }
         });
     }

@@ -27,6 +27,7 @@ public class ProductVariant : EntityBase, IAuditableEntity
     public DateTime? EndDateTime { get; set; }
     public int VariantCode { get; set; }
     public int Count { get; set; }
+    public short MaxCountInCart { get; set; }    
 
     #endregion
 

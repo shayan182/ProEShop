@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using ProEShop.Entities.AuditableEntity;
 using ProEShop.Entities.Identity;
 
@@ -15,7 +12,7 @@ public class Cart : IAuditableEntity
 
     public long UserId { get; set; }
     public long ProductVariantId { get; set; }
-    public int Count { get; set; }
+    public short Count { get; set; }
 
     #endregion
 

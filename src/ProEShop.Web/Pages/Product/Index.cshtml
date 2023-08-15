@@ -1,6 +1,7 @@
 ﻿@page "/product/pc-{productCode}/{slug}"
 @using DNTPersianUtils.Core
 @using ProEShop.Entities
+@using ProEShop.ViewModels.Products
 @model ProEShop.Web.Pages.Product.IndexModel
 @{
     var productInfo = Model.ProductInfo;
@@ -524,15 +525,21 @@
                             </form>
                         }
                         <!-- End 8 -->
-                        <!-- 9 -->
+                        <!-- 9 -->  
                         @foreach (var variants in groupedVariants)
                         {
                             var currentVariant = variants.First();
                             var productVariantInCart = productInfo.ProductVariantsInCart.SingleOrDefault(x => x.ProductVariantId == currentVariant.Id);
-                            var showButton = productVariantInCart != null;
+                            var isCartFull = false;
+                            if (productVariantInCart != null)
+                            {
+                                isCartFull = productVariantInCart.Count == currentVariant.MaxCountInCart
+                                             ||
+                                             productVariantInCart.Count == currentVariant.Count;
+                            }                            var showButton = productVariantInCart != null;
                             <div class="@(showButton ? string.Empty : "d-none ")d-flex mt-3 product-variant-in-cart-section @(firstProductVariant.VariantValue == currentVariant.VariantValue ? string.Empty : " d-none")" variant-id="@currentVariant.Id">
                                 <div class="d-flex align-items-center text-danger shadow rounded p-2">
-                                    <span class="px-2 disable-selecting pointer-cursor">
+                                    <span class="px-2 disable-selecting@(isCartFull ? " text-custom-grey" : " pointer-cursor")">
                                         <form method="post" functionNameToCallInTheEnd="addProductVariantToCart" varaint-id="@currentVariant.Id"
                                               class=" public-ajax-form" asp-page-handler="AddProductVariantToCart">
                                             <input type="hidden" name="productVariantId" value="@currentVariant.Id" />
@@ -540,8 +547,11 @@
                                             <span class="rem20px increaseProductVariantInCartButton">+</span>
                                         </form>
                                     </span>
-                                    <span class="px-2 fw-bold disable-selecting product-variant-count-in-cart persian-numbers">@(productVariantInCart?.Count ?? 0)</span>
-                                    <span class="px-2 disable-selecting pointer-cursor">
+                                    <span class="d-flex flex-column justify-content-between align-items-center px-2 disable-selecting product-variant-count-in-cart ">
+                                        <span class="persian-numbers fw-bold">@(productVariantInCart?.Count ?? 0)</span>
+                                        <span class="text-custom-grey rem13px@(isCartFull ? String.Empty : " d-none")">حداکثر</span>
+                                    </span>
+                                    <span class="px-2 disable-selecting pointer-cursor@((productVariantInCart?.Count == 1 ?string.Empty:" d-none")?? " d-none")">
                                         <form method="post" functionNameToCallInTheEnd="addProductVariantToCart" varaint-id="@currentVariant.Id"
                                           class=" public-ajax-form" asp-page-handler="AddProductVariantToCart">
                                             <input type="hidden" name="productVariantId" value="@currentVariant.Id" />
@@ -550,7 +560,7 @@
                                             </span>
                                         </form>
                                     </span>
-                                    <span class="px-2 disable-selecting pointer-cursor">
+                                    <span class="px-2 disable-selecting pointer-cursor@((productVariantInCart?.Count > 1 ?string.Empty:" d-none")?? " d-none")">
                                         <form method="post" functionNameToCallInTheEnd="addProductVariantToCart" varaint-id="@currentVariant.Id"
                                           class=" public-ajax-form" asp-page-handler="AddProductVariantToCart">
                                             <input type="hidden" name="productVariantId" value="@currentVariant.Id" />
@@ -617,7 +627,7 @@
     var shareProductData = (productInfo.PersianTitle,
         Url.PageLink("/Product/ProductShortLink", null, new { productShortLink = productInfo.ProductShortLinkDisplayLink }));
 }
-<partial name="_OtherVariantsPartial" model="productVariants" />
+<partial name="_OtherVariantsPartial" model="(productVariants,productInfo.ProductVariantsInCart)" />
 <partial name="_ShareProductPartial" model="shareProductData" />
 
 @section CustomScripts

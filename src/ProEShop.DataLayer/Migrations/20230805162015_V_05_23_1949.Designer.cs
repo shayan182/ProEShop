@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ProEShop.DataLayer.Context;
 namespace ProEShop.DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230805162015_V_05_23_1949")]
+    partial class V_05_23_1949
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,8 +124,8 @@ namespace ProEShop.DataLayer.Migrations
                     b.Property<long>("ProductVariantId")
                         .HasColumnType("bigint");
 
-                    b.Property<short>("Count")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedByBrowserName")
                         .HasMaxLength(1000)
