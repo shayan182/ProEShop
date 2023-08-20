@@ -1,0 +1,24 @@
+﻿@page
+@model ProEShop.Web.Pages.Cart.IndexModel
+@{
+    ViewData["Title"] = "سبد خرید";
+    ViewData["HideMainCartDropdown"] = true;
+
+}
+
+<div class="container mt-4" id="cart-body">
+
+@if (Model.CartItems.Count == 0)
+{
+    <partial name="_EmptyCartPartial" />
+}
+else
+{
+    <partial name="_CartBodyPartial" model="Model.CartItems" />
+
+}
+</div>
+@section CustomScripts
+    {
+    <script src="~/Pages/Cart/Index.cshtml.js"></script>
+}

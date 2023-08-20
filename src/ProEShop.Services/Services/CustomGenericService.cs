@@ -25,4 +25,9 @@ public class CustomGenericService<TEntity> : ICustomGenericService<TEntity> wher
     {
         _entities.Remove(entity);
     }
+
+    public void RemoveRange(List<TEntity> entity)
+    {
+        _entities.RemoveRange(entity);
+    }
 }

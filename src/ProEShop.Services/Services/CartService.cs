@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
@@ -25,8 +24,8 @@ public class CartService : CustomGenericService<Cart>, ICartService
     public Task<List<ProductVariantInCartForProductInfoViewModel>> GetProductVariantsInCart(List<long> productVariantIds, long userId)
     {
         return _mapper.ProjectTo<ProductVariantInCartForProductInfoViewModel>(
-            _carts.Where(x=>x.UserId == userId)
-                .Where(x=>productVariantIds.Contains(x.ProductVariantId))).ToListAsync();
+            _carts.Where(x => x.UserId == userId)
+                .Where(x => productVariantIds.Contains(x.ProductVariantId))).ToListAsync();
     }
 
     public Task<List<ShowCartInDropDownViewModel>> GetCartsForDropDown(long userId)
@@ -34,7 +33,21 @@ public class CartService : CustomGenericService<Cart>, ICartService
         return _carts.AsNoTracking()
             .Where(x => x.UserId == userId)
             .ProjectTo<ShowCartInDropDownViewModel>(
-                configuration:_mapper.ConfigurationProvider, parameters:new {now  = DateTime.Now}
+                configuration: _mapper.ConfigurationProvider, parameters: new { now = DateTime.Now }
             ).ToListAsync();
+    }
+
+    public Task<List<ShowCartInCartPageViewModel>> GetCartsForCartPage(long userId)
+    {
+        return _carts.AsNoTracking()
+            .Where(x => x.UserId == userId)
+            .ProjectTo<ShowCartInCartPageViewModel>(
+                configuration: _mapper.ConfigurationProvider, parameters: new { now = DateTime.Now }
+            ).ToListAsync();
+    }
+
+    public Task<List<Cart>> GetAllCartItems(long userId)
+    {
+        return _carts.Where(x => x.UserId == userId).ToListAsync();
     }
 }

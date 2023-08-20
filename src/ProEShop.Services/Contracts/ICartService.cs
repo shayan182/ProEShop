@@ -8,4 +8,6 @@ public interface ICartService: ICustomGenericService<Cart>
 {
     Task<List<ProductVariantInCartForProductInfoViewModel>> GetProductVariantsInCart(List<long> productVariantIds, long userId);
     Task<List<ShowCartInDropDownViewModel>> GetCartsForDropDown(long userId);
+    Task<List<ShowCartInCartPageViewModel>> GetCartsForCartPage(long userId);
+    Task<List<Entities.Cart>> GetAllCartItems(long userId);
 }

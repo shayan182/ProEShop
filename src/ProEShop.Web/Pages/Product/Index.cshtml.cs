@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
-using ProEShop.Entities.Identity;
 using ProEShop.Services.Contracts;
 using ProEShop.ViewModels.Products;
 
@@ -18,16 +16,18 @@ public class IndexModel : PageBase
     private readonly ICartService _cartService;
     private readonly IProductVariantService _productVariantService;
     private readonly IUserProductFavoriteService _userProductFavoriteService;
+    private readonly IViewRendererService _viewRendererService;
     private readonly IUnitOfWork _uow;
     #endregion
 
-    public IndexModel(IProductService productService, IUserProductFavoriteService userProductFavoriteService, IUnitOfWork uow, IProductVariantService productVariantService, ICartService cartService)
+    public IndexModel(IProductService productService, IUserProductFavoriteService userProductFavoriteService, IUnitOfWork uow, IProductVariantService productVariantService, ICartService cartService, IViewRendererService viewRendererService)
     {
         _productService = productService;
         _userProductFavoriteService = userProductFavoriteService;
         _uow = uow;
         _productVariantService = productVariantService;
         _cartService = cartService;
+        _viewRendererService = viewRendererService;
     }
 
     public ShowProductInfoViewModel? ProductInfo { get; set; }
@@ -129,13 +129,15 @@ public class IndexModel : PageBase
         await _uow.SaveChangesAsync();
         var isCartFull =  productVariant.MaxCountInCart == (cart?.Count ?? 1) // check max value
            || (cart?.Count ?? 1) == productVariant.Count;
-        return Json(new JsonResultOperation(true,"Good job")
+        var carts = await _cartService.GetCartsForDropDown(userId);
+        return Json(new JsonResultOperation(true,string.Empty)
         {
             Data = new
             {
                 ProductVariantId = productVariantId,
                 Count = cart ?.Count ??  1,
-                IsCartFull = isCartFull
+                IsCartFull = isCartFull,
+                CartsDetails = await _viewRendererService.RenderViewToStringAsync("~/Pages/Shared/_CartPartial.cshtml",carts)
             }
         });
     }
