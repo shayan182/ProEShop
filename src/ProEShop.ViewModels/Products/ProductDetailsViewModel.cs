@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProEShop.Common.Attributes;
 using ProEShop.Entities;
+using ProEShop.Entities.Enums;
 
 namespace ProEShop.ViewModels.Products;
 
@@ -49,7 +50,8 @@ public class ProductDetailsViewModel
     public string? BrandFullTitle { get; set; }
 
     public ProductStatus Status { get; set; }
-
+    [Display(Name = "ابعاد")]
+    public ProductDimensions Dimensions { get; set; }
     public string? CategoryTitle { get; set; }
 
     public List<ProductMediaForProductDetailsViewModel>? ProductMedia { get; set; }

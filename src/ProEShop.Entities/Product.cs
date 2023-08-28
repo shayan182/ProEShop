@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ProEShop.Entities.AuditableEntity;
+using ProEShop.Entities.Enums;
 
 namespace ProEShop.Entities;
 
@@ -50,8 +51,8 @@ public class Product : EntityBase, IAuditableEntity
 
     [ForeignKey(nameof(Category))]
     public long MainCategoryId { get; set; }
-
     public long ProductShortLinkId { get; set; }
+    public ProductDimensions Dimensions { get; set; }
     #endregion
     #region Relations
 

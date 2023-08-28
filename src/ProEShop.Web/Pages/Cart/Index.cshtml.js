@@ -1,6 +1,6 @@
 ﻿function addProductVariantToCart(message, data) {
     $('#cart-body').html(data.cartBody);
-
+    enablingNormalTooltips();
     $('#cart-body .persian-numbers').each(function () {
         var text = $(this).html();
         $(this).html(text.toPersinaDigit());
