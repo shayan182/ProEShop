@@ -1,3 +1,11 @@
 [*.cs]
 csharp_style_namespace_declarations = file_scoped:warning
 dotnet format
+#### Naming styles ####
+[*.{cs,vb}]
+
+# CS8618: Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+dotnet_diagnostic.CS8618.severity = none
+
+# CS8601: Possible null reference assignment.
+dotnet_diagnostic.CS8601.severity = none 

@@ -710,6 +710,7 @@ function publicAjaxFormFunction(form) {
         },
         complete: function () {
             hideLoading();
+            currentForm.parents('.modal').off('hidden.bs.modal');
         },
         error: function () {
             showErrorMessage();

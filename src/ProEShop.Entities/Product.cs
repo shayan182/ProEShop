@@ -52,7 +52,7 @@ public class Product : EntityBase, IAuditableEntity
     [ForeignKey(nameof(Category))]
     public long MainCategoryId { get; set; }
     public long ProductShortLinkId { get; set; }
-    public ProductDimensions Dimensions { get; set; }
+    public Dimension Dimension { get; set; }
     #endregion
     #region Relations
 

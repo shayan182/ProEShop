@@ -1,11 +1,13 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using ProEShop.Common.Constants;
 using ProEShop.Common.Helpers;
 using ProEShop.Common.IdentityToolkit;
 using ProEShop.DataLayer.Context;
 using ProEShop.Entities;
 using ProEShop.Services.Contracts;
+using ProEShop.ViewModels;
 using ProEShop.ViewModels.Variants;
 
 namespace ProEShop.Web.Pages.SellerPanel.Product;
@@ -100,8 +102,20 @@ public class AddVariantModel : PageBase
     public async Task<IActionResult> OnGetGetGuarantees(string input)
     {
         var result = await _guaranteeService.SearchOnGuaranteesForSelect2(input);
-        // we most send a object of many array 
-        return Json(new
+
+        var specificGuarantee = result.Select((value, index) => new { value, index })
+            .SingleOrDefault(p => p.value.Text.Contains(" 0 ماهه"));
+
+        if (specificGuarantee is not null)
+        {
+            result[specificGuarantee.index] = new ShowSelect2DataByAjaxViewModel()
+            {
+                Text = "گرانتی اصالت و سلامت فیزیکی کالا",
+                Id = specificGuarantee.value.Id
+            };
+        }
+    // we most send a object of many array 
+    return Json(new
         {
             results = result
         });

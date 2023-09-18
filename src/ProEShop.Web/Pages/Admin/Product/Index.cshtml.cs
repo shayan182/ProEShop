@@ -69,7 +69,7 @@ public class IndexModel : PageBase
         }
         return Partial("ProductDetails", product);
     }
-    public async Task<IActionResult> OnPostConfirmProduct(long id,ProductDimensions dimensions)
+    public async Task<IActionResult> OnPostConfirmProduct(long id,Dimension dimension)
     {
         if (id < 0)
             return Json(new JsonResultOperation(false));
@@ -79,7 +79,7 @@ public class IndexModel : PageBase
             return Json(new JsonResultOperation(false, "محصول مورد نظر یافت نشد!"));
 
         product.Status = ProductStatus.Confirmed;
-        product.Dimensions = dimensions;
+        product.Dimension = dimension;
         product.RejectReason = null;
 
         await _uow.SaveChangesAsync();

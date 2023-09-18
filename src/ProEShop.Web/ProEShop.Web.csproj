@@ -24,7 +24,6 @@
   <ItemGroup>
     <None Remove="Pages\Admin\Brand\AddBrand.cshtml.css" />
     <None Remove="Pages\Admin\Category\_EditCategoryVariantPartial.cshtml.css" />
-    <None Remove="Pages\Cart\Checkout.cshtml.css" />
     <None Remove="Pages\Cart\Checkout.cshtml.js" />
     <None Remove="Pages\Cart\Index.cshtml.js" />
     <None Remove="Pages\Cart\_CartBodyPartial.cshtml.css" />
@@ -41,7 +40,6 @@
   <ItemGroup>
     <Content Include="Pages\Admin\Category\_EditCategoryVariantPartial.cshtml.css" />
     <Content Include="Pages\Cart\Checkout.cshtml.js" />
-    <Content Include="Pages\Cart\Checkout.cshtml.css" />
     <Content Include="Pages\Cart\Index.cshtml.js" />
     <Content Include="Pages\Cart\_CartBodyPartial.cshtml.css" />
     <Content Include="Pages\Cart\_EmptyCartPartial.cshtml.css" />

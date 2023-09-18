@@ -37,8 +37,9 @@ public class ProductVariant : EntityBase, IAuditableEntity
     public Variant? Variant { get; set; }
     public Guarantee? Guarantee { get; set; }
 
-    public ICollection<ConsignmentItem>? ConsignmentItems { get; set; }
-    public ICollection<ProductStock>? ProductStocks { get; set; }
+    public ICollection<ConsignmentItem> ConsignmentItems { get; set; }
+    public ICollection<ProductStock> ProductStocks { get; set; }
+    public ICollection<ParcelPostItem> ParcelPostItems { get; set; }
 
     #endregion
 }

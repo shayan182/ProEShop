@@ -35,7 +35,6 @@ public class AddBrandViewModel
 
     [Display(Name = "لوگوی برند")]
     [IsImage]
-    [FileRequired]
     [MaxFileSize(3)]
     public IFormFile? LogoPicture { get; set; }
 

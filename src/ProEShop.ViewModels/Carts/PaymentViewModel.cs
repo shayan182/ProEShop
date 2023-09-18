@@ -2,24 +2,13 @@
 
 namespace ProEShop.ViewModels.Carts;
 
-public class CheckoutViewModel
+public class PaymentViewModel
 {
-    public AddressInCheckoutPageViewModel UserAddress { get; set; }
-    public List<ShowCartInCheckoutPageViewModel> CartItems { get; set; }
+    public List<ShowCartInPaymentPageViewModel> CartItems { get; set; }
 }
-public class AddressInCheckoutPageViewModel
+public class ShowCartInPaymentPageViewModel
 {
-    public string? FullName { get; set; }
 
-    public string? AddressLine { get; set; }
-
-    public string? ProvinceTitle { get; set; }
-
-    public string? CityTitle { get; set; }
-}
-public class ShowCartInCheckoutPageViewModel
-{
-    
     public bool IsDiscountActive { get; set; }
 
     public int ProductVariantPrice { get; set; }

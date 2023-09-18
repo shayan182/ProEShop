@@ -43,13 +43,14 @@ public class User : IdentityUser<long>, IAuditableEntity
 
     #region Relations
 
-    public virtual ICollection<UserClaim>? UserClaims { get; set; }
-    public virtual ICollection<UserLogin>? UserLogins { get; set; }
-    public virtual ICollection<UserRole>? UserRoles { get; set; }
-    public virtual ICollection<UserToken>? UserTokens { get; set; }
-    public virtual ICollection<UserProductFavorite>? UserProductFavorites { get; set; }
-    public virtual ICollection<Cart>? Carts{ get; set; }
-    public Seller? Seller { get; set; }
+    public virtual ICollection<UserClaim> UserClaims { get; set; }
+    public virtual ICollection<UserLogin> UserLogins { get; set; }
+    public virtual ICollection<UserRole> UserRoles { get; set; }
+    public virtual ICollection<UserToken> UserTokens { get; set; }
+    public virtual ICollection<UserProductFavorite> UserProductFavorites { get; set; }
+    public virtual ICollection<Cart> Carts{ get; set; }
+    public ICollection<Order> Orders { get; set; }
+    public Seller Seller { get; set; }
 
     #endregion
 }

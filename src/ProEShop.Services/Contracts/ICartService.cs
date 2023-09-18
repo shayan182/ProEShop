@@ -10,5 +10,7 @@ public interface ICartService: ICustomGenericService<Cart>
     Task<List<ShowCartInDropDownViewModel>> GetCartsForDropDown(long userId);
     Task<List<ShowCartInCartPageViewModel>> GetCartsForCartPage(long userId);
     Task<List<ShowCartInCheckoutPageViewModel>> GetCartsForCheckoutPage(long userId);
+    Task<List<ShowCartInPaymentPageViewModel>> GetCartsForPaymentPage(long userId);
+    Task<List<ShowCartForCreateOrderAndPayViewModel>> GetCartsForCreateOrderAndPay(long userId);
     Task<List<Entities.Cart>> GetAllCartItems(long userId);
 }

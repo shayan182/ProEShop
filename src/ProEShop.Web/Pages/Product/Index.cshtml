@@ -413,7 +413,17 @@
                         <div class="d-flex align-items-center mt-3">
                             <i class="bi bi-shield-check me-2 rem21px"></i>
                             <div class="rem14px" id="product-guarantee-in-single-page-of-product">
-                                @firstProductVariant.GuaranteeFullTitle
+                                @{
+                                    var guaranteeTitle = firstProductVariant.GuaranteeFullTitle;
+                                    if (guaranteeTitle.Contains("0 ماهه"))
+                                    {
+                                        @:گرانتی اصالت و سلامت فیزیکی کالا
+                                    }
+                                    else
+                                    {
+                                        @guaranteeTitle
+                                                        }
+                                }
                             </div>
                         </div>
 

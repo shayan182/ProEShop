@@ -339,7 +339,12 @@ public class CreateModel : SellerPanelBase
 
         var userId = User.Identity?.GetUserId();
         brand.SellerId = await _sellerService.GetSellerIdAsync(userId.Value);
-        brand.LogoPicture = model.LogoPicture.GenerateFileName();
+
+        string brandLogoFileName = null;
+        if (model.LogoPicture.IsFileUploaded())
+            brandLogoFileName = model.LogoPicture.GenerateFileName();
+        brand.LogoPicture = brandLogoFileName;
+
         string brandRegistrationFileName = null;
         if (model.BrandRegistrationPicture.IsFileUploaded())
             brandRegistrationFileName = model.BrandRegistrationPicture.GenerateFileName();

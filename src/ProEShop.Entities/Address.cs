@@ -35,7 +35,7 @@ public class Address : EntityBase, IAuditableEntity
     [MaxLength(200)] public string? LastName { get; set; }
 
     [NotMapped] public string FullName => $"{FirstName} {LastName}";
-
+    public bool IsDefault { get; set; }
     [MaxLength(11)] public string? PhoneNumber { get; set; }
 
     #endregion

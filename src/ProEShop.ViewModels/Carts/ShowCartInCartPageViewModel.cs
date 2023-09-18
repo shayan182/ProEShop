@@ -24,6 +24,8 @@ public class ShowCartInCartPageViewModel
     public short Count { get; set; }
 
     public string? ProductPicture { get; set; }
+    public int ProductVariantProductProductCode { get; set; }
+    public string ProductVariantProductSlug { get; set; }
 
     //Start Custom
 
@@ -37,7 +39,7 @@ public class ShowCartInCartPageViewModel
     {
         get
         {
-            var result = Math.Ceiling((double)ProductVariantPrice / 10000);
+            var result = Math.Ceiling((ProductVariantPrice * Count) / (double)10000);
             if (result <= 1)
                 return 1;
             if (result >= 150)

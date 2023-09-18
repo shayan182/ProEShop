@@ -59,13 +59,14 @@ public class GuaranteeService : GenericService<Guarantee>, IGuaranteeService
     public Task<List<ShowSelect2DataByAjaxViewModel>> SearchOnGuaranteesForSelect2(string input)
     {
         return _guarantees
-            .Where(x=>x.Title.Contains(input))
+            .Where(x => x.Title.Contains(input))
+            .Where(x => x.IsConfirmed)
             .Select(x => new ShowSelect2DataByAjaxViewModel()
-        {
-            Id = x.Id,
-            Text = x.FullTitle
-        })
-            .OrderBy(x=>x.Id)
+            {
+                Id = x.Id,
+                Text = x.FullTitle
+            })
+            .OrderBy(x => x.Id)
             .Take(20)
             .ToListAsync();
 

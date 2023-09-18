@@ -51,7 +51,7 @@ public class ProductDetailsViewModel
 
     public ProductStatus Status { get; set; }
     [Display(Name = "ابعاد")]
-    public ProductDimensions Dimensions { get; set; }
+    public Dimension Dimension { get; set; }
     public string? CategoryTitle { get; set; }
 
     public List<ProductMediaForProductDetailsViewModel>? ProductMedia { get; set; }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ProEShop.DataLayer.Context;
 namespace ProEShop.DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230907193902_V_07_23_2308")]
+    partial class V_07_23_2308
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1325,6 +1327,7 @@ namespace ProEShop.DataLayer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("PostTrackingCode")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
@@ -1339,8 +1342,7 @@ namespace ProEShop.DataLayer.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("PostTrackingCode")
-                        .IsUnique()
-                        .HasFilter("[PostTrackingCode] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ParcelPosts");
                 });
@@ -2579,7 +2581,7 @@ namespace ProEShop.DataLayer.Migrations
             modelBuilder.Entity("ProEShop.Entities.ParcelPost", b =>
                 {
                     b.HasOne("ProEShop.Entities.Order", "Order")
-                        .WithMany("ParcelPosts")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2596,7 +2598,7 @@ namespace ProEShop.DataLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("ProEShop.Entities.ParcelPost", "ParcelPost")
-                        .WithMany("ParcelPostItems")
+                        .WithMany("ParcelPostItem")
                         .HasForeignKey("ParcelPostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2896,14 +2898,9 @@ namespace ProEShop.DataLayer.Migrations
                     b.Navigation("UserTokens");
                 });
 
-            modelBuilder.Entity("ProEShop.Entities.Order", b =>
-                {
-                    b.Navigation("ParcelPosts");
-                });
-
             modelBuilder.Entity("ProEShop.Entities.ParcelPost", b =>
                 {
-                    b.Navigation("ParcelPostItems");
+                    b.Navigation("ParcelPostItem");
                 });
 
             modelBuilder.Entity("ProEShop.Entities.Product", b =>

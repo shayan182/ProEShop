@@ -25,4 +25,16 @@ public class AddressService : GenericService<Address>, IAddressService
                 _addresses.Where(x=>x.UserId == userId))
             .FirstAsync();
     }
+
+    public async Task<(bool HasUserAddress, long AddressId)> GetAddressForCreateOrderAndPay(long userId)
+    {
+        var address = await _addresses
+            .Where(x => x.IsDefault)
+            .Select(x => new
+            {
+                x.Id,
+                x.UserId
+            }).FirstOrDefaultAsync(x => x.UserId == userId);
+        return address is null ? (false, default) : (true, address.Id);
+    }
 }

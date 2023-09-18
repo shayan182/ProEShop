@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿ using System.ComponentModel.DataAnnotations;
 
 namespace ProEShop.Entities.Enums;
-public enum ProductDimensions : byte
+public enum Dimension : byte
 {
     [Display(Name = "عادی")]
     Normal,
